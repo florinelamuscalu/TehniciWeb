@@ -1,0 +1,76 @@
+#a-noua-zona{
+  padding-left:var(--padding-intern);
+  padding-right:var(--padding-intern);
+} 
+
+#grid-galerie {
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-row-gap:0.5em;
+    grid-column-gap:0.5em;
+    counter-reset: nrimag 1; /* nrimag=3*/
+
+    img{
+        width: 100%; 
+    }
+
+    figcaption::before{
+        content: counter(nrimag, upper-roman) ")";
+      }
+
+    figcaption{
+        text-align:center;
+        counter-increment: nrimag 0; /* nrimag+=2*/
+    }
+    $img: -1;
+    @for $imagine from 1 through 12{
+        @if($imagine <= 3){
+            > figure:nth-child(#{$imagine}){
+                $col_sus: $img + 2;
+                $col_jos: $img + 3;
+                grid-area: 1/#{$col_sus}/2/#{$col_jos};
+        }
+        $img: $img + 2;
+    }@else if($imagine == 6 or $imagine == 4){
+        > figure:nth-child(#{$imagine}){ 
+            $col_sus: $img - 4;
+            $col_jos: $img - 3;
+            grid-area: 3/#{$col_sus}/4/#{$col_jos};
+        }
+        $img: $img + 3
+    }@else if($imagine == 9 or $imagine == 7){
+            > figure:nth-child(#{$imagine}){
+                $col_sus: $img - 10;
+                $col_jos: $img - 9;
+                grid-area:  5/#{$col_sus}/6/#{$col_jos};
+            }
+            $img: $img + 4
+        }@else if($imagine <= 12 and $imagine > 9){
+        > figure:nth-child(#{$imagine}){
+            $col_sus: $img - 18;
+            $col_jos: $img - 17;
+            grid-area:  7/#{$col_sus}/8/#{$col_jos};
+    }
+    $img: $img + 2
+}
+}
+}
+
+@media screen and (max-width:800px){
+    #grid-galerie {
+        display:grid;
+        grid-template-columns: repeat(2,1fr);
+        grid-row-gap:0.5em;
+        grid-column-gap:0.5em;
+        counter-reset: nrimag 1; /* nrimag=3*/
+
+    }
+}
+
+@media screen and (max-width:450px){
+    #grid-galerie {
+        display: block;
+    }
+  }
+
+

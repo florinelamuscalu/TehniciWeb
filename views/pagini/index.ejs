@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title>PC components</title>
+    <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
+    <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
+
+    <link rel="stylesheet" href="resurse/css/index.css" type="text/css">
+    <%- include("../fragmente/head.ejs") %>
+</head>
+
+<body>
+
+    <main>
+        <%- include("../fragmente/header.ejs") %>
+            <div id="promo">
+                <a href="promotii" target="_self">
+                    <figure style="width: 65%">
+                        <picture>
+                            <source srcset="resurse/imagini/promo-phone.jpg" media="(max-width: 450px)">
+                            <source srcset="resurse/imagini/promo-tablet.jpg" media="(max-width: 800px)">
+                            <img src="resurse/imagini/promo.jpg" alt="promo" style="width:100%">
+                        </picture>
+                        <figcaption style="text-align: center; color: black; width: 100%">Pana la ora 24:00 puteti sa va
+                            cumparati
+                            orice tip de ram si aveti 20% reducere</figcaption>
+                    </figure>
+                </a>
+            </div>
+            <p>Ip: <%- locals.ip %>
+            </p>
+            <button class="btn btn-primary">click</button>
+            <div id="video">
+                <video poster="resurse/imagini/poster_video/poster1.jpg" controls="controls" preload="metadata">
+                    <source src="resurse/video/video.mp4" type="video/mp4">
+                    <source src="resurse/video/video.ogv" type="video/ogv">
+                    <track default src="/resurse/caption/mesaje_ro.vtt" kind="captions" srclang="ro" label="romana" />
+                    <track src="/resurse/caption/mesaje_en.vtt" kind="captions" srclang="en" label="engleza" />
+                </video>
+            </div>
+    </main>
+    <div id="footer">
+        <%- include("../fragmente/footer.ejs") %>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+#fa:hover{
+    background-color: var(--background-color) !important;
+    animation: none !important;
+    transition: none !important;
+  }
+#fa{
+    border: none;
+    display: flex;
+    justify-content: center;
+  }
+
+#fa:hover::before{
+    opacity: 0;
+}
+
+.fa-solid {
+    font-size: var(--inaltime-but-home);
+    line-height: var(--inaltime-but-home);
+    position: absolute;
+    left: 4%;
+    right: 0;
+    top: 25%;
+    display: block;
+
+}
+
+#icon-house{
+    all:revert;
+}
+
+#hamburger, #ch-menu {
+    display: none;
+}
+
+
+@media only screen and (max-width: 801px)  {
+    #but-home {
+        all: revert;
+        display: none;
+    }
+
+    #li-home {
+        all: revert;
+    }
+}

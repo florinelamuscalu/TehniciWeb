@@ -1,0 +1,64 @@
+Tehnici web curs 1
+
+Regulament:
+
+proiect 6p 
+activitate lab + curs 1p 
+bonus curs 1p 
+bonus lab 1p 
+examen 3p
+examen o grila 2.5 p si o prblema 2.5 p
+task-uri bonus daca se depaseste nota 10 nu mai vii la examen 
+petnru restanta task-uri de recuperare 
+
+Proiect 
+
+site comercial
+lucrare cu o baza de date
+se pune si pe net
+chat 
+cos virtual 
+user 
+mail 
+boostrap
+
+
+!!!!!!!!!!!!!
+Vezi keyword din meta aici se pun cuvintele cheie din etapa 0
+faviconuri imaginea site din tab ex google drive
+tag semantice: section article nav 
+section e un tag standard de sectionare care perimte includere altor biblioteci precum h, div nu e un tag standard (intreseaza-te de el)
+article componente statatoare dif fata de section
+aside daca vrei sa faci mici paranteze (link-uri catre chestii asemanartoare)
+pre pentru linii de cod transfera textul asa cum vrem noi
+&nbsp pentru spatii 
+%lt pentru "<"
+ul -lista neordonata 
+ol -lista ordonata
+<!-- <ol>
+<li> capitol 1</li>
+<li> capitol 2</li>
+<li> capitol 3</li>
+<li> capitol 4</li>
+</ol> -->
+ target ="_blank " new tab
+
+
+ !!! 
+ <!-- <p><a href="http://fmi.unibuc.ro" target="_blank "> fmi.unibuc.ro</a><br>Lorem ipsum dolor sit amet,
+ consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+<figure style="width: 25%">
+ <img src="resurse/imagini/orar.png" alt="orar" style="width: 100%" />
+  width="300" height="200" -->
+<!-- <figcaption style="text-align: center; color: blueviolet; width: 100%">Orar anul 4</figcaption>
+</figure>
+
+
+dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+deserunt mollit anim id est laborum.
+</p> -->
+
+
+ 

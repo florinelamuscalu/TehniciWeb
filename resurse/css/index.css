@@ -1,0 +1,17 @@
+#video {
+    display: flex;
+    justify-content: center;
+}
+
+#video video{
+    width: 50%;
+    height: auto;
+}
+
+::cue {
+    background: white;
+    opacity: 0.3;
+    font-style: italic;
+    color: #023328
+}
+

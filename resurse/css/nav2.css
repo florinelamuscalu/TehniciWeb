@@ -1,0 +1,165 @@
+body {
+  --inaltime-meniu: 40px;
+  --inaltime-but-home: 20px;
+  --latime-buton: 200px;
+  --latime-bord-meniu-selectat: 1px;
+  --top-submeniu2: -40px;
+  --color-text: white;
+  --culoare-meniu-select: #2b6777;
+  --background-color: #52ab98;
+  --culoare-meniu: #52ab98;
+  --text-dec: none;
+  --text-align: center;
+  --inaltime-nav: 50px;
+}
+
+ul.meniu ul li, ul li ul, ul.meniu>li {
+  /* background-color: var(--background-color); */
+  position: relative;
+  height: var(--inaltime-meniu);
+  width: var(--latime-buton);
+}
+
+ul.meniu li ul li ul li:hover, ul.meniu li ul li:hover {
+  overflow: visible;
+  border: var(--latime-bord-meniu-selectat) solid white;
+  border-radius: 1.5rem;
+}
+
+nav {
+  background-color: var(--background-color);
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+ul.meniu {
+  list-style-type: none;
+  display: flex;
+  padding: 0px;
+  margin-left: 10%;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+ul.meniu a {
+  color: var(--color-text);
+  text-align: var(--text-align);
+  text-decoration: var(--text-dec);
+  display: block;
+  height: 100%;
+}
+
+ul.meniu li {
+
+  cursor: pointer;
+  background-color: var(--culoare-meniu);
+  transition: all 0.7s linear;
+}
+
+ul.meniu li:hover {
+  background-color: var(--culoare-meniu-select);
+}
+
+ul.meniu li:hover ul {
+  animation-name: animatie_submeniu;
+  animation-duration: 3s;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  transform-origin: 50% 50%;
+  opacity: 0;
+  display: block;
+}
+
+ul.meniu li ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 2px;
+  display: block;
+}
+
+ul.meniu li ul li {
+  overflow: hidden;
+  line-height: var(--inaltime-meniu);
+}
+
+ul.meniu li ul li ul {
+  list-style-type: none;
+  position: relative;
+  left: 200px;
+  top: var(--top-submeniu2);
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+
+ul.meniu li ul li ul li {
+  overflow: hidden;
+  line-height: var(--inaltime-meniu);
+}
+
+ul.meniu li ul li:hover ul {
+  animation-name: animatie_submeniu;
+  animation-duration: 3s;
+  animation-iteration-count: 2;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  transform-origin: 50% 50%;
+  opacity: 0;
+  display: block;
+}
+
+ul.meniu>li {
+  list-style-type: none;
+  display: inline;
+  overflow: hidden;
+  line-height: var(--inaltime-meniu);
+  margin: 2px;
+}
+
+ul.meniu>li:hover {
+  overflow: visible;
+}
+
+ul.meniu>li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(var(--culoare-meniu-select), white, var(--culoare-meniu-select));
+  width: 100%;
+  z-index: 1;
+  height: 5px;
+  opacity: 0;
+  /*transition: transform 3s; */
+  transition-property: transform;
+  transition-duration: 2s;
+  transition-timing-function: linear;
+}
+
+ul.meniu>li:hover::before {
+  opacity: 1;
+  transform: translateY(40px);
+}
+
+@keyframes animatie_submeniu {
+  50% {
+    transform: scale(0.5, 0.5);
+  }
+
+  100% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+.fa-house {
+  display: none;
+  /* all: revert; */
+}
+
+#hamburger, #ch-menu {
+  display: none;
+}

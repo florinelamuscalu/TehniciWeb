@@ -1,0 +1,135 @@
+Magazin online de componente calculator
+PC components
+
+1.	Tema: Site cu component PC se va numi PC Components
+2.	Descriere proiect: 
+a.
+Pe pagina principala vreau sa afisez meniul impreuna cu o imagine cu promotile (cod de reducere sau procent) sau o imagine cu marca noilor produse ( ex: Apple Week) pe urma cateva produse noi sau chiar cateva care au cea mai mare reducere
+Meniu:
+Info --> o sa fie impartita in 3 subcapitole: 
+o	Contact (o sa am un email si un formular)
+o	Garantia Securitatii (prelevrarea preferinteleor unui user)
+o	GDPR 
+Promotii --> o sa afisez produsele care sunt la promotie si timpul in care este promotia, de asemenea pe pagina principala as vrea sa am o imagine (in care sa scrie procentul de promotie) iar daca apas pe ea sa ma duca la pagina de promotii
+Desigilate --> toate produsele care au fost retunate si se mai pot utiliza, acetse produse sunt reduse cu 10% si au la recenzie si motivul returnarii
+Urmareste Colet --> Informatii despre colet, cand a plecat din depozit, cand l-a primit curierul cand a ajuns la locatie + istoric comenzi + bonusuri pentru clientii mai vechi sau cei care devin clientii principali cumpara anual peste o anumita suma
+PC & Accessory --> cu urmatoarele subcapitole: (daca o sa mai am timp o sa mai adaug pe prcurs si alte subcapitole)
+o	Monitoare
+o	Memorie 
+o	RAM
+o	SSD
+o	HDD
+o	Procesoare
+
+Fiecare subcapitol de la PC & Accessory o sa aiba pagina lui proprie cu produsele afisate, o sa fie pozitionata in partea stanga un  fel de meniu in care noi putem categoriza produsul (pret, brand, rating, si alte detalii specifice fiecrui produs in parte) --> ca la emag.
+De asemenea, as vrea sa fac: nr de stelute acumulate de la recenzii, posibilitatea livrarii prin easy box, adaugarea la favorite. Pe urma cand intram pe pagina produsului vreau sa am o descriere specificatii, unele link-uri catre recenzii facute de oameni din domeniu (vloggers mai cunoscuti care se ocupa cu partea de component PC) plus un fel de chat in care user-ul poate sa scrie despre experienta lui cu produsul.
+
+b. 
+•	Pagina principala 
+•	Info
+o	Contact
+o	Garantia Securitatii
+o	GDPR
+•	Promotii
+•	Desigilate
+•	PC & Accessory
+•	Urmareste coletul 
+•	Pagina de Login + Signin
+c. Cuvinte cheie
+	PC
+	Placa video
+	Memorie
+	Gaming
+	Pc gaming
+Cred ca as pute sa pun o lista cu tipul produselor (carcasa pc, monitoare)
+Pentru fiecare pagina in parte:
+•	Pagina principala
+o	Pc
+o	Gaming
+•	Info
+o	Contcat
+o	Garantie
+•	Promotii
+o	Reducere
+o	Pc 
+o	Gaming
+o	Placa video
+o	Ram
+o	SSD
+o	HDD
+o	Procesor
+o	AMD
+o	Intel
+o	Monitoare 
+o	Mouse 
+o	Tastatura
+o	Cooler
+•	Desigilate:
+o	Pc 
+o	Gaming
+o	Placa video
+o	Ram
+o	SSD
+o	HDD
+o	Procesor
+o	AMD
+o	Intel
+o	Monitoare 
+o	Mouse 
+o	Tastatura
+o	Cooler
+•	PC & Accessory
+o	Pc 
+o	Gaming
+o	Placa video
+o	Ram
+o	SSD
+o	HDD
+o	Procesor
+o	AMD
+o	Intel
+o	Monitoare 
+o	Mouse 
+o	Tastatura
+o	Cooler
+•	Urmareste coletul
+o	Easy box 
+o	Curier 
+o	Pc
+o	Gamming
+•	Pagina de Login + Signin
+o	User
+o	Password
+o	PC
+o	Gaming
+d. Site-uri pentru vanzare componentelor pc-ului
+pro: livrare prin easybox, menu diversificat, reclama cu 30%, consulta un specialist
+
+contra: font-ul (mi se pare ca este destul de micut si nu e estetic), palet de culori 
+
+link: https://www.pcgarage.ro/
+
+pro: paleta de culori si fontul, diversificarea, subcategoriile afisate pe fiecare imagine
+
+contra: fara oferte 
+
+link: https://www.flanco.ro/laptop-it-tablete.html
+
+pro: pe partea stanga putem sa filtram produsul pe care il vrem, pot sa il bag din pagina la favorite, apar stelutele
+
+contra:
+
+link: https://www.emag.ro/placi_video/c?ref=hp_menu_quick-nav_23_7&type=category
+
+
+pro: tema alb rosu
+
+contra: afisare in pagina imita emag dar mai prost
+
+link: https://altex.ro/sisteme-pc-calculatoare/cpl/
+
+pro: meniul din partea stanga, descrierea din pagina produsului, ducand mous-ul pe el se mareste imaginea
+
+contra: e dezordonata pagina (mult prea incarcata), langa produs apare specifictile produsului dar asta face ca pagina sa nu mai arate frumos 
+
+link: https://www.amazon.com/s?i=specialty-aps&bbn=16225007011&rh=n%3A16225007011%2Cn%3A193870011&ref=nav_em__nav_desktop_sa_intl_computer_components_0_2_6_3

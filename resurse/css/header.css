@@ -1,0 +1,41 @@
+#user-button{
+    display: flex;
+    width: 100%;
+    height: max-content;
+}
+
+.fa-user{
+    display: block;
+    position: absolute;
+    right: 20%;
+    margin-top: 1.5%;
+    font-size: 150%;
+}
+
+.fa-heart{
+    display: block;
+    position: absolute;
+    right: 17%;
+    margin-top: 1.5%;
+    font-size: 150%;
+}
+
+.fa-heart:hover{
+    color: red;
+    animation-name: animatie-heart;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    transform-origin: 0% 0%;
+}
+
+
+@keyframes animatie-heart {
+    0%{
+        transform: rotate(0);
+}
+    100%{
+        transform: rotate(360deg);
+}
+}

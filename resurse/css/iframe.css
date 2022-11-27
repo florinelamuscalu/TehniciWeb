@@ -1,0 +1,67 @@
+.taburi-iframe {
+    background-color: var(--color-meniu-iframe);
+    padding: 0rem;
+    display: flex;
+    justify-content: center;
+    /* justify-content: space-around; */
+    height: var(--inaltime-meniu);
+    line-height: var(--inaltime-meniu);
+    width: 100vw;
+    margin-left: calc(40% - 40vw);
+}
+
+.taburi-iframe a {
+    font-size: 1.2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--color-text-meniu-iframe);
+    margin-left: 2%;
+}
+.taburi-iframe a:hover {
+    font-size: 1.2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #2b6777;
+    padding: 0.0rem;
+    margin: 0.0rem;
+    margin-left: 2%;
+    border-radius: 1.2rem;
+    border: 1px solid white;
+
+}
+
+#iframe-video{
+    display: flex;
+    justify-content: center;
+}
+
+#iframe-video iframe{
+    width: 600px;
+    height: 350px;
+}
+
+@media screen and (max-width:800px){
+    .taburi-iframe a {
+        font-size: 1rem;
+    }
+    .taburi-iframe a:hover {
+        font-size: 1rem;
+    }
+    #iframe-video iframe{
+        width: 400px;
+        height: 250px;
+    }
+}
+
+@media screen and (max-width:450px){
+    .taburi-iframe a {
+        font-size: 0.5rem;
+    }
+    .taburi-iframe a:hover {
+        font-size: 0.5rem;
+    }
+    #iframe-video iframe{
+        width: 200px;
+        height: 150px;
+    }
+}

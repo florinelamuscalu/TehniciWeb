@@ -1,0 +1,79 @@
+{
+	"cale_galerie":"resurse/imagini/galerie",
+	"imagini": [
+		{
+			"fisier":"pc1.jpg",
+			"titlu":"PC",
+			"descriere":"PC",
+			"sfert_ora": "3"
+		},
+		{
+			"fisier":"pc2.jpg",
+			"titlu": "PC",
+			"descriere":"Setup PC",
+			"sfert_ora":"4"
+			
+		},
+		{
+			"fisier":"tastatura1.jpg",
+			"titlu":"Keyboard",
+			"descriere":"illuminated Keyboard",
+			"sfert_ora":"1"
+		},
+		{
+			"fisier":"tastatura2.jpg",
+			"titlu":"Keyboard",
+			"descriere":"Keyboard",
+			"sfert_ora":"2"
+		},
+		{
+			"fisier":"mouse1.jpg",
+			"titlu":"Mouse",
+			"descriere":"Mouse",
+			"sfert_ora":"3"
+		},
+		{
+			"fisier":"mouse2.jpg",
+			"descriere":"Mouse gamming",
+			"sfert_ora":"4",
+			"alt":"mouse"
+		},
+		{
+			"fisier":"cooler1.jpg",
+			"descriere":"Coller",
+			"sfert_ora":"1",
+			"alt":"cooler"
+		},
+		{
+			"fisier":"cooler2.jpg",
+			"descriere":"AMD Coller",
+			"sfert_ora":"2",
+			"alrt":"cooler"
+		},
+		{
+			"fisier":"headphones1.jpg",
+			"descriere":"Headphones",
+			"sfert_ora":"3",
+			"alrt":"hraadphones"
+		},
+		{
+			"fisier":"headphones2.jpg",
+			"descriere":"Gaming Headphones",
+			"sfert_ora":"3",
+			"alrt":"hraadphones"
+		},
+		{
+			"fisier":"SSD1.jpg",
+			"descriere":"SSD",
+			"sfert_ora":"4",
+			"alrt":"SSD"
+		},
+		{
+			"fisier":"SSD2.jpg",
+			"descriere":"SSD",
+			"sfert_ora":"4",
+			"alrt":"SSD"
+		}
+
+	]
+}

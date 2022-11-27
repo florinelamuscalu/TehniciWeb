@@ -1,0 +1,47 @@
+#footer-arr{
+  text-decoration: none;
+}
+
+#link-top{
+    width: max-content;
+    height: max-content;
+}
+
+#tooltip{
+    visibility: hidden;
+}
+
+#link-top:hover #tooltip{
+    visibility: visible;
+}
+#container{
+    display: block;
+    border: 1px solid var(--culoare-meniu-select);
+    border-top-left-radius: 1.2rem;
+    border-top-right-radius: 1.2rem;
+    width: max-content;
+    /* margin: auto;
+    padding: auto; */
+    box-shadow: 0 0 15px #c8d8e4 inset;
+}
+
+#container:hover {
+    background-image: linear-gradient(#c8d8e4, white);
+}
+
+#arrow{
+    display: block;
+    opacity: 0.5;
+    color:var(--background-color);
+    transition: transform .2s;
+    font-size: 250%;
+    margin: auto;
+    padding: auto;
+}
+
+
+#arrow:hover{
+   opacity: 1;
+   transform: scale(1.5);
+}
+

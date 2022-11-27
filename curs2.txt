@@ -1,0 +1,2 @@
+pentru a dimensiona o imagine folosesti --> picture 
+variabile in css --pading-main

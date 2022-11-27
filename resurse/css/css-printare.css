@@ -1,0 +1,120 @@
+@media print {
+
+    h1 {
+        display: block;
+        margin: auto;
+        padding: auto;
+        margin-top: 50%;
+    }
+
+    ul.meniu {
+        display: flex;
+        flex-direction: column;
+        page-break-after: always;
+    }
+
+    ul.meniu a {
+        text-align: start !important;
+    }
+
+    #banner {
+        margin-top: 90%;
+        display: flex;
+        justify-content: center;
+    }
+
+    #banner p {
+        width: 70%;
+        border: 4px inset #52ab98;
+        text-align: center;
+    }
+
+    #user-button .fa-regular {
+        display: none;
+    }
+
+    .downImg img {
+        display: none;
+    }
+
+    #LinusTechTips {
+        display: none;
+    }
+
+    #grid-pagina {
+        display: block;
+    }
+
+    #main {
+        display: block;
+    }
+
+    #grid-galerie {
+        display: none;
+    }
+
+    #link-top {
+        display: none;
+    }
+
+    #footer {
+        break-before: always;
+        display: flex;
+        justify-content: start;
+    }
+
+    #footer address {
+        text-align: start;
+    }
+
+    #copyright {
+        text-align: start;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    #watermark {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        color: rgba(0, 0, 0, 0.4);
+        right: 0;
+    }
+
+    #watermark::after {
+        width: 4cm;
+        height: 1cm;
+        opacity: 0.4;
+        display: block;
+        background: white;
+        border: 3px solid black;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-right: none;
+        content: "Muscalu Florinela";
+        text-align: center;
+    }
+}
+
+@page {
+    size: A4 portrait;
+    margin-bottom: 3cm;
+    margin-top: 3cm;
+    counter-increment: page;
+
+}
+
+@page: left {
+
+    margin-left: 3cm;
+    margin-right: 1cm;
+}
+
+@page: right {
+
+    margin-right: 3cm;
+    margin-left: 1cm;
+}
