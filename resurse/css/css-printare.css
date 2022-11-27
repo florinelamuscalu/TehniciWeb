@@ -86,7 +86,9 @@
 
     #watermark::after {
         width: 4cm;
-        height: 1cm;
+        /* line-height: 0.5em;    */
+        height: 1cm;    
+        /* overflow: hidden; */
         opacity: 0.4;
         display: block;
         background: white;
