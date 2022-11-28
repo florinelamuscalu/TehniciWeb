@@ -1,13 +1,33 @@
+$var:1rem;
+
 @use '../../node_modules/bootstrap/scss/bootstrap.scss' with (
-    $primary: #52ab98,
+    $primary:   #52ab98,
     $secondary: #2b6777,
     $success:   #c8d8e4,
     $info:      #FFAD03,
 
-    $border-radius:               1.2rem,
+    $border-radius:               0.2rem,
     $border-radius-sm:            0.15rem,
     $border-radius-lg:            0.5rem,
     $border-radius-xl:            1rem,
     $border-radius-2xl:           2rem,
-    $border-radius-pill:          50rem,
+    $border-radius-pill:          40rem,
+
+    $link-color: black,
+
+    $container-max-widths: (
+      sm: 450px,
+      md: 800px,
+      lg: 1000px,
+      xl: 1200px,
+      xxl: 1400px
+    ),
+
+    $font-size-base: $var,
+
+    $h1-font-size:  $var * 2.5,
+    $h2-font-size:  $var * 2,
+    $h3-font-size:  $var * 1.5,
+    $h4-font-size:  $var * 1.3,
+    $h5-font-size:  $var * 1.1,
   );

@@ -15,7 +15,7 @@ window.onload = function() {
                 var cond1 = true; 
             }
 
-            let categorie = produs.getElementsByClassName("val-categorie")[0].innerHTML;
+            let categorie = produs.getElementsByClassName("val-categorie")[0].innerHTML.trim();
             if(inpCategorie == "toate" || categorie == inpCategorie) {
                 var cond2 = true; 
             }
