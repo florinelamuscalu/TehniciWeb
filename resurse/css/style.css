@@ -62,8 +62,11 @@ body {
     /* background-color: var(--color-meniu-iframe); */
 }
 
+
 #tabel td, th{
     /* border: 1px solid; */
+    border: none !important;
+    border-bottom: none !important;
     color: white;
     text-align: center;
     padding: 0;

@@ -1,6 +1,13 @@
 @use '../../node_modules/bootstrap/scss/bootstrap.scss' with (
-    $primary: #52ab98
-    // $secondary: #2b677
-    // $success:   #c8d8e4
-    // $info:      #FFAD03
+    $primary: #52ab98,
+    $secondary: #2b6777,
+    $success:   #c8d8e4,
+    $info:      #FFAD03,
+
+    $border-radius:               1.2rem,
+    $border-radius-sm:            0.15rem,
+    $border-radius-lg:            0.5rem,
+    $border-radius-xl:            1rem,
+    $border-radius-2xl:           2rem,
+    $border-radius-pill:          50rem,
   );

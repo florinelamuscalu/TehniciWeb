@@ -15,12 +15,20 @@ var client = new Client({
 });
 client.connect();
 
-client.query("select * from tabel_test", function (err, rez) {
-    if (err)
-        console.log(err);
-    else
-        console.log(rez);
-});
+// client.query("select * from tabel_test", function (err, rez) {
+//     if (err)
+//         console.log(err);
+//     else
+//         console.log(rez);
+// });
+
+
+// var vedeToatalumea="ceva!";
+// app.use('/*', function(req,res){
+//     res.locals.vede=vedeToatalumea;
+//     next();
+// });
+
 
 const sass = require("sass");
 var cssBootstrap = sass.compile(__dirname + "/resurse/scss/customizare_bootstrap.scss", { sourceMap: true });
@@ -50,7 +58,7 @@ function createImages() {
         elem.fisier_mediu = obiect.cale_galerie + '/mediu/' + numefisier + '.webp';
         elem.fisier = obiect.cale_galerie + "/" + elem.fisier;
         sharp(__dirname + '/' + elem.fisier).resize(dim_mediu).toFile(__dirname + '/' + elem.fisier_mediu);
-        
+
 
         if (!fs.existsSync(obiect.cale_galerie + '/mic/')) {
             fs.mkdirSync(obiect.cale_galerie + '/mic/');
@@ -91,28 +99,48 @@ app.get(["/info", "info"], function (req, res) {
     res.render("pagini/info", { imagini: obGlobal.imagini });
 });
 
-app.get("/produse", function (req, res) {
-    client.query("select * from prajituri", function (err, rez) {
-        if (err){
-            console.log(err);
-            renderError(2);
-        }
-        else{
-        res.render("pagini/produse", { produse: rez.rows, optiuni:[]});
-        console.log(rez);
-        }
+// app.get("/produse", function (req, res) {
+//     client.query("select * from unnest(enum_range(null::categ_prajitura))", function (err, rezCateg) {
+//         client.query("select  * from prajituri", function (err, rez){
+//             if (err) {
+//                 console.log(err);
+//                 renderError(res, 2);
+//             }
+//             else {
+//                 res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
+//                 //console.log(rez);
+//             }
+//         });
+//     });
+// });
+
+
+app.get(["/produse"], function (req, res) {
+    console.log(req.query);
+    client.query("select * from unnest(enum_range(null::categ_prajitura))", function (err, rezCateg) {
+        continuareQuery=""
+        if(req.query.tip)
+            continuareQuery+=`and tip_produs='${req.query.tip}'`
+        client.query("select * from prajituri where 1=1" + continuareQuery, function (err, rez) {
+            if (err) {
+                renderError(res, 2);
+                console.log(err);
+            } else {
+                res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
+            }
+        })
     })
 });
 
 app.get("/produs/:id", function (req, res) {
-    client.query("select * from prajituri where id ="+req.params.id, function (err, rez) {
-        if (err){
+    client.query("select * from prajituri where id =" + req.params.id, function (err, rez) {
+        if (err) {
             console.log(err);
             renderError(2);
         }
-        else{
-        res.render("pagini/produs", { prod: rez.rows[0]});
-        console.log(rez);
+        else {
+            res.render("pagini/produs", { prod: rez.rows[0] });
+            //console.log(rez);
         }
     })
 });
