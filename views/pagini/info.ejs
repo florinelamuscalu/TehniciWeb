@@ -10,10 +10,8 @@
 
     <link rel="stylesheet" href="resurse/css/style.css" type="text/css">
     <link rel="stylesheet" href="resurse/css/iframe.css" type="text/css">
-    <link rel="stylesheet" href="resurse/css/css-printare.css" type="text/css">
-    <!-- <link rel="stylesheet" href="resurse/css/galerie-statica.css" type="text/css">
-    <link rel="stylesheet" href="resurse/css/galerie-statica-500.css" type="text/css"
-        media="screen and (max-width:450px)"> -->
+    <link rel="stylesheet" href="resurse/css/promo/promo.css" type="text/css">
+    <link rel="stylesheet" href="resurse/css/css-printare/css-printare.css" type="text/css">
     <link rel="stylesheet" href="resurse/css/galerie_statica/galerie.css" type="text/css">
     <%- include("../fragmente/head.ejs") %>
 
@@ -21,7 +19,7 @@
 
 <body>
     <%- include("../fragmente/header.ejs") %>
-    <div id="grid-pagina">
+        <div id="grid-pagina">
             <main id="main">
                 <div id="prima-zona">
                     <div class="downImg">
@@ -36,9 +34,9 @@
                     <section id="despre">
                         <h2>Despre noi</h2>
                         <p id="watermark"></p>
-                    <div id="banner">
-                        <p> Acesta este un proiect școlar!</p>
-                    </div>
+                        <div id="banner">
+                            <p> Acesta este un proiect școlar!</p>
+                        </div>
                         <p> &nbsp; Hello, noi suntem echipa <b>PC Components</b>, suntem inca la inceput, dar invatam
                             repede
                             si ne
@@ -224,7 +222,12 @@
                 </div>
                 <div id="a-noua-zona">
                     <section id="galerie">
-                        <h2> Galerie </h2>
+                        <div id="text">
+                            <h2> Galerie </h2>
+                        </div>
+                        <div id="text-reflectat">
+                            <h2> Galerie </h2>
+                        </div>
                         <div id="grid-galerie">
                             <% for (let imag of locals.imagini){ %>
                                 <figure>
@@ -246,7 +249,7 @@
             <div id="footer">
                 <%- include("../fragmente/footer.ejs") %>
             </div>
-    </div>
+        </div>
 </body>
 
 </html>
