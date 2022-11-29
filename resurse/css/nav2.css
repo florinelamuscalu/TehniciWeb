@@ -155,6 +155,10 @@ ul.meniu>li:hover::before {
   }
 }
 
+#fa{
+  all:revert;
+}
+
 .fa-house {
   display: none;
   /* all: revert; */

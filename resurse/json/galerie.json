@@ -61,19 +61,6 @@
 			"descriere":"Gaming Headphones",
 			"sfert_ora":"3",
 			"alrt":"hraadphones"
-		},
-		{
-			"fisier":"SSD1.jpg",
-			"descriere":"SSD",
-			"sfert_ora":"4",
-			"alrt":"SSD"
-		},
-		{
-			"fisier":"SSD2.jpg",
-			"descriere":"SSD",
-			"sfert_ora":"4",
-			"alrt":"SSD"
 		}
-
 	]
 }

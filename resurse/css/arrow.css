@@ -19,7 +19,7 @@
     border: 1px solid var(--culoare-meniu-select);
     border-top-left-radius: 1.2rem;
     border-top-right-radius: 1.2rem;
-    width: max-content;
+    width: 70%;
     /* margin: auto;
     padding: auto; */
     box-shadow: 0 0 15px #c8d8e4 inset;
@@ -30,13 +30,12 @@
 }
 
 #arrow{
-    display: block;
+    display: flex;
     opacity: 0.5;
     color:var(--background-color);
     transition: transform .2s;
     font-size: 250%;
-    margin: auto;
-    padding: auto;
+    justify-content: center;
 }
 
 
