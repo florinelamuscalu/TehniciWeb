@@ -55,7 +55,6 @@
   #grid-galerie {
     display: grid;
     grid-template-columns: repeat(2, fr);
-    margin-left: 5%;
   }
   #grid-galerie > figure:nth-child(1) {
     grid-area: 1/1/2/2;

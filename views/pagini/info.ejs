@@ -8,9 +8,10 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro&family=Literata">
 
-    <link rel="stylesheet" href="resurse/css/style.css" type="text/css">
-    <link rel="stylesheet" href="resurse/css/iframe.css" type="text/css">
+    <link rel="stylesheet" href="resurse/css/pagini/info/style.css" type="text/css">
+    <link rel="stylesheet" href="resurse/css/pagini/info/iframe.css" type="text/css">
     <link rel="stylesheet" href="resurse/css/promo/promo.css" type="text/css">
+    <link rel="stylesheet" href="resurse/css/pagini/info/reflexie.css" type="text/css">
     <link rel="stylesheet" href="resurse/css/css-printare/css-printare.css" type="text/css">
     <link rel="stylesheet" href="resurse/css/galerie_statica/galerie.css" type="text/css">
     <%- include("../fragmente/head.ejs") %>
@@ -222,11 +223,13 @@
                 </div>
                 <div id="a-noua-zona">
                     <section id="galerie">
-                        <div id="text">
-                            <h2> Galerie </h2>
-                        </div>
-                        <div id="text-reflectat">
-                            <h2> Galerie </h2>
+                        <div id="hoverTitlu">
+                            <div id="text">
+                                <h2 > Galerie </h2>
+                            </div>
+                            <div id="text-reflectat">
+                                <h2> Galerie </h2>
+                            </div>
                         </div>
                         <div id="grid-galerie">
                             <% for (let imag of locals.imagini){ %>

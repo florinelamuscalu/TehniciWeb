@@ -1,0 +1,26 @@
+#text-reflectat h2 {
+    display: block;
+    transform-origin: 0 0;
+    opacity: 0.55;
+    /* transform: scaleX(-1) translate(300px, -50px); */
+    transform: rotateX(180deg) skew(-45deg) scaleY(1) translate(30px, -25px);
+   
+}
+
+#text h2 {
+    transform: skew(45deg);
+    /* transform: skew(70deg); */
+}
+
+#text h2, #text-reflectat h2 {
+    font-size: 300%;
+    font-weight: bold;
+}
+
+/* #text h2:hover, #text-reflectat h2:hover{
+    color: #FFAD03;
+} */
+
+#hoverTitlu:hover {
+    color: #FFAD03;
+}
