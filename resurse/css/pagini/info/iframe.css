@@ -7,7 +7,7 @@
     height: var(--inaltime-meniu);
     line-height: var(--inaltime-meniu);
     width: 100vw;
-    margin-left: calc(40% - 40vw);
+    margin-left: calc(50% - 50vw);
 }
 
 .taburi-iframe a {

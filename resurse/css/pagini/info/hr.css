@@ -1,0 +1,9 @@
+#CalcularePret hr{
+    background-image: repeating-radial-gradient(circle at 50%, #2b6777, white);
+    border: 0;
+    display: block;
+    height: 40px;
+    background-repeat: repeat-x;
+    background-size: 40px 40px;
+    mask-image: repeating-radial-gradient(circle, black 10%, rgba(0, 0, 0, 0.5) 10%);
+}

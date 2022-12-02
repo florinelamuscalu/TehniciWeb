@@ -3,7 +3,9 @@ body {
     transition: font-size 0.2s;
     --color-meniu-iframe:#52ab98 ;
     --color-text-meniu-iframe: white;
-    font-family: 'Crimson Pro', serif;  
+    font-family: 'Crimson Pro', serif; 
+    --culoare-text: #2b6777;
+    --culoare-background: #FFAD03;
 }
 
 @media only screen and (max-width: 450px) and (min-width: 0px) {
@@ -13,6 +15,9 @@ body {
     #a-doua-zona{
         overflow-x: scroll;
     }
+    #a-sasea-zona p{
+        column-count: 1;
+    }
 }
 
 @media only screen and (max-width: 800px) and (min-width: 451px) {
@@ -21,6 +26,9 @@ body {
     }
     #a-doua-zona{
         overflow-x: scroll ;
+    }
+    #a-sasea-zona p{
+        column-count:1; 
     }
 }
 
@@ -155,6 +163,10 @@ body {
 #a-patra-zona {
     grid-area: z-4;
 }
+#a-patra-zona p::selection {
+    color: var(--culoare-text);
+    background-color: var(--culoare-background);
+}
 
 #a-cincea-zona {
     grid-area: z-5;
@@ -162,6 +174,10 @@ body {
 
 #a-sasea-zona {
     grid-area: z-6;
+}
+#a-sasea-zona p{
+    column-count: 2;
+    column-rule: solid 0.5px;
 }
 
 #a-saptea-zona {
@@ -196,5 +212,14 @@ body {
     }
     #main{
         display: block;
+    }
+    #a-sasea-zona p{
+        column-count:1; 
+    }
+}
+
+@media only screen and (max-width: 800px) and (min-width: 451px) {
+    #a-sasea-zona p{
+        column-count:1; 
     }
 }
