@@ -1,6 +1,22 @@
 <header id="header">
     <div id="user-button">
         <h1 id="titlu">PC components</h1>
+        <button id="tema"> Schimba tema </button>
+        <script>
+            tema_curenta = localStorage.getItem("tema");
+            if (tema_curenta) {
+                document.body.classList.add(tema_curenta);
+            }
+            document.getElementById("tema").onclick = function () {
+                if (document.body.classList.contains("dark")) {
+                    document.body.classList.remove("dark");
+                    localStorage.removeItem("tema");
+                } else {
+                    document.body.classList.add("dark")
+                    localStorage.setItem("tema", "dark")
+                }
+            }
+        </script>
         <i class="fa-regular fa-user"></i>
         <i class="fa-regular fa-heart"></i>
     </div>
@@ -11,10 +27,10 @@
         <input id="ch-menu" type="checkbox">
         <ul class="meniu">
             <li id="fa"><a href="index">
-                <div id="home">
-                    <i class="fa-solid fa-house"></i>
-                </div>
-            </a>
+                    <div id="home">
+                        <i class="fa-solid fa-house"></i>
+                    </div>
+                </a>
             </li>
             <li id="li-home"> <a href="index" id="but-home">Home</a></li>
             <li> <a href="pc&periferice">PC & Periferice</a>
