@@ -9,7 +9,7 @@ body{
 }
 
 #imag{
-    background-image: url("../../../imagini/urmaresteColet/trackpackage.png");
+    background-image: url("/resurse/imagini/urmaresteColet/trackpackage.png");
     background-repeat: no-repeat;
     /*margin-top:10%; */
     background-attachment: fixed;

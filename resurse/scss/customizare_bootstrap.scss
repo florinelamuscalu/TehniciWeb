@@ -23,6 +23,19 @@ $var:1rem;
       xxl: 1400px
     ),
 
+
+    /// de facut
+    /// 
+    /// // scss-docs-start grid-breakpoints
+// $grid-breakpoints: (
+//   xs: 0,
+//   sm: 576px,
+//   md: 768px,
+//   lg: 992px,
+//   xl: 1200px,
+//   xxl: 1400px
+// ) !default;
+
     $font-size-base: $var,
 
     $h1-font-size:  $var * 2.5,

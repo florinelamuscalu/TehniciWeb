@@ -3,6 +3,8 @@
     transform-origin: 0 0;
     opacity: 0.55;
     /* transform: scaleX(-1) translate(300px, -50px); */
+
+    /*rotateY scale translate*/
     transform: rotateX(180deg) skew(-45deg) scaleY(1) translate(30px, -25px);
    
 }
