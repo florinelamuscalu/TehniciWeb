@@ -2,16 +2,15 @@
     display: block;
     transform-origin: 0 0;
     opacity: 0.55;
-    /* transform: scaleX(-1) translate(300px, -50px); */
-
-    /*rotateY scale translate*/
+    /* transform: rotateY(360deg) scaleY(1) translate( 225px, -65px) rotate(25deg); */
     transform: rotateX(180deg) skew(-45deg) scaleY(1) translate(30px, -25px);
-   
+      
 }
 
 #text h2 {
+    /* transform: rotate( -25deg) translate(0px, 65px);
+    transform-origin: 0 0; */
     transform: skew(45deg);
-    /* transform: skew(70deg); */
 }
 
 #text h2, #text-reflectat h2 {

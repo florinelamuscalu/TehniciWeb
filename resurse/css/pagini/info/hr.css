@@ -10,11 +10,9 @@
 
 
 
-    background-image:
-    radial-gradient(circle at top left, transparent 15px, #58a 0) top left,
-    radial-gradient(circle at top right, transparent 15px, #58a 0) top right,
-    radial-gradient(circle at bottom right, transparent 15px, #58a 0) bottom right,
-    radial-gradient(circle at bottom left, transparent 15px, #58a 0) bottom left;
+    background-image: radial-gradient(closest-corner at 40% 70%,#FFFFFF 0%, rgb(171,171,171),50%,transparent),
+                     radial-gradient(closest-corner circle at 80% 20%, #FFFFFF 0%, rgb(171,171,171),20%,transparent),
+                     radial-gradient(closest-corner circle at 10% 10%, #FFFFFF 0%,rgb(171,171,171) 25%);
     background-size: 50% 50%;
     background-repeat: no-repeat;
 }

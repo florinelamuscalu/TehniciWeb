@@ -1,57 +1,134 @@
-body{
+body {
     --culoare-background: #FFAD03;
 }
 
-#main{
-    margin-top: 10%;
+#main {
+    margin-top: 1%;
     margin-left: 2%;
     margin-right: 2%;
 }
 
-#imag{
-    background-image: url("/resurse/imagini/urmaresteColet/trackpackage.png");
+#imag {
+    /* background-image: url("/resurse/imagini/urmaresteColet/trackpackage.png"); */
     background-repeat: no-repeat;
     /*margin-top:10%; */
     background-attachment: fixed;
-    /* width: max-content;
-    height: max-content; */
-    background-position: right top;
-    /* animation-name: animatie_background;
-    animation-duration: 15s;
-    animation-iteration-count: infinite; */
+    width: 1500px;
+    height: 800px;
+    background-position: center;
+    animation-name: animatie_background;
+    animation-duration: 30s;
+    animation-iteration-count: infinite;
 }
 
 @keyframes animatie_background {
     0%, 100% {
-        background-image: url('../../../imagini/urmaresteColet/trackpackage.png');
+        background-image: url('/resurse/imagini/urmaresteColet/trackpackage.png');
     }
-    25%{
-        background-image: url('../../../imagini/urmaresteColet/imag1.png')
-    }
+
+    /* 25%{
+        background-image: url('/resurse/imagini/urmaresteColet/imag1.png')
+    } */
     50% {
-        background-image: url('../../../imagini/urmaresteColet/box1.png');
+        background-image: url('/resurse/imagini/urmaresteColet/box1.png');
     }
 }
 
-#tabel caption{
+
+#tabel caption {
     caption-side: bottom;
     text-align: center;
     color: var(--culoare-background)
 }
 
-#table{
+#table {
     display: block;
 }
-#tabel thead{
+
+#tabel tbody {
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+    width: 60%;
+    border-collapse: collapse;
+    /* box-sizing: border-box; */
+}
+
+#tabel td {
+    box-sizing: border-box;
+}
+
+#tabel thead {
     text-align: center;
 }
 
-#tabel td, th{
-    border: 1px solid #c8d8e4;
+#tabel td, th {
+    border-radius: 1rem;
+    border-top: 0.15rem solid white;
     width: 200px;
     color: white;
     text-align: center;
     padding: 0;
     margin: 0;
     background-color: var(--culoare-background);
+}
+
+@media screen and (max-width: 800px) {
+
+    #tabel caption {
+        font-size: 1em;
+    }
+
+    #tabel thead {
+        display: none;
+    }
+    #tabel tr {
+        border: none;
+        padding: 0;
+        margin: 0;
+        display: block;
+    } 
+
+    #tabel tbody td:nth-child(1)::before{
+        content: "Nr colet";
+    }
+    #tabel tbody td:nth-child(2)::before{
+        content: "Pregatire";
+    }
+    #tabel tbody td:nth-child(3)::before{
+        content: "Ambalare";
+    }
+    #tabel tbody td:nth-child(4)::before{
+        content: "Plecare din depozit";
+    }
+    #tabel tbody td:nth-child(5)::before{
+        content: "Destinatie finala";
+    }
+
+    #tabel td {
+        display: block;
+        /* border-bottom: none; */
+        border-top: none;
+        float: left;
+        width: 90%;
+        padding-left: 2%;
+        padding-right: 2%;
+        box-sizing: border-box;
+    }
+
+    #tabel td::before {
+        float: left;
+        width: 60%;
+        height: 100%;
+        font-weight: bold;
+        margin-right: 0.5em;
+        padding: 0.1em;
+        line-height: 100%;
+    }
+
+    /*nu face nimic ...*/
+    /* #tabel td:last-child{
+       border-bottom: 2rem;
+       border-top: 3rem;
+    } */
 }
