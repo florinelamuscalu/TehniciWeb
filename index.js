@@ -7,7 +7,7 @@ const sharp = require("sharp");
 const { Client } = require("pg");
 const ejs = require("ejs");
 var client = new Client({
-    database: "lab8",
+    database: "pc",
     user: "flori2",
     password: "flori",
     host: "localhost",
@@ -117,11 +117,11 @@ app.get(["/info", "info"], function (req, res) {
 
 app.get(["/produse"], function (req, res) {
     console.log(req.query);
-    client.query("select * from unnest(enum_range(null::categ_prajitura))", function (err, rezCateg) {
+    client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
         continuareQuery=""
         if(req.query.tip)
             continuareQuery+=`and tip_produs='${req.query.tip}'`
-        client.query("select * from prajituri where 1=1" + continuareQuery, function (err, rez) {
+        client.query("select * from produse where 1=1" + continuareQuery, function (err, rez) {
             if (err) {
                 renderError(res, 2);
                 console.log(err);
@@ -133,7 +133,7 @@ app.get(["/produse"], function (req, res) {
 });
 
 app.get("/produs/:id", function (req, res) {
-    client.query("select * from prajituri where id =" + req.params.id, function (err, rez) {
+    client.query("select * from produse where id =" + req.params.id, function (err, rez) {
         if (err) {
             console.log(err);
             renderError(2);
