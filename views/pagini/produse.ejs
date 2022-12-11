@@ -35,14 +35,27 @@
             </div>
 
 
-            <label> Pret minim: <input type="range" id="inp-pret" value="100" min="100" max="10000"> <span
-                    id="infoRange">(100)</span></label>
+            <label> Pret minim: <input type="range" id="inp-pret" value="100" min="100" max="10000"> <span id="infoRange">(100)</span></label>
             <label>Select simplu:
                 <select id="inp-categorie">
                     <option id="sel-toate" selected value="toate">toate</option>
                     <% for (let opt of locals.optiuni) { %>
-                        <option value="<%- opt.unnest %>">
-                            <%- opt.unnest %>
+                        <%let cat = opt.unnest%>
+                        <% if(cat.startsWith("1") == true || cat.startsWith(2) == true || cat.startsWith(3) == true || cat.startsWith(4) == true) {%>
+                            <%
+                            let index = cat.indexOf("-")
+                            let nume1 = cat.substr(index+1 )
+                            let index2 = nume1.indexOf("-")
+                            let nume2= nume1.substr(index-1, index2)
+                            nume1= nume1.substr(index2 + 3)
+                            var nume3 = [nume2, nume1]
+            
+                            %>
+                        <% } else {%>
+                            <% nume3 = [cat]%>
+                            <% } %>%>
+                        <option value="<%-nume3 %>">
+                            <%-nume3%>
                         </option>
                         <% } %>
                 </select>
@@ -65,9 +78,24 @@
                                         <%- prod.nume%>
                                     </span></a></h3>
                             <div class="categorie">
-                                <%  let cat = prod.categorie.replace(/\"/g, " ")  %>
+                                <%  let cat = prod.categorie.replace(/{/g, "")
+                                    cat = cat.replace(/}/g, "")
+                                    // let cat = prod.categorie
+                                    if(cat.startsWith("1") == true || cat.startsWith(2) == true || cat.startsWith(3) == true || cat.startsWith(4) == true) {%>
+                                        <%//console.log(cat)
+                                        let index = cat.indexOf("-")
+                                        let nume1 = cat.substr(index+1 )
+                                        let index2 = nume1.indexOf("-")
+                                        let nume2= nume1.substr(index-1, index2)
+                                        nume1= nume1.substr(index2 + 3)
+                                        var nume3 = [nume2, nume1]
+                        
+                                        %>
+                                    <% } else {%>
+                                        <% nume3 = [cat]%>
+                                        <% } %>
                                 <p class="categorie">Categorie: <span class="val-categorie">
-                                    <%-cat%>
+                                        <%-nume3%>
                                     </span></p>
                             </div>
                             <div class="descriereImg">
