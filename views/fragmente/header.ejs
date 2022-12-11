@@ -33,17 +33,24 @@
                 </a>
             </li>
             <li id="li-home"> <a href="index" id="but-home">Home</a></li>
-            <li> <a href="/produse">PC & Periferice</a>
+            <li> <a href="/produse">Produse</a>
                 <ul>
-                    <li><a href="pc&periferice#monitoare">Monitoare</a></li>
-                    <li><a href="pc&periferice#memorie">Memorie</a>
-                        <ul>
-                            <li><a href="pc&periferice#memeorie#memorieRAM">Memorie RAM</a></li>
-                            <li><a href="pc&periferice#memorie#memorieSSD">Memorie SSD</a></li>
-                            <li><a href="pc&periferice#memorie#memorieHDD">Memorie HDD</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#procesoare">Procesoare</a></li>
+                    <% for(let opt of locals.optiuni) {  %>
+                        <% 
+                            let cat = opt.unnest
+                            //console.log(cat.startsWith("2"))
+                            if(cat.startsWith(1) == false && cat.startsWith(2) == false && cat.startsWith(3) == false) { %>
+                                <li><a href="/produse#<%- cat %>"><%- cat %></a></li>
+                           <% } else if(cat.startsWith(1) == true && cat.startsWith(2) == false && cat.startsWith(3) == false) {%>
+                                <%
+                                    console.log(cat)
+                                    let index = cat.indexOf("-")
+                                    let nume1 = cat.substr(index)
+                                    console.log(nume1)
+                                %>
+                                <li><a href="/produse#<%- cat %>"><%- cat %></a></li>
+                            <% }%>
+                    <%}%>
                 </ul>
             </li>
             <li> <a href="info">Info</a>
@@ -62,4 +69,5 @@
             <li> <a href="urmaresteColet">Urmareste Colet</a></li>
         </ul>
     </nav>
+    <br/>
 </header>

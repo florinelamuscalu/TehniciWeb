@@ -5,6 +5,18 @@ main{
     padding-right:var(--padd-main);
 }
 
+@media only screen and (max-width: 800px)  and (min-width: 450px){
+    main{
+        margin-top: 6%;
+    }
+}
+
+@media only screen and (max-width: 450px) and (min-width: 0px) {
+    main{
+        margin-top: 8%;
+    }
+}
+
 .grid-produse{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -27,16 +39,17 @@ main{
 .grid-produse .produs h3 a{
     color:black;
 }
-.grid-produse .produs h3 a:hover{
+/* .grid-produse .produs h3 a:hover{
     color:white;
-}
+} */
 .grid-produse .produs figure{
     text-align: center;
 }
-.grid-produse .produs figure img{
+/* .grid-produse .produs figure img{
     border:1px solid grey
-}
-.grid-produse .produs .info-prod{
+} */
+
+/* .grid-produse .produs .info-prod{
     display:flex;
     background-color: var(--cl-marcare);
 }
@@ -44,18 +57,35 @@ main{
     width:30%;
     text-align:center;
     font-weight:bold;
-}
+} */
 
 .grid-produse .produs p.categorie{
 
-    text-align:center;
+    text-align:start;
     font-weight:bold;
+    margin-left: 2%;
 }
 
-.info-produse{
-    background-color: var(--cl-marcare);
-    padding:0.2rem;
-    box-shadow: 0px 0px 0.5rem 0.15rem grey;
+.info-prod{
+    margin-left: 2%;
+}
+
+.descriereImg{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap:1rem;
+}
+
+.descriereImg .descriere{
+    font-weight:bold;
+    width: 100%;
+    margin-left: 2%;
+    display: flex;
+    justify-content: center;
+}
+.descriereImg .img{
+    display: flex;
+    justify-content: right;
 }
 
 .produs{

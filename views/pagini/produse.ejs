@@ -6,7 +6,7 @@
     <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
-    
+
     <link rel="stylesheet" href="/resurse/css/pagini/produse/produse.css" type="text/css" />
     <script type="text/javascript" src="/resurse/js/produse.js"></script>
     <%- include("../fragmente/head") %>
@@ -35,7 +35,7 @@
             </div>
 
 
-            <label> Pret minim: <input type="range" id="inp-pret" value="0" min="100" max="10000"> <span
+            <label> Pret minim: <input type="range" id="inp-pret" value="100" min="100" max="10000"> <span
                     id="infoRange">(100)</span></label>
             <label>Select simplu:
                 <select id="inp-categorie">
@@ -64,24 +64,31 @@
                             <h3 class="nume">Nume: <a href="/produs/<%-prod.id %>"><span class="val-nume">
                                         <%- prod.nume%>
                                     </span></a></h3>
-                            <div class="info-prod">
-                                <p class="pret">Pret: <span class="val-pret">
-                                        <%- prod.pret%>
+                            <div class="categorie">
+                                <%  let cat = prod.categorie.replace(/\"/g, " ")  %>
+                                <p class="categorie">Categorie: <span class="val-categorie">
+                                    <%-cat%>
                                     </span></p>
-                                <p class="data_fabricare">Data fabricare: <span class="val-data_fabricare">
-                                        <%- prod.calorii%>
-                                    </span></p>
-                                <!-- <p class="gramaj">Gramaj: <span class="val-gramaj">
-                                        <%- //prod.gramaj%> 
-                                    </span></p> -->
                             </div>
-                            <p class="categorie">Categorie:<span class="val-categorie">
-                                    <%- prod.categorie%>
-                                </span></p>
-                            <figure>
-                                <a href="/produs/<%-prod.id %>"><img src="/resurse/imagini/produse/<%- prod.imagine %>"
-                                        style="width:50%;height:auto;" alt="[imagine <%- prod.nume %>]" /></a>
-                            </figure>
+                            <div class="descriereImg">
+                                <div class="descriere">
+                                    <p class="descriere">Descriere:<span class="val-descriere">
+                                            <%- prod.descriere%>
+                                        </span></p>
+                                </div>
+                                <figure class="img">
+                                    <a href="/produs/<%-prod.id %>"><img
+                                            src="/resurse/imagini/produse/<%- prod.imagine %>"
+                                            style="width:100%;height:auto;" alt="[imagine <%- prod.nume %>]" /></a>
+                                </figure>
+                            </div>
+                            <div class="info-prod">
+                                <p class="pret">Pret: <span class="val-pret"><%- prod.pret%></span></p>
+                                <p class="tip_produs">Tip Produs: <span class="val-tip_produs"><%- prod.tip_produs%></span></p>
+                                <p class="specificatii">Specificatii: <span class="val-specificatii"><%- prod.specificatii%></span></p>
+                                <p class="data_fabricare">Data Fabricare: <span class="val-data_fabricare"><time datetime="DTDD-MM-YYY"><%- prod.data_fabricare%></time></span></p>
+                                <p class="desigilat">Desigilat <span class="val-desigilat"><%- prod.desigilat%></span></p>
+                            </div>
                             <label class="selecteaza-cos">
                                 Selectează:<br />
                                 <input type="checkbox" class="select-cos" value="<%-prod.id %>" autocomplete="off">

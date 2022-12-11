@@ -56,3 +56,22 @@ alt="<% if (imag.alt){ %> <%- imag.alt %> <% }else{ %> <%- imag.titlu %> <%} %>"
                                     <% timp=3;  %>
                                     <% } else { timp=4; } %>
                                     <% if(imag.sfert_ora && imag.sfert_ora.includes(timp)){ %>
+
+
+
+
+
+                                      <li><a href="/produse#<% locals.rezCateg %>">Periferice</a></li>
+                                      <li><a href="/produse#<% locals.rezCateg %>">Componente PC</a>
+                                          <ul>
+                                              <li><a href="/produse#<% locals.rezCateg %>#<% locals.rezCateg %>">RAM</a></li>
+                                              <li><a href="/produse#<% locals.rezCateg %>#<% locals.rezCateg %>">SSD</a></li>
+                                              <li><a href="/produse#<% locals.rezCateg %>#<% locals.rezCateg %>">HDD</a></li>
+                                              <li><a href="/produse#<% locals.rezCateg %>#<% locals.rezCateg %>">Procesoare</a></li>
+                                              <li><a href="/produse#<% locals.rezCateg %>#<% locals.rezCateg %>">Placa Video</a></li>
+                                              <li><a href="/produse#<% locals.rezCateg %>#<% locals.rezCateg %>">Placa Baza</a></li>
+                                              <li><a href="/produse#<% locals.rezCateg %>#<% locals.rezCateg %>">Monitoare</a></li>
+                                          </ul>
+                                      </li>
+                                      <li><a href="/produse#<% locals.rezCateg %>">PC</a></li>
+                                      <li><a href="/produse#<% locals.rezCateg %>">Laptop</a></li>

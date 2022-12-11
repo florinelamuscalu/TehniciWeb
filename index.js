@@ -99,20 +99,6 @@ app.get(["/info", "info"], function (req, res) {
     res.render("pagini/info", { imagini: obGlobal.imagini });
 });
 
-// app.get("/produse", function (req, res) {
-//     client.query("select * from unnest(enum_range(null::categ_prajitura))", function (err, rezCateg) {
-//         client.query("select  * from prajituri", function (err, rez){
-//             if (err) {
-//                 console.log(err);
-//                 renderError(res, 2);
-//             }
-//             else {
-//                 res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
-//                 //console.log(rez);
-//             }
-//         });
-//     });
-// });
 
 
 app.get(["/produse"], function (req, res) {
@@ -143,6 +129,21 @@ app.get("/produs/:id", function (req, res) {
             //console.log(rez);
         }
     })
+});
+
+app.get("/produse", function (req, res) {
+    client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
+        client.query("select  * from ", function (err, rez){
+            if (err) {
+                console.log(err);
+                renderError(res, 2);
+            }
+            else {
+                res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
+                console.log(rez);
+            }
+        });
+    });
 });
 
 app.get(["/", "/index", "/home"], function (req, res) {
