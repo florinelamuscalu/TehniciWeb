@@ -35,8 +35,8 @@
             <li id="li-home"> <a href="index" id="but-home">Home</a></li>
             <li> <a href="/produse">Produse</a>
                 <ul>
-                    <%var nume3 =[]%>
-                    <% for(let opt of locals.optiuni) {  %>
+                    <%var nume3 =[]
+                      for(let opt of locals.optiuni) {  %>
                         <% 
                             let cat1 = opt.unnest
                             if(cat1.startsWith(1) == false && cat1.startsWith(2) == false && cat1.startsWith(3) == false && cat1.startsWith(4) == false) { %>
@@ -50,23 +50,24 @@
                                     //nume2 contine numele meniului == componente
                                     nume3.push(nume1.substr(index2 + 3))
                                     // in nume 1 salvez numele submeniului
-                                
-                                }
-                            }%>
-                                <li><a href="/produse#<%-nume2%>"><%-nume2 %></a>
-                                    <ul>
-                                        <%for(let menu of nume3) {%>
-                                        <li><a href="/produse#<%-nume2%>#<%-nume1%>"><%-menu %></a></li>
-                                        <%}%>
-                                    </ul>
-                                </li>
+                                %> 
+                            <%}%>
+                        <%}%>
+                            
+                        <li><a href="/produse#<%-nume2%>"><%-nume2 %></a>
+                            <ul>
+                                <%for(let menu of nume3) {%>
+                                    <li><a href="/produse#<%-nume2%>#<%-menu%>"><%-menu %></a></li>
+                                <%}%>
+                            </ul>
+                        </li>
                 </ul>
             </li>
             <li> <a href="info">Info</a>
                 <ul>
                     <li><a href="info#despre">Despre Noi</a></li>
                     <li><a href="info#contact">Contact</a></li>
-                    <li><a href="info#Shops">Sedii magazine</a></li>
+                    <li><a href="info#Shops">Sedii magazine</a></li> 
                     <li><a href="info#garantie">Garantia Securitatii</a></li>
                     <li><a href="info#gdpr">GDPR</a></li>
                     <li><a href="info#CalcularePret">Calcul pret redus</a></li>

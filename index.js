@@ -4,7 +4,9 @@ app = express();
 
 
 const sharp = require("sharp");
+const formidable = require("formidable");
 const { Client } = require("pg");
+const {Utilizator} = require("./module_propri/utilizator.js")
 const ejs = require("ejs");
 var client = new Client({
     database: "pc",
@@ -93,6 +95,52 @@ function renderError(res, identificator, titlu, text, imagine) {
         res.render("pagini/eroare", { titlu: titlu, text: text, imagine: imagine });
     }
 }
+
+/// Utilizatori
+
+
+app.post("/inregistrare",function(req, res){
+    var username;
+    console.log("ceva");
+    var formular= new formidable.IncomingForm()
+    formular.parse(req, function(err, campuriText, campuriFisier ){
+        console.log(campuriText);
+ 
+        var eroare="";
+
+        var utilizNou = new Utilizator();
+        try {
+            utilizNou.setareNume(campuriText.nume);
+            utilizNou.setareUserName(campuriText.username);
+        }
+        catch(e){ eroare +=e.message}
+
+        if(!eroare){
+           
+        }
+        else
+            res.render("pagini/inregistrare", {err: "Eroare: "+eroare});
+    });
+    formular.on("field", function(nume,val){  // 1
+   
+        console.log(`--- ${nume}=${val}`);
+       
+        if(nume=="username")
+            username=val;
+    })
+    formular.on("fileBegin", function(nume,fisier){ //2
+        console.log("fileBegin");
+       
+        console.log(nume,fisier);
+        //TO DO in folderul poze_uploadate facem folder cu numele utilizatorului
+ 
+    })    
+    formular.on("file", function(nume,fisier){//3
+        console.log("file");
+        console.log(nume,fisier);
+    });
+});
+
 
 
 app.get(["/info", "info"], function (req, res) {
@@ -193,3 +241,4 @@ console.log("Hello world!");
 
 app.listen(8080);
 console.log("Serverul a pornit!");
+
