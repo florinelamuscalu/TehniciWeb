@@ -1,4 +1,4 @@
-window.addEventListener("load" , function(){
+window.addEventListener("DOMContentLoaded" , function(){
     //vect_teme =["dark", "light", "craciun"]
     tema_curenta = localStorage.getItem("tema");
     if(tema_curenta){

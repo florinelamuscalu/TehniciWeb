@@ -12,7 +12,7 @@
     <%- include("../fragmente/head") %>
 </head>
 
-<body>
+<body class="dark">
     <%- include("../fragmente/header") %>
 
         <main>
@@ -104,18 +104,21 @@
             </label>
 
             <label>Search:
-                <textarea id="inp_textare">Search</textarea>
+                <textarea id="inp_textare"></textarea>
             </label>
 
             <p>
                 <button id="filtrare">Filtreaza</button>
                 <button id="resetare">Reseteaza</button><br />
                 <button id="sortCrescNume">Sorteaza crescator dupa pret si nume</button>
-                <button id="sortDescrescNume">Sorteaza descrescator dupa pret si nume</button>
+                <button id="sortDescrescNume">Sorteaza descrescator dupa pret si nume</button><br>
+                <button id="maxim">Produsul cu pretul cel mai mare</button>
+                <button id="minim">Produsul cu pretul cel mai mic</button>
 
             </p>
 
             <p id="p-suma">Apăsați Alt+"c" pentru suma preturilor produselor afișate. </p>
+            <p id="messaje_alert"></p>
             <section id="produse">
                 <h2>Produse</h2>
                 <div class="grid-produse">
@@ -165,7 +168,7 @@
                                 <p class="culoare">Culoare: <span class="val-culoare"><%- prod.culoare%></span></p>
                                 <p class="desigilat">Desigilat <span class="val-desigilat"><%- prod.desigilate%></span></p>
                             </div>
-                            <p style="display: none" class="culoare">Culoare:<span class="val-culoare"><%- prod.culoare%></span></p>
+                            <p style="display: none" class="culoare">Culoare:<span class="val-culoare"><%- prod.culoare%></span></p><br>
                             <label class="selecteaza-cos">
                                 Selectează:<br />
                                 <input type="checkbox" class="select-cos" value="<%-prod.id %>" autocomplete="off">

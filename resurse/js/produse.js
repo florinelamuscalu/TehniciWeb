@@ -1,5 +1,12 @@
 window.onload = function () {
     x = 100
+
+    document.getElementById("inp-garantie").onchange=function(){
+        console.log(this.value);
+        document.getElementById("infoRange").innerHTML=`(${this.value})`
+    }
+
+
     document.getElementById("filtrare").onclick = function () {
         var inpNume = document.getElementById("inp-nume").value.toLowerCase().trim();
         var inpCategorie = document.getElementById("inp-categorie").value;
@@ -9,10 +16,13 @@ window.onload = function () {
         var desigilat = document.getElementsByName("gr_chck");
         var datalist = document.getElementById("i_datalist").value;
 
-        if(inpNume == " " || inp_text == " "){
-            return;
-            alert("Ai uitat sa completezi campurile: Nume si Search")
+        var text;
+        if (inpNume == "" || inp_text == "" 
+            || !inpNume.match(new RegExp("a-z]"))
+            || !inp_text.match(new RegExp("[a-z][-+]")) ) {
+            text = "Campurile: \`Nume si Search` nu sunt completate corect";
         }
+        document.getElementById("messaje_alert").innerHTML = text;
 
         var tip_prod_value = "";
         for (let tp of inpTipProd) {
@@ -34,7 +44,7 @@ window.onload = function () {
 
         for (let produs of produse) {
             var cond1 = false, cond2 = false, cond3 = false, cond4 = false,
-                cond5 = false, cond6=false, cond7=false;
+                cond5 = false, cond6 = false, cond7 = false;
             produs.style.display = "none";
 
             let nume = produs.getElementsByClassName("val-nume")[0].innerHTML.toLowerCase().trim();
@@ -82,22 +92,22 @@ window.onload = function () {
                     cond6 = true;
                 }
             }
-            for(let id in desigilat_id){
-                if(id == "promotii"){
+            for (let id in desigilat_id) {
+                if (id == "promotii") {
                     // go to page promotii 
-                    console.log(id)
+                    //console.log(id)
                 }
             }
 
-            for(let id in desigilat_id){
-                if(id == "desigilat"){
+            for (let id in desigilat_id) {
+                if (id == "desigilat") {
                     // go to page desigilat 
-                    console.log(id)
+                    //console.log(id)
                 }
             }
 
             let culoare = produs.getElementsByClassName("val-culoare")[0].innerHTML;
-            if(culoare.includes(datalist)){
+            if (culoare.includes(datalist)) {
                 cond7 = true;
             }
 
@@ -105,13 +115,13 @@ window.onload = function () {
                 produs.style.display = "block";
                 //console.log(cond3)
             }
-            console.log("1", cond1);
-            console.log("2", cond2);
-            console.log("3", cond3);
-            console.log("4", cond4);
-            console.log("5", cond5);
-            console.log("6", cond6);
-            console.log("7", cond7);
+            // console.log("1", cond1);
+            // console.log("2", cond2);
+            // console.log("3", cond3);
+            // console.log("4", cond4);
+            // console.log("5", cond5);
+            // console.log("6", cond6);
+            // console.log("7", cond7);
 
         }
     }
@@ -125,6 +135,14 @@ window.onload = function () {
         //resetare filtre
         document.getElementById("inp-nume").value = "";
         document.getElementById("sel-toate").selected = true;
+        document.getElementById("i-pret").selected = false;
+        document.getElementById("i_datalist").value = "";
+        document.getElementById("inp_textare").value = "";
+        document.getElementById("stoc").checked = true;
+        document.getElementById("resigilat").checked = false;
+        document.getElementById("promotii").checked = false;
+        document.getElementById("i_rad4").checked = true;
+
 
     }
 
@@ -154,6 +172,94 @@ window.onload = function () {
     }
     document.getElementById("sortDescrescNume").onclick = function () {
         sorteaza(-1);
+    }
+
+    function maxim() {
+        var max = 0;
+        var produse = document.getElementsByClassName("produs");
+        //console.log(produse)
+        for (let prod of produse) {
+            let pret = parseFloat(prod.getElementsByClassName("val-pret")[0].innerHTML.trim());
+            if(pret > max){
+                max = pret
+            }
+        }
+        console.log(max)
+        return max;
+    }
+
+    function minim() {
+        var min = 9999999;
+        var produse = document.getElementsByClassName("produs");
+        //console.log(produse)
+        for (let prod of produse) {
+            let pret = parseFloat(prod.getElementsByClassName("val-pret")[0].innerHTML.trim());
+            //console.log(pret)
+            if(pret < min){
+                min = pret
+            }
+        }
+        console.log("****",min)
+        return min;
+    }
+
+    document.getElementById("maxim").onclick = function () {
+        var pret_max = maxim();
+        //console.log(pret_max)
+        const produs = document.createElement("p")
+        produs.innerText=`Pretul maxim este ${pret_max}` 
+        // var produse = document.getElementsByClassName("produs");
+        // for (let prod in produse) {
+        //     if (prod.pret == pret_max)
+        //     //produs.innerHTML = prod
+        //     produs.innerText=`Pretul maxim este ${pret_max}` 
+        // }
+        document.getElementsByClassName("grid-produse").appendChild(produs)
+    }
+    document.getElementById("minim").onclick = function () {
+        var pret_min = minim();
+        //console.log(pret_max)
+        var produs = document.createElement("p")
+        produs.id="pret"
+        produs.innerHTML=`Pretul minim este ${pret_min}` 
+        var p = document.getElementsByClassName("grid-produse");
+        p.insertBefore(produs,p.nextSibling);
+        // var produse = document.getElementsByClassName("produs");
+        // for (let prod in produse) {
+        //     if (prod.pret == pret_min)
+        //     //produs.innerHTML = prod
+        //     produs.innerText=`Pretul minim este ${pret_min}` 
+        // }
+        //document.getElementsByClassName("grid-produse").appendChild(produs)
+    }
+
+    window.onkeydown=function(e){
+        //console.log(e);
+        if(e.key=='c' && e.altKey){
+            var produse=document.getElementsByClassName("produs");
+            let suma=0;
+            for(let prod of produse){
+                if (prod.style.display!="none")
+                    suma+=parseFloat(prod.getElementsByClassName("val-pret")[0].innerHTML)
+            }
+            if (!document.getElementById("rezultat")){
+                rezultat=document.createElement("p");
+                rezultat.id="rezultat";
+                rezultat.innerHTML="<b>Pret total:</b> "+suma;
+                //document.getElementById("produse").appendChild(rezultat);
+                var ps=document.getElementById("p-suma");
+                ps.parentNode.insertBefore(rezultat,ps.nextSibling);
+                rezultat.style.border="1px solid purple";
+                rezultat.onclick= function(){
+                    this.remove();
+                }
+
+                setTimeout(function (){
+                    document.getElementById("rezultat").remove();
+                }, 2000);
+            }
+            //setInterval(function(){alert(1);}, 3000);
+        }
     }
 
 }
