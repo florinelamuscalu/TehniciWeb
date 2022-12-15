@@ -8,14 +8,30 @@ const formidable = require("formidable");
 const { Client } = require("pg");
 const {Utilizator} = require("./module_propri/utilizator.js")
 const ejs = require("ejs");
-var client = new Client({
-    database: "pc",
-    user: "flori2",
-    password: "flori",
-    host: "localhost",
-    port: 5432
-});
-client.connect();
+
+const AccesBd= require("./module_propri/accesbd.js")
+
+// var client = new Client({
+//     database: "pc",
+//     user: "flori2",
+//     password: "flori",
+//     host: "localhost",
+//     port: 5432
+// });
+// client.connect();
+
+var instantaBD=AccesBd.getInstanta({init:"local"})
+var client = instantaBD.getClient();
+
+
+//verificare select din accesbd
+// instantaBD.select({campuri:[" nume, pret"], tabel:"produse", conditiiAnd:["pret>300", "pret<500"]}, function(err, rez){
+//     console.log("!!!!!!!!!!")
+//     if (err)
+//         console.log(err);
+//     else
+//         console.log(rez);
+// })
 
 // client.query("select * from tabel_test", function (err, rez) {
 //     if (err)
@@ -44,6 +60,15 @@ obGlobal = {
     erori: null,
     imagini: null
 }
+
+app.use("/*", function(req, res, next){
+    client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
+        continuareQuery=""
+        res.locals.optiuni = rezCateg.rows;
+        next();
+    });
+})
+
 
 function createImages() {
     var continutFisier = fs.readFileSync(__dirname + "/resurse/json/galerie.json").toString("utf8");
@@ -110,8 +135,13 @@ app.post("/inregistrare",function(req, res){
 
         var utilizNou = new Utilizator();
         try {
-            utilizNou.setareNume(campuriText.nume);
-            utilizNou.setareUserName(campuriText.username);
+            utilizNou.setareNume =campuriText.nume;
+            utilizNou.setareUserName = campuriText.username;
+            utilizNou.email =(campuriText.email);
+            utilizNou.prenume=(campuriText.prenume)
+            utilizNou.culoare_chat = (campuriText.culoare_chat);
+            utilizNou.parola=(campuriText.parola)
+            utilizNou.salvareUtilizator();
         }
         catch(e){ eroare +=e.message}
 
@@ -165,6 +195,8 @@ app.get(["/produse"], function (req, res) {
         })
     })
 });
+
+
 
 app.get("/produs/:id", function (req, res) {
     client.query("select * from produse where id =" + req.params.id, function (err, rez) {

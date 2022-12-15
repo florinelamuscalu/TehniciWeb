@@ -1,7 +1,7 @@
 DROP TYPE IF EXISTS categ_produs;
 DROP TYPE IF EXISTS tipuri_produse;
 
-CREATE TYPE categ_produs AS ENUM( 'periferice', 'PC', 'componente PC', 'laptop', '1-componente-1-monitoare', '2-componente-1-RAM','2-componente-2-SSD', '2-componente-3-HDD', '3-componente-1-placa-video', '3-componente-2-placa-baza', '4-componente-1-procesor');
+CREATE TYPE categ_produs AS ENUM( 'periferice', 'PC', 'laptop', '1-componente-1-monitoare', '2-componente-1-RAM','2-componente-2-SSD', '2-componente-3-HDD', '3-componente-1-placa-video', '3-componente-2-placa-baza', '4-componente-1-procesor');
 CREATE TYPE tipuri_produse AS ENUM('gaming', 'office','home');
 
 

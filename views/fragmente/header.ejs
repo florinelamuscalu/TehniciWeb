@@ -1,7 +1,6 @@
 <header id="header">
     <div id="user-button">
         <h1 id="titlu">PC components</h1>
-        <button id="tema"> Schimba tema </button>
         <script>
             tema_curenta = localStorage.getItem("tema");
             if (tema_curenta) {
@@ -17,6 +16,7 @@
                 }
             }
         </script>
+        <button id="tema"> Schimba tema </button>
         <i class="fa-regular fa-user"></i>
         <i class="fa-regular fa-heart"></i>
     </div>
@@ -33,6 +33,7 @@
                 </a>
             </li>
             <li id="li-home"> <a href="index" id="but-home">Home</a></li>
+            <li> <a href="/inregistrare">Inregistrare</a>
             <li> <a href="/produse">Produse</a>
                 <ul>
                     <%var nume3 =[]

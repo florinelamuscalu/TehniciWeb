@@ -17,25 +17,36 @@
 
         <main>
             <label> Nume: <input type="text" id="inp-nume"></label>
-            <!--<label> Maxim calorii: <input type="number" id="inp-calorii" value="10000"></label>-->
-            <div> Data fabricare:
-                <!-- trebuie sa aiba acelasi name ca sa formeze un grup -->
-                <p><label>Vechi (data fabricare &lt; 2019)
-                        <input id="i_rad1" name="gr_rad" value="0:2021" type="radio" />
+            <div> Tip produs:
+                <p><label>Gaming 
+                        <input id="i_rad1" name="gr_rad" value="gaming" type="radio" />
                     </label></p>
-                <p><label>Mediu (2020 &le; data fabricare &lt; 2021)
-                        <input id="i_rad2" name="gr_rad" value="2020:2021" type="radio" />
+                <p><label>Home 
+                        <input id="i_rad2" name="gr_rad" value="home" type="radio" />
                     </label>
-                <p><label>Nou (2021 &le; data fabricare)
-                        <input id="i_rad3" name="gr_rad" value="2021:2023" type="radio" />
+                <p><label>Office
+                        <input id="i_rad3" name="gr_rad" value="office" type="radio" />
                     </label>
                 <p><label>Toate
                         <input id="i_rad4" checked name="gr_rad" value="toate" type="radio" />
                     </label>
             </div>
 
+            <label> Resigilat
+                <input id="resigilat" name="gr_chck"  value="true" type="checkbox"/>
+            </label>
+            
+            <label>In stoc
+                <input id="stoc" name="gr_chck" checked value="false" type="checkbox"/>
+            </label>
+        
+            <label>Promotii 
+                <input id="promotii" name="gr_chck"  value="false" type="checkbox"/>
+            </label> <br>
 
-            <label> Pret minim: <input type="range" id="inp-pret" value="100" min="100" max="10000"> <span id="infoRange">(100)</span></label>
+
+            <label> Garantie: <input type="range" id="inp-garantie" value="0" min="0" max="5"> <span id="infoRange">(0)</span></label>
+
             <label>Select simplu:
                 <select id="inp-categorie">
                     <option id="sel-toate" selected value="toate">toate</option>
@@ -59,7 +70,43 @@
                         </option>
                         <% } %>
                 </select>
+            </label> <br>
+
+            <label>Select multiplu:
+                <select id="i-pret" multiple size="3">
+                    <option value="1">0-200</option>
+                    <option value="2" selected>200-500</option>
+                    <option value="3">500-1000</option>
+                    <option value="4">1000-1500</option>
+                    <option value="5">1500-2000</option>
+                    <option value="6">2000-3000</option>
+                    <option value="7">3000-4000</option>
+                    <option value="8">4000-5000</option>
+                    <option value="9">Peste 5000</option>
+                </select>
             </label>
+
+            <label>Datalist:
+                <input list="id_lista" id="i_datalist">
+                <datalist id="id_lista">
+                    <% var culori = [] %>
+                    <% for( let prod of locals.produse) { %>
+                            <%
+                            if(!culori.includes(prod.culoare)){%>
+                                <% culori.push(prod.culoare)%>
+                            <%}%>
+                            %>
+                    <%}%>
+                    <%for(let culoare of culori){%>
+                        <option value="<%-culoare%>"></option>
+                    <%}%>
+                </datalist>
+            </label>
+
+            <label>Search:
+                <textarea id="inp_textare">Search</textarea>
+            </label>
+
             <p>
                 <button id="filtrare">Filtreaza</button>
                 <button id="resetare">Reseteaza</button><br />
@@ -111,12 +158,14 @@
                                 </figure>
                             </div>
                             <div class="info-prod">
-                                <p class="pret">Pret: <span class="val-pret"><%- prod.pret%></span></p>
-                                <p class="tip_produs">Tip Produs: <span class="val-tip_produs"><%- prod.tip_produs%></span></p>
+                                <p class="pret">Pret:<span class="val-pret"><%- prod.pret%></span></p>
+                                <p class="tip_produs">Tip Produs: <span class="val-tip_produs"><%-prod.tip_produs%></span></p>
                                 <p class="specificatii">Specificatii: <span class="val-specificatii"><%- prod.specificatii%></span></p>
                                 <p class="data_fabricare">Data Fabricare: <span class="val-data_fabricare"><time datetime="DTDD-MM-YYY"><%- prod.data_fabricare%></time></span></p>
-                                <p class="desigilat">Desigilat <span class="val-desigilat"><%- prod.desigilat%></span></p>
+                                <p class="culoare">Culoare: <span class="val-culoare"><%- prod.culoare%></span></p>
+                                <p class="desigilat">Desigilat <span class="val-desigilat"><%- prod.desigilate%></span></p>
                             </div>
+                            <p style="display: none" class="culoare">Culoare:<span class="val-culoare"><%- prod.culoare%></span></p>
                             <label class="selecteaza-cos">
                                 Selectează:<br />
                                 <input type="checkbox" class="select-cos" value="<%-prod.id %>" autocomplete="off">
