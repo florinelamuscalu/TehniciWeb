@@ -180,11 +180,13 @@ app.get(["/info", "info"], function (req, res) {
 
 
 app.get(["/produse"], function (req, res) {
-    console.log(req.query);
+    console.log('req1',req.query);
     client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
         continuareQuery=""
         if(req.query.tip)
-            continuareQuery+=`and tip_produs='${req.query.tip}'`
+            continuareQuery+=` and 'categorie'::text like '%${req.query.tip}%'`
+            console.log('req',req.query.tip)
+    
         client.query("select * from produse where 1=1" + continuareQuery, function (err, rez) {
             if (err) {
                 renderError(res, 2);

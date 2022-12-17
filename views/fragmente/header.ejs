@@ -41,9 +41,9 @@
                     <%var nume3 =[]
                       for(let opt of locals.optiuni) {  %>
                         <% 
-                            let cat1 = opt.unnest
+                            var cat1 = opt.unnest
                             if(cat1.startsWith(1) == false && cat1.startsWith(2) == false && cat1.startsWith(3) == false && cat1.startsWith(4) == false) { %>
-                                <li><a href="/produse#<%- cat1 %>"><%- cat1 %></a></li>
+                                <li><a href="/produse?<%- cat1 %>"><%- cat1 %></a></li>
                            <% } else if(cat1.startsWith(1) == true || cat1.startsWith(2) == true || cat1.startsWith(3) == true || cat1.startsWith(4) == true) {%>
                                 <%
                                     let index = cat1.indexOf("-")
@@ -57,10 +57,10 @@
                             <%}%>
                         <%}%>
                             
-                        <li><a href="/produse#<%-nume2%>"><%-nume2 %></a>
+                        <li><a href="/produse?tip=<%-nume2%>"><%-nume2 %></a>
                             <ul>
                                 <%for(let menu of nume3) {%>
-                                    <li><a href="/produse#<%-nume2%>#<%-menu%>"><%-menu %></a></li>
+                                    <li><a href="/produse?tip=<%-cat1%>"><%-menu %></a></li>
                                 <%}%>
                             </ul>
                         </li>

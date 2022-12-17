@@ -11,18 +11,18 @@ window.onload = function () {
         var inpNume = document.getElementById("inp-nume").value.toLowerCase().trim();
         var inpCategorie = document.getElementById("inp-categorie").value;
         var inpTipProd = document.getElementsByName("gr_rad");
-        var inp_pret = document.getElementById("i-pret").value;
+        var inp_pret = document.getElementById("i-pret").options;
         var inp_text = document.getElementById("inp_textare").value.toLowerCase().trim();
         var desigilat = document.getElementsByName("gr_chck");
         var datalist = document.getElementById("i_datalist").value;
 
-        var text;
-        if (inpNume == "" || inp_text == "" 
-            || !inpNume.match(new RegExp("a-z]"))
-            || !inp_text.match(new RegExp("[a-z][-+]")) ) {
-            text = "Campurile: \`Nume si Search` nu sunt completate corect";
-        }
-        document.getElementById("messaje_alert").innerHTML = text;
+        // var text;
+        // if (inpNume == "" || inp_text == "" 
+        //     || !inpNume.match(new RegExp("a-z]"))
+        //     || !inp_text.match(new RegExp("[a-z][-+]")) ) {
+        //     text = "Campurile: \`Nume si Search` nu sunt completate corect";
+        // }
+        // document.getElementById("messaje_alert").innerHTML = text;
 
         var tip_prod_value = "";
         for (let tp of inpTipProd) {
@@ -33,11 +33,11 @@ window.onload = function () {
         var desigilat_value = "";
         var desigilat_id = "";
         for (let des of desigilat) {
-            if (des.checked)
+            if (des.checked){
                 desigilat_value += des.value + " ";
-            desigilat_id += des.id + " ";
+                desigilat_id += des.id + " ";
+            }
         }
-
 
 
         var produse = document.getElementsByClassName("produs");
@@ -66,29 +66,44 @@ window.onload = function () {
             //console.log(cond3)
 
             //console.log(cond3)
-            let pret = produs.getElementsByClassName("val-pret")[0].innerHTML.trim();
-            //console.log(pret)
-            if (inp_pret == 1 && pret < 200 || inp_pret == 2 && pret >= 200 && pret < 500
-                || inp_pret == 3 && pret >= 500 && pret < 1000 || inp_pret == 4 && pret >= 1000 && pret < 1500
-                || inp_pret == 5 && pret >= 1500 && pret < 2000 || inp_pret == 6 && pret >= 2000 && pret < 3000
-                || inp_pret == 7 && pret >= 3000 && pret < 4000 || inp_pret == 8 && pret >= 4000 && pret < 5000
-                || inp_pret == 9 && pret >= 5000) {
+            let pret = parseInt(produs.getElementsByClassName("val-pret")[0].innerHTML.trim());
+            sir = []
+            for(let opt of inp_pret){
+                if(opt.selected)
+                    sir.push(opt.value)
+            }
+            console.log(sir)
+            console.log(cond4)
+            console.log(pret)
+            if ( sir.includes("1") && pret < 200 || sir.includes("2") && pret >= 200 && pret < 500
+                || sir.includes("3") && pret >= 500 && pret < 1000 || sir.includes("4") && pret >= 1000 && pret < 1500
+                || sir.includes("5")&& pret >= 1500 && pret < 2000 || sir.includes("6") && pret >= 2000 && pret < 3000
+                ||sir.includes("7") && pret >= 3000 && pret < 4000 || sir.includes("8") && pret >= 4000 && pret < 5000
+                || sir.includes("9") && pret >= 5000) {
                 cond4 = true
             }
-
+            console.log(cond4)
+            //cond4= true;
             let descriere = produs.getElementsByClassName("descriere")[0].innerHTML.toLocaleLowerCase().trim();
             //console.log(descriere);
+            //console.log("--", inp_text)
             let semn = inp_text.indexOf("+")
+            //console.log(semn)
             let space = inp_text.indexOf(" ")
+            //console.log(space)
             let text = inp_text.substr(semn + 1, space)
-            //console.log(text)
+            ///console.log("***", text)
+            //console.log("des", descriere)
             if (descriere.includes(text)) {
                 cond5 = true;
             }
 
             let disponibilitate = produs.getElementsByClassName("val-desigilat")[0].innerHTML.trim();
+            //console.log("dis",disponibilitate)
+            //console.log("des",desigilat_value)
             for (let val in desigilat_value) {
-                if (disponibilitate.includes(val)) {
+                console.log("val", val)
+                if (disponibilitate =desigilat_value) {
                     cond6 = true;
                 }
             }
@@ -115,13 +130,13 @@ window.onload = function () {
                 produs.style.display = "block";
                 //console.log(cond3)
             }
-            // console.log("1", cond1);
-            // console.log("2", cond2);
-            // console.log("3", cond3);
-            // console.log("4", cond4);
-            // console.log("5", cond5);
-            // console.log("6", cond6);
-            // console.log("7", cond7);
+            console.log("1", cond1);
+            console.log("2", cond2);
+            console.log("3", cond3);
+            console.log("4", cond4);
+            console.log("5", cond5);
+            console.log("6", cond6);
+            console.log("7", cond7);
 
         }
     }
@@ -214,7 +229,7 @@ window.onload = function () {
         //     //produs.innerHTML = prod
         //     produs.innerText=`Pretul maxim este ${pret_max}` 
         // }
-        document.getElementsByClassName("grid-produse").appendChild(produs)
+        document.getElementsByClassName("grid-produse")[0].appendChild(produs)
     }
     document.getElementById("minim").onclick = function () {
         var pret_min = minim();
@@ -222,8 +237,8 @@ window.onload = function () {
         var produs = document.createElement("p")
         produs.id="pret"
         produs.innerHTML=`Pretul minim este ${pret_min}` 
-        var p = document.getElementsByClassName("grid-produse");
-        p.insertBefore(produs,p.nextSibling);
+        var p = document.getElementsByClassName("grid-produse")[0];
+        p.parentNode.insertBefore(produs,p);
         // var produse = document.getElementsByClassName("produs");
         // for (let prod in produse) {
         //     if (prod.pret == pret_min)
