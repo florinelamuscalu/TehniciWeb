@@ -20,8 +20,9 @@ function deleteCookie(nume){
     document.cookie=`${nume}=0; expires=${(new Date()).toUTCString()}`;
 }
 
+//DOMContentLoaded -- se incarca mai repede si nu mai apare cookie la refresh
 
-window.addEventListener("load", function(){
+window.addEventListener("DOMContentLoaded", function(){
     if (getCookie("acceptat_banner")){
         document.getElementById("banner").style.display="none";
     }

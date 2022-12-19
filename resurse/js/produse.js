@@ -1,9 +1,9 @@
 window.onload = function () {
     x = 100
 
-    document.getElementById("inp-garantie").onchange=function(){
-        console.log(this.value);
-        document.getElementById("infoRange").innerHTML=`(${this.value})`
+    document.getElementById("inp-garantie").onchange = function () {
+        //console.log(this.value);
+        document.getElementById("infoRange").innerHTML = `(${this.value})`
     }
 
 
@@ -33,7 +33,7 @@ window.onload = function () {
         var desigilat_value = "";
         var desigilat_id = "";
         for (let des of desigilat) {
-            if (des.checked){
+            if (des.checked) {
                 desigilat_value += des.value + " ";
                 desigilat_id += des.id + " ";
             }
@@ -68,33 +68,67 @@ window.onload = function () {
             //console.log(cond3)
             let pret = parseInt(produs.getElementsByClassName("val-pret")[0].innerHTML.trim());
             sir = []
-            for(let opt of inp_pret){
-                if(opt.selected)
+            for (let opt of inp_pret) {
+                if (opt.selected)
                     sir.push(opt.value)
             }
-            console.log(sir)
-            console.log(cond4)
-            console.log(pret)
-            if ( sir.includes("1") && pret < 200 || sir.includes("2") && pret >= 200 && pret < 500
+            //console.log(sir)
+            //console.log(cond4)
+            //console.log(pret)
+            if (sir.includes("1") && pret < 200 || sir.includes("2") && pret >= 200 && pret < 500
                 || sir.includes("3") && pret >= 500 && pret < 1000 || sir.includes("4") && pret >= 1000 && pret < 1500
-                || sir.includes("5")&& pret >= 1500 && pret < 2000 || sir.includes("6") && pret >= 2000 && pret < 3000
-                ||sir.includes("7") && pret >= 3000 && pret < 4000 || sir.includes("8") && pret >= 4000 && pret < 5000
+                || sir.includes("5") && pret >= 1500 && pret < 2000 || sir.includes("6") && pret >= 2000 && pret < 3000
+                || sir.includes("7") && pret >= 3000 && pret < 4000 || sir.includes("8") && pret >= 4000 && pret < 5000
                 || sir.includes("9") && pret >= 5000) {
                 cond4 = true
             }
-            console.log(cond4)
+            //console.log(cond4)
             //cond4= true;
             let descriere = produs.getElementsByClassName("descriere")[0].innerHTML.toLocaleLowerCase().trim();
             //console.log(descriere);
             //console.log("--", inp_text)
-            let semn = inp_text.indexOf("+")
-            //console.log(semn)
-            let space = inp_text.indexOf(" ")
+            let messaj;
+            if (inp_text.indexOf("+") < 0 && inp_text.indexOf("-") < 0) {
+                messaj = "Textul trebuie sa contina semnul \'+' pentru caracteristica pe care o vrei si \'-' pentru ce nu vrei";
+                document.getElementById("messaje_alert").innerHTML = messaj;
+            }
+
+            let space;
+            if (inp_text.indexOf(" ") >= 0) {
+                space = inp_text.indexOf(" ")
+            }
+            else {
+                space = inp_text.length;
+            }
             //console.log(space)
-            let text = inp_text.substr(semn + 1, space)
-            ///console.log("***", text)
-            //console.log("des", descriere)
-            if (descriere.includes(text)) {
+
+            let semn;
+            let text;
+            let semn2;
+            let text2;
+            console.log(inp_text.indexOf("+"))
+            if (inp_text.indexOf("+") >= 0 && inp_text.indexOf("-") < 0) {
+                semn = inp_text.indexOf("+");
+                console.log('semn', semn);
+                text = inp_text.substr(semn + 1, space);
+            } else if (inp_text.indexOf("-") >= 0 && inp_text.indexOf("+") < 0) {
+                semn2 = inp_text.indexOf("-")
+                text2 = inp_text.substr(semn2 + 1, space)
+            } else if (inp_text.indexOf("-") >= 0 && inp_text.indexOf("+") >= 0) {
+                console.log(inp_text.charAt(0))
+                if (inp_text.charAt(0) == "+") {
+                    semn = inp_text.indexOf("+");
+                    text = inp_text.substr(semn + 1, space)
+                    semn2 = inp_text.indexOf("-");
+                    text2 = inp_text.substr(semn2+1, inp_text.length)
+                }else{
+                    semn2 = inp_text.indexOf("-");
+                    text2 = inp_text.substr(semn2+1, space)
+                    semn = inp_text.indexOf("+");
+                    text = inp_text.substr(semn +1, inp_text.length)
+                }
+            }
+            if (descriere.includes(text) || !descriere.includes(text2) || descriere.includes(text) && !descriere.includes(text2)) {
                 cond5 = true;
             }
 
@@ -102,8 +136,8 @@ window.onload = function () {
             //console.log("dis",disponibilitate)
             //console.log("des",desigilat_value)
             for (let val in desigilat_value) {
-                console.log("val", val)
-                if (disponibilitate =desigilat_value) {
+                //console.log("val", val)
+                if (disponibilitate = desigilat_value) {
                     cond6 = true;
                 }
             }
@@ -130,13 +164,13 @@ window.onload = function () {
                 produs.style.display = "block";
                 //console.log(cond3)
             }
-            console.log("1", cond1);
-            console.log("2", cond2);
-            console.log("3", cond3);
-            console.log("4", cond4);
-            console.log("5", cond5);
-            console.log("6", cond6);
-            console.log("7", cond7);
+            // console.log("1", cond1);
+            // console.log("2", cond2);
+            // console.log("3", cond3);
+            // console.log("4", cond4);
+            // console.log("5", cond5);
+            // console.log("6", cond6);
+            // console.log("7", cond7);
 
         }
     }
@@ -195,7 +229,7 @@ window.onload = function () {
         //console.log(produse)
         for (let prod of produse) {
             let pret = parseFloat(prod.getElementsByClassName("val-pret")[0].innerHTML.trim());
-            if(pret > max){
+            if (pret > max) {
                 max = pret
             }
         }
@@ -210,11 +244,11 @@ window.onload = function () {
         for (let prod of produse) {
             let pret = parseFloat(prod.getElementsByClassName("val-pret")[0].innerHTML.trim());
             //console.log(pret)
-            if(pret < min){
+            if (pret < min) {
                 min = pret
             }
         }
-        console.log("****",min)
+        console.log("****", min)
         return min;
     }
 
@@ -222,7 +256,7 @@ window.onload = function () {
         var pret_max = maxim();
         //console.log(pret_max)
         const produs = document.createElement("p")
-        produs.innerText=`Pretul maxim este ${pret_max}` 
+        produs.innerText = `Pretul maxim este ${pret_max}`
         // var produse = document.getElementsByClassName("produs");
         // for (let prod in produse) {
         //     if (prod.pret == pret_max)
@@ -235,10 +269,10 @@ window.onload = function () {
         var pret_min = minim();
         //console.log(pret_max)
         var produs = document.createElement("p")
-        produs.id="pret"
-        produs.innerHTML=`Pretul minim este ${pret_min}` 
+        produs.id = "pret"
+        produs.innerHTML = `Pretul minim este ${pret_min}`
         var p = document.getElementsByClassName("grid-produse")[0];
-        p.parentNode.insertBefore(produs,p);
+        p.parentNode.insertBefore(produs, p);
         // var produse = document.getElementsByClassName("produs");
         // for (let prod in produse) {
         //     if (prod.pret == pret_min)
@@ -248,28 +282,28 @@ window.onload = function () {
         //document.getElementsByClassName("grid-produse").appendChild(produs)
     }
 
-    window.onkeydown=function(e){
+    window.onkeydown = function (e) {
         //console.log(e);
-        if(e.key=='c' && e.altKey){
-            var produse=document.getElementsByClassName("produs");
-            let suma=0;
-            for(let prod of produse){
-                if (prod.style.display!="none")
-                    suma+=parseFloat(prod.getElementsByClassName("val-pret")[0].innerHTML)
+        if (e.key == 'c' && e.altKey) {
+            var produse = document.getElementsByClassName("produs");
+            let suma = 0;
+            for (let prod of produse) {
+                if (prod.style.display != "none")
+                    suma += parseFloat(prod.getElementsByClassName("val-pret")[0].innerHTML)
             }
-            if (!document.getElementById("rezultat")){
-                rezultat=document.createElement("p");
-                rezultat.id="rezultat";
-                rezultat.innerHTML="<b>Pret total:</b> "+suma;
+            if (!document.getElementById("rezultat")) {
+                rezultat = document.createElement("p");
+                rezultat.id = "rezultat";
+                rezultat.innerHTML = "<b>Pret total:</b> " + suma;
                 //document.getElementById("produse").appendChild(rezultat);
-                var ps=document.getElementById("p-suma");
-                ps.parentNode.insertBefore(rezultat,ps.nextSibling);
-                rezultat.style.border="1px solid purple";
-                rezultat.onclick= function(){
+                var ps = document.getElementById("p-suma");
+                ps.parentNode.insertBefore(rezultat, ps.nextSibling);
+                rezultat.style.border = "1px solid purple";
+                rezultat.onclick = function () {
                     this.remove();
                 }
 
-                setTimeout(function (){
+                setTimeout(function () {
                     document.getElementById("rezultat").remove();
                 }, 2000);
             }

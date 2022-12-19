@@ -35,6 +35,13 @@
             "titlu":"Eroare baza date",
             "text": "Produsul cautat nu este in baza noastra de date",
             "imagine":"eroare.png"
+        },
+        {
+            "identificator":3,
+            "status":false,
+            "titlu":"Date gresite",
+            "text": "Verificati date",
+            "imagine":"eroare.png"
         }
     ]
 }

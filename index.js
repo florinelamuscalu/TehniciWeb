@@ -6,10 +6,11 @@ app = express();
 const sharp = require("sharp");
 const formidable = require("formidable");
 const { Client } = require("pg");
-const {Utilizator} = require("./module_propri/utilizator.js")
+const { Utilizator } = require("./module_propri/utilizator.js")
 const ejs = require("ejs");
+const session = require("express-session");
 
-const AccesBd= require("./module_propri/accesbd.js")
+const AccesBd = require("./module_propri/accesbd.js")
 
 // var client = new Client({
 //     database: "pc",
@@ -20,7 +21,7 @@ const AccesBd= require("./module_propri/accesbd.js")
 // });
 // client.connect();
 
-var instantaBD=AccesBd.getInstanta({init:"local"})
+var instantaBD = AccesBd.getInstanta({ init: "local" })
 var client = instantaBD.getClient();
 
 
@@ -49,6 +50,7 @@ var client = instantaBD.getClient();
 
 
 const sass = require("sass");
+const utilizator = require("./module_propri/utilizator.js");
 var cssBootstrap = sass.compile(__dirname + "/resurse/scss/customizare_bootstrap.scss", { sourceMap: true });
 fs.writeFileSync(__dirname + "/resurse/css/biblioteci/bootstrap_custom.css", cssBootstrap.css);
 
@@ -61,12 +63,21 @@ obGlobal = {
     imagini: null
 }
 
-app.use("/*", function(req, res, next){
+app.use(session({ // aici se creeaza proprietatea session a requestului (pot folosi req.session)
+    secret: 'abcdefg',//folosit de express session pentru criptarea id-ului de sesiune
+    resave: true,
+    saveUninitialized: false
+  }));
+
+
+app.use("/*", function (req, res, next) {
     client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
-        continuareQuery=""
+        continuareQuery = ""
         res.locals.optiuni = rezCateg.rows;
         next();
     });
+    res.locals.utilizator = req.session.utilizator;
+    //next();
 })
 
 
@@ -121,53 +132,88 @@ function renderError(res, identificator, titlu, text, imagine) {
     }
 }
 
+// logare
+
+
+app.post("/login", function (req, res) {
+    var username;
+    console.log("ceva");
+    var formular = new formidable.IncomingForm()
+    formular.parse(req, function (err, campuriText, campuriFisier) {
+         Utilizator.getUtilizDupaUsername(campuriText.username, {
+            req: req,
+            res: res,
+            parola: campuriText.parola
+         }, function(u, obparam){
+            let parolaCriptata = Utilizator.criptareParola(obparam.parola);
+            if(u.parola == parolaCriptata){
+                obparam.req.session.Utilizator = u;
+                obparam.res.redirect("/index");
+                // obparam.res.render("/login"); pagina in care ii multumesti ca s-a logat
+            }else{
+                obparam.res.render("pagini/index", {erroareLogin:"Date logare incorecte!"})
+            }
+         })
+    })
+});
+
+
+//delogare
+
+app.get("/logout", function(req, res){
+    req.session.destroy();
+    res.locals.utilizator=null;
+    res.render("pagini/logout");
+});
+
+
 /// Utilizatori
 
 
-app.post("/inregistrare",function(req, res){
+app.post("/inregistrare", function (req, res) {
     var username;
     console.log("ceva");
-    var formular= new formidable.IncomingForm()
-    formular.parse(req, function(err, campuriText, campuriFisier ){
+    var formular = new formidable.IncomingForm()
+    formular.parse(req, function (err, campuriText, campuriFisier) {
         console.log(campuriText);
- 
-        var eroare="";
+
+        var eroare = "";
 
         var utilizNou = new Utilizator();
         try {
-            utilizNou.setareNume =campuriText.nume;
+            utilizNou.setareNume = campuriText.nume;
             utilizNou.setareUserName = campuriText.username;
-            utilizNou.email =(campuriText.email);
-            utilizNou.prenume=(campuriText.prenume)
+            utilizNou.email = (campuriText.email);
+            utilizNou.prenume = (campuriText.prenume)
             utilizNou.culoare_chat = (campuriText.culoare_chat);
-            utilizNou.parola=(campuriText.parola)
+            utilizNou.parola = (campuriText.parola)
             utilizNou.salvareUtilizator();
         }
-        catch(e){ eroare +=e.message}
+        catch (e) { eroare += e.message }
 
-        if(!eroare){
-           
+        if (!eroare) {
+            res.render("pagini/inregistrare", { raspuns: "Inregistrare cu scucces!" });
         }
         else
-            res.render("pagini/inregistrare", {err: "Eroare: "+eroare});
+            res.render("pagini/inregistrare", { err: "Eroare: " + eroare });
     });
-    formular.on("field", function(nume,val){  // 1
-   
+    formular.on("field", function (nume, val) {  // 1
+
         console.log(`--- ${nume}=${val}`);
-       
-        if(nume=="username")
-            username=val;
+
+        if (nume == "username")
+            username = val;
     })
-    formular.on("fileBegin", function(nume,fisier){ //2
+    formular.on("fileBegin", function (nume, fisier) { //2
         console.log("fileBegin");
-       
-        console.log(nume,fisier);
+
+        console.log(nume, fisier);
         //TO DO in folderul poze_uploadate facem folder cu numele utilizatorului
- 
-    })    
-    formular.on("file", function(nume,fisier){//3
+
+    })
+    formular.on("file", function (nume, fisier) {//3
         console.log("file");
-        console.log(nume,fisier);
+        console.log(nume, fisier);
     });
 });
 
@@ -180,13 +226,13 @@ app.get(["/info", "info"], function (req, res) {
 
 
 app.get(["/produse"], function (req, res) {
-    console.log('req1',req.query);
+    console.log('req1', req.query);
     client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
-        continuareQuery=""
-        if(req.query.tip)
-            continuareQuery+=` and 'categorie'::text like '%${req.query.tip}%'`
-            console.log('req',req.query.tip)
-    
+        continuareQuery = ""
+        if (req.query.tip)
+            continuareQuery += ` and categorie::text like '%${req.query.tip}%'`
+        console.log('req', req.query.tip)
+
         client.query("select * from produse where 1=1" + continuareQuery, function (err, rez) {
             if (err) {
                 renderError(res, 2);
@@ -215,7 +261,7 @@ app.get("/produs/:id", function (req, res) {
 
 app.get("/produse", function (req, res) {
     client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
-        client.query("select  * from ", function (err, rez){
+        client.query("select  * from ", function (err, rez) {
             if (err) {
                 console.log(err);
                 renderError(res, 2);
@@ -228,7 +274,37 @@ app.get("/produse", function (req, res) {
     });
 });
 
-app.get(["/", "/index", "/home"], function (req, res) {
+//http://${Utilizator.numeDomeniu}/cod/${utiliz.username}/${token}
+
+app.get("/cod/:username/:token", function (req, re) {
+    console.log(req.params) // parametrii functiei 
+    try {
+        Utilizator.getUtilizDupaUsername(req.params.username, { res: res, token: req.params.token }, function (u, obparam) {
+            AccesBd.getInstanta().update({
+                tabel: "utilizatori",
+                campuri: ['confirmat_mail'],
+                valori: ['true'],
+                conditiiAnd: [`cod = '${obparam.token}'`]
+            },
+                function (err, rez) {
+                    if (err || rezUpdate.rowCount == 0) {
+                        console.error("Cod", err)
+                        renderError(rez, 3);
+                    } else {
+                        rez.render("pagini/confirmare.ejs");
+                    }
+                }
+            )
+        })
+    }
+    catch (e) {
+        console.log(e);
+        renderError(res, 2);
+    }
+});
+
+
+app.get(["/", "/index", "/home,/login"], function (req, res) {
     console.log("ceva");
     res.render("pagini/index", { ip: req.ip })
 });

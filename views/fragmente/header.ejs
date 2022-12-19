@@ -35,7 +35,6 @@
                 </a>
             </li>
             <li id="li-home"> <a href="index" id="but-home">Home</a></li>
-            <li> <a href="/inregistrare">Inregistrare</a>
             <li> <a href="/produse">Produse</a>
                 <ul>
                     <%var nume3 =[]
@@ -80,6 +79,18 @@
             <li> <a href="promotii">Promotii</a></li>
             <li> <a href="desigilate">Desigilate</a></li>
             <li> <a href="urmaresteColet">Urmareste Colet</a></li>
+            <li> <a href="inregistrare">Inregistrare</a></li>
+            <% if(locals.utilizator && locals.utilizator.rol=="admin") { %>
+                <li><a href="/useri">Useri</a></li>
+            <% } %>
+            <% if(locals.utilizator) { %>
+                <li><div><%- locals.utilizator.username %></div>
+                    <ul>
+                        <li><a href="/profil">Profil</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+            <%}%>
         </ul>
     </nav>
     <br/>

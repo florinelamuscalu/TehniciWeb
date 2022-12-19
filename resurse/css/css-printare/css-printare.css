@@ -99,6 +99,10 @@
         content: "Muscalu Florinela";
         text-align: center;
     }
+
+    #mesaj_cookie{
+        display: none;
+    }
 }
 
 @page {
