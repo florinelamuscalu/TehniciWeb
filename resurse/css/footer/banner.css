@@ -1,0 +1,47 @@
+footer{
+    margin-top: 2%;
+    margin-left: 1%;
+}
+
+
+#banner{
+    display: block;
+    width: 25%;
+    /*font-size: 1.5rem;
+    border: 1px solid #f7a502; */
+    text-align: center;
+    padding: 3%;
+    animation-name: animatie_banner;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    transform-origin: 50% 50%;
+}
+
+@keyframes animatie_banner{
+    0%{
+        font-size: 0.75rem;
+        opacity: 0;
+        background-color: #9d7b36;
+    }
+
+    50%{
+        font-size: 1rem;
+        opacity: 0.50;
+        background-color: #c99225;
+    }
+
+    100%{
+        font-size: 1.5rem;
+        opacity: 0.75;
+        background-color: #f7a502;
+    }
+}
+
+@media screen and (max-width: 800px){
+    #banner{
+        animation: none;
+        -webkit-animation: none;
+}
+}

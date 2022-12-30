@@ -4,6 +4,16 @@
     height: 20%;
 
 }
+#button{
+    display: block;
+    position: absolute;
+    /* margin-right: 1%; */
+    margin-left: 95%;
+    margin-top: 1%;
+    font-size: 150%;
+}
+
+
 
 .fa-user {
     display: block;
@@ -37,10 +47,10 @@
 @keyframes animatie-heart {
     0% {
         transform: rotate(0);
-        
-}
+
+    }
 
     100% {
         transform: rotate(360deg);
-}
+    }
 }

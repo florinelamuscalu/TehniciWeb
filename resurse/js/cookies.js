@@ -2,6 +2,7 @@
 //setCookie("a",10, 1000)
 function setCookie(nume, val, timpExpirare){//timpExpirare in milisecunde
     d=new Date();
+    //SameSite=Lax;
     d.setTime(d.getTime()+timpExpirare)
     document.cookie=`${nume}=${val}; expires=${d.toUTCString()}`;
 }
