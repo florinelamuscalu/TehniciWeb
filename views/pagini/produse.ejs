@@ -6,180 +6,224 @@
     <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
 
     <link rel="stylesheet" href="/resurse/css/pagini/produse/produse.css" type="text/css" />
+    <link rel="stylesheet" href="/resurse/css/pagini/produse/buttoane.css" type="text/css" />
     <script type="text/javascript" src="/resurse/js/produse.js"></script>
     <%- include("../fragmente/head") %>
 </head>
 
 <body class="dark">
     <%- include("../fragmente/header") %>
-
         <main>
-            <label> Nume: <input type="text" id="inp-nume"></label>
-            <div> Tip produs:
-                <p><label>Gaming 
-                        <input id="i_rad1" name="gr_rad" value="gaming" type="radio" />
-                    </label></p>
-                <p><label>Home 
-                        <input id="i_rad2" name="gr_rad" value="home" type="radio" />
-                    </label>
-                <p><label>Office
-                        <input id="i_rad3" name="gr_rad" value="office" type="radio" />
-                    </label>
-                <p><label>Toate
-                        <input id="i_rad4" checked name="gr_rad" value="toate" type="radio" />
-                    </label>
-            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="col">
+                        <label> Nume:
+                            <input type="text" id="inp-nume" class="form-control btn btn-outline-info">
+                        </label>
+                    </div>
+                    <div class="col">
+                        <div class="btn-group-toggle" data-toggle="buttons"> Tip produs:
+                            <p><label class="btn btn-outline-info">Gaming
+                                    <input id="i_rad1" name="gr_rad" value="gaming" type="radio" data-toggle="toggle" />
+                                </label></p>
+                            <p><label class="btn btn-outline-info">Home
+                                    <input id="i_rad2" name="gr_rad" value="home" type="radio" data-toggle="toggle" />
+                                </label>
+                            <p><label class="btn btn-outline-info">Office
+                                    <input id="i_rad3" name="gr_rad" value="office" type="radio" data-toggle="toggle" />
+                                </label>
+                            <p><label class="btn btn-outline-info">Toate
+                                    <input id="i_rad4" checked name="gr_rad" value="toate" type="radio"
+                                        data-toggle="toggle" />
+                                </label>
+                        </div>
+                    </div>
+                    <div class="col">
 
-            <label> Resigilat
-                <input id="resigilat" name="gr_chck"  value="true" type="checkbox"/>
-            </label>
-            
-            <label>In stoc
-                <input id="stoc" name="gr_chck" checked value="false" type="checkbox"/>
-            </label>
-        
-            <label>Promotii 
-                <input id="promotii" name="gr_chck"  value="false" type="checkbox"/>
-            </label> <br>
-
-
-            <label> Garantie: <input type="range" id="inp-garantie" value="0" min="0" max="5"> <span id="infoRange">(0)</span></label>
-
-            <label>Select simplu:
-                <select id="inp-categorie">
-                    <option id="sel-toate" selected value="toate">toate</option>
-                    <% for (let opt of locals.optiuni) { %>
-                        <%let cat = opt.unnest%>
-                        <% if(cat.startsWith("1") == true || cat.startsWith(2) == true || cat.startsWith(3) == true || cat.startsWith(4) == true) {%>
-                            <%
-                            let index = cat.indexOf("-")
-                            let nume1 = cat.substr(index+1 )
-                            let index2 = nume1.indexOf("-")
-                            let nume2= nume1.substr(index-1, index2)
-                            nume1= nume1.substr(index2 + 3)
-                            var nume3 = [nume2, nume1]
-            
-                            %>
-                        <% } else {%>
-                            <% nume3 = [cat]%>
-                            <% } %>%>
-                        <option value="<%-nume3 %>">
-                            <%-nume3%>
-                        </option>
-                        <% } %>
-                </select>
-            </label> <br>
-
-            <label>Select multiplu:
-                <select id="i-pret" multiple size="3" autocomplete="off">
-                    <option value="1" selected>0-200</option>
-                    <option value="2" selected>200-500</option>
-                    <option value="3" selected>500-1000</option>
-                    <option value="4" selected>1000-1500</option>
-                    <option value="5" selected>1500-2000</option>
-                    <option value="6" selected>2000-3000</option>
-                    <option value="7" selected>3000-4000</option>
-                    <option value="8" selected>4000-5000</option>
-                    <option value="9" selected>Peste 5000</option>
-                </select>
-            </label>
-
-            <label>Datalist:
-                <input list="id_lista" id="i_datalist">
-                <datalist id="id_lista">
-                    <% var culori = [] %>
-                    <% for( let prod of locals.produse) { %>
-                            <%
-                            if(!culori.includes(prod.culoare)){%>
-                                <% culori.push(prod.culoare)%>
-                            <%}%>
-                            %>
-                    <%}%>
-                    <%for(let culoare of culori){%>
-                        <option value="<%-culoare%>"></option>
-                    <%}%>
-                </datalist>
-            </label>
-
-            <label>Search:
-                <textarea id="inp_textare"></textarea>
-            </label>
-
-            <p>
-                <button id="filtrare">Filtreaza</button>
-                <button id="resetare">Reseteaza</button><br />
-                <button id="sortCrescNume">Sorteaza crescator dupa pret si nume</button>
-                <button id="sortDescrescNume">Sorteaza descrescator dupa pret si nume</button><br>
-                <button id="maxim">Produsul cu pretul cel mai mare</button>
-                <button id="minim">Produsul cu pretul cel mai mic</button>
-
-            </p>
-
-            <p id="p-suma">Apăsați Alt+"c" pentru suma preturilor produselor afișate. </p>
-            <p id="messaje_alert"></p>
-            <section id="produse">
-                <h2>Produse</h2>
-                <div class="grid-produse">
-                    <% for( let prod of locals.produse) { %>
-                        <article class="produs">
-                            <h3 class="nume">Nume: <a href="/produs/<%-prod.id %>"><span class="val-nume">
-                                        <%- prod.nume%>
-                                    </span></a></h3>
-                            <div class="categorie">
-                                <%  let cat = prod.categorie.replace(/{/g, "")
-                                    cat = cat.replace(/}/g, "")
-                                    // let cat = prod.categorie
-                                    if(cat.startsWith("1") == true || cat.startsWith(2) == true || cat.startsWith(3) == true || cat.startsWith(4) == true) {%>
-                                        <%//console.log(cat)
-                                        let index = cat.indexOf("-")
-                                        let nume1 = cat.substr(index+1 )
-                                        let index2 = nume1.indexOf("-")
-                                        let nume2= nume1.substr(index-1, index2)
-                                        nume1= nume1.substr(index2 + 3)
-                                        var nume3 = [nume2, nume1]
-                        
-                                        %>
-                                    <% } else {%>
-                                        <% nume3 = [cat]%>
-                                        <% } %>
-                                <p class="categorie">Categorie: <span class="val-categorie">
-                                        <%-nume3%>
-                                    </span></p>
-                            </div>
-                            <div class="descriereImg">
-                                <div class="descriere">
-                                    <p class="descriere">Descriere:<span class="val-descriere">
-                                            <%- prod.descriere%>
-                                        </span></p>
-                                </div>
-                                <figure class="img">
-                                    <a href="/produs/<%-prod.id %>"><img
-                                            src="/resurse/imagini/produse/<%- prod.imagine %>"
-                                            style="width:100%;height:auto;" alt="[imagine <%- prod.nume %>]" /></a>
-                                </figure>
-                            </div>
-                            <div class="info-prod">
-                                <p class="pret">Pret:<span class="val-pret"><%- prod.pret%></span></p>
-                                <p class="tip_produs">Tip Produs: <span class="val-tip_produs"><%-prod.tip_produs%></span></p>
-                                <p class="specificatii">Specificatii: <span class="val-specificatii"><%- prod.specificatii%></span></p>
-                                <p class="data_fabricare">Data Fabricare: <span class="val-data_fabricare"><time datetime="DTDD-MM-YYY"><%- prod.data_fabricare%></time></span></p>
-                                <p class="culoare">Culoare: <span class="val-culoare"><%- prod.culoare%></span></p>
-                                <p class="desigilat">Desigilat <span class="val-desigilat"><%- prod.desigilate%></span></p>
-                            </div>
-                            <p style="display: none" class="culoare">Culoare:<span class="val-culoare"><%- prod.culoare%></span></p><br>
-                            <label class="selecteaza-cos">
-                                Selectează:<br />
-                                <input type="checkbox" class="select-cos" value="<%-prod.id %>" autocomplete="off">
+                        <div class="btn-group-toggle" data-toggle="buttons"> Disponibilitate produs
+                            <label class="btn btn-outline-info"> Resigilat
+                                <input id="resigilat" name="gr_chck" value="true" type="checkbox" data-toggle="toggle" />
                             </label>
-                        </article>
-                        <% }%>
+
+                            <label class="btn btn-outline-info">In stoc
+                                <input id="stoc" name="gr_chck" checked value="false" type="checkbox"
+                                    data-toggle="toggle" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label> Garantie: <input type="range" id="inp-garantie" value="0" min="0" max="5"
+                                class="form-range"> <span id="infoRange">(0)</span></label>
+                    </div>
+
+                    <div class="col">
+                        <label>Select simplu:
+                            <select id="inp-categorie" class="form-select form-select-lg">
+                                <option id="sel-toate" selected value="toate">toate</option>
+                                <% for (let opt of locals.optiuni) { %>
+                                    <% let cat=opt.unnest%>
+                                    <% if(cat.startsWith("1")==true || cat.startsWith(2)==true ||
+                                        cat.startsWith(3)==true || cat.startsWith(4)==true) {%>
+                                            <% let index=cat.indexOf("-"); 
+                                                let nume1=cat.substr(index+1 ); 
+                                                let index2=nume1.indexOf("-");
+                                                let nume2=nume1.substr(index-1, index2);
+                                                nume1=nume1.substr(index2 + 3); 
+                                                var nume3=[nume2, nume1]; %>
+                                        <% } else {%>
+                                            <% nume3=[cat]; %>
+                                                <% } %>
+                                    <option value="<%-nume3 %>"><%-nume3%></option>
+                                <% } %>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="col">
+                        <label>Select multiplu:
+                            <select id="i-pret" multiple size="3" autocomplete="off" class="form-select form-select-lg mb-3"
+                                multiple aria-label="multiple select example">
+                                <option value="1" selected>0-200</option>
+                                <option value="2" selected>200-500</option>
+                                <option value="3" selected>500-1000</option>
+                                <option value="4" selected>1000-1500</option>
+                                <option value="5" selected>1500-2000</option>
+                                <option value="6" selected>2000-3000</option>
+                                <option value="7" selected>3000-4000</option>
+                                <option value="8" selected>4000-5000</option>
+                                <option value="9" selected>Peste 5000</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="col">
+                        <label>Datalist:
+                            <input list="id_lista" id="i_datalist" class="form-control btn btn-outline-info">
+                            <datalist id="id_lista">
+                                <% var culori=[] %>
+                                <% for( let prod of locals.produse) { %>
+                                    <% if(!culori.includes(prod.culoare)){%>
+                                        <% culori.push(prod.culoare)%>
+                                    <%}%>
+                                <%}%>
+                                <%for(let culoare of culori){%>
+                                    <option value="<%-culoare%>"></option>
+                                <%}%>
+                            </datalist>
+                        </label>
+                    </div>
+
+                    <div class="col">
+                        <label>Search:
+                            <textarea id="inp_textare" class="form-control btn btn-outline-info"></textarea>
+                        </label>
+                    </div>
+
+                    <div class="col">
+                        <p>
+                            <button id="filtrare" type="button" class="btn btn-primary">Filtreaza
+                                <i class="bi bi-filter-circle"></i>
+                            </button>
+                            <button id="resetare" type="button" class="btn btn-primary">Reseteaza
+                                <i class="bi bi-x-circle"></i>
+                            </button><br />
+                            <button id="sortCrescNume" type="button" class="btn btn-primary">Sorteaza crescator dupa pret si
+                                nume
+                                <i class="bi bi-arrow-up"></i>
+                            </button>
+                            <button id="sortDescrescNume" type="button" class="btn btn-primary ">Sorteaza descrescator dupa
+                                pret si nume
+                                <i class="bi bi-arrow-down"></i>
+                            </button><br>
+                            <button id="maxim" type="button" class="btn btn-primary">Produsul cu pretul cel mai mare
+                                <i class="bi bi-caret-up"></i>
+                            </button>
+                            <button id="minim" type="button" class="btn btn-primary">Produsul cu pretul cel mai mic
+                                <i class="bi bi-caret-down"></i>
+                            </button>
+
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p id="p-suma">Apăsați Alt+"c" pentru suma preturilor produselor afișate. </p>
+                        <p id="messaje_alert"></p>
+                    </div>
                 </div>
-            </section>
+
+                <div class="col-10">
+                    <div class="row">
+                        <section id="produse">
+                            <h2>Produse</h2>
+                            <div class="grid-produse">
+                                <% for( let prod of locals.produse) { %>
+                                    <article class="produs">
+                                        <h3 class="nume">Nume<a href="/produs/<%-prod.id %>"><span class="val-nume"><%- prod.nume%></span></a></h3>
+                                        <div class="categorie">
+                                            <% let cat=prod.categorie.replace(/{/g, "" );
+                                            cat=cat.replace(/}/g, "" ); // let
+                                            cat=prod.categorie;
+                                            if(cat.startsWith("1")==true || cat.startsWith(2)==true
+                                                || cat.startsWith(3)==true || cat.startsWith(4)==true) {%>
+                                                <% //console.log(cat) 
+                                                    let index=cat.indexOf("-") 
+                                                    let nume1=cat.substr(index+1 );
+                                                    let index2=nume1.indexOf("-");
+                                                    let nume2=nume1.substr(index-1, index2);
+                                                    nume1=nume1.substr(index2 + 3);
+                                                    var nume3=[nume2, nume1]; %>
+                                                    <% } else {%>
+                                                        <% nume3=[cat];%>
+                                                    <% } %>
+                                                    <p class="categorie">Categorie: <span class="val-categorie"><%-nume3%></span></p>
+                                        </div>
+                                        <div class="descriereImg">
+                                            <div class="descriere">
+                                                <p class="descriere">Descriere:<span class="val-descriere">
+                                                        <%- prod.descriere%>
+                                                    </span></p>
+                                            </div>
+                                            <figure class="img">
+                                                <a href="/produs/<%-prod.id %>"><img
+                                                        src="/resurse/imagini/produse/<%- prod.imagine %>"
+                                                        style="width:100%;height:auto;"
+                                                        alt="[imagine <%- prod.nume %>]" /></a>
+                                            </figure>
+                                        </div>
+                                        <div class="info-prod">
+                                            <p class="pret">Pret:<span class="val-pret"><%- prod.pret%></span></p>
+                                            <p class="tip_produs">Tip Produs: <span
+                                                    class="val-tip_produs"><%-prod.tip_produs%></span></p>
+                                            <p class="specificatii">Specificatii: <span class="val-specificatii"><%-
+                                                        prod.specificatii%></span></p>
+                                            <p class="data_fabricare">Data Fabricare: <span class="val-data_fabricare"><time
+                                                        datetime="DTDD-MM-YYY"><%- prod.data_fabricare%></time></span></p>
+                                            <p class="culoare">Culoare: <span class="val-culoare"><%- prod.culoare%></span>
+                                            </p>
+                                            <p class="desigilat">Desigilat <span class="val-desigilat"><%-
+                                                        prod.desigilate%></span></p>
+                                        </div>
+                                        <p style="display: none" class="culoare">Culoare:<span class="val-culoare"><%-
+                                                    prod.culoare%></span></p><br>
+                                        <label class="selecteaza-cos">
+                                            Selectează:<br />
+                                            <input type="checkbox" class="select-cos" value="<%-prod.id %>"
+                                                autocomplete="off">
+                                        </label>
+                                    </article>
+                                    <% }%>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
         </main>
 
-        <%- include("../fragmente/footer") %>
+<%- include("../fragmente/footer") %>
 </body>
 
 </html>

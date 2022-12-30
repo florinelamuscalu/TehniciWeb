@@ -1,0 +1,26 @@
+/* body{
+    --culoare-buton: #52ab98;
+}
+
+#filtrare, #sortCrescNume, #sortDescrescNume, #resetare{
+    color: var(--culoare-buton);
+} */
+i{
+    display: none;
+}
+
+@media screen and (max-width: 450px){
+ i{
+    display: block;
+    color: black;
+    /* position: ablsolute;
+    top: 30%; */
+
+ }  
+ #filtrare, #resetare, #sortCrescNume, #sortDescrescNume, #maxim, #minim{
+    /* text-indent: -9999rem; */
+    color: transparent;
+    /* background-color: transparent; */
+ }
+}
+

@@ -331,6 +331,7 @@ app.get("/*", function (req, res) {
     console.log("url:", req.url);
     res.render("pagini" + req.url, function (err, rezRandare) {
         if (err) {
+            console.log(err)
             if (err.message.includes("Failed to lookup view")) {
                 renderError(res, 404);
             }

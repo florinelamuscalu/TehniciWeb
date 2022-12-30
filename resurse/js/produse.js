@@ -24,6 +24,13 @@ window.onload = function () {
         // }
         // document.getElementById("messaje_alert").innerHTML = text;
 
+        // var validateNume = inpNume.validate({
+        //         rules:{
+        //             require: true,
+        //         rangelenght: [1,500]
+        //     }
+        // });
+
         var tip_prod_value = "";
         for (let tp of inpTipProd) {
             if (tp.checked)

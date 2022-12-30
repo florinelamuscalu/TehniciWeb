@@ -1,8 +1,13 @@
 <header id="header">
     <div id="user-button">
         <h1 id="titlu">PC components</h1>
-        <button id="tema"> Schimba tema </button>
+        <!-- <button id="tema"> 
+            <input id="tema" type="checkbox" checked data-toggle="toggle" data-style="slow">
+        </button> -->
+
+        <!-- <input id="tema" type="checkbox" checked data-toggle="toggle" data-style="slow"> -->
         
+
         <script>
             tema_curenta = localStorage.getItem("tema");
             if (tema_curenta) {
@@ -21,6 +26,12 @@
         
         <i class="fa-regular fa-user"></i>
         <i class="fa-regular fa-heart"></i>
+
+        <label class="switch">
+            <input type="checkbox" id="tema">
+            <span class="slider round"></span>
+        </label>
+        
     </div>
     <nav>
         <label id="hamburger" for="ch-menu">
@@ -37,12 +48,12 @@
             <li id="li-home"> <a href="index" id="but-home">Home</a></li>
             <li> <a href="/produse">Produse</a>
                 <ul>
-                    <%var nume3 =[]
+                    <% var nume3 =[]
                       for(let opt of locals.optiuni) {  %>
                         <% 
                             var cat1 = opt.unnest
                             if(cat1.startsWith(1) == false && cat1.startsWith(2) == false && cat1.startsWith(3) == false && cat1.startsWith(4) == false) { %>
-                                <li><a href="/produse?<%- cat1 %>"><%- cat1 %></a></li>
+                                <li><a href="/produse?tip=<%- cat1 %>"><%- cat1 %></a></li>
                            <% } else if(cat1.startsWith(1) == true || cat1.startsWith(2) == true || cat1.startsWith(3) == true || cat1.startsWith(4) == true) {%>
                                 <%
                                     let index = cat1.indexOf("-")
@@ -79,7 +90,7 @@
             <li> <a href="promotii">Promotii</a></li>
             <li> <a href="desigilate">Desigilate</a></li>
             <li> <a href="urmaresteColet">Urmareste Colet</a></li>
-            <li> <a href="inregistrare">Inregistrare</a></li>
+            <li> <a href="/inregistrare">Inregistrare</a></li>
             <% if(locals.utilizator && locals.utilizator.rol=="admin") { %>
                 <li><a href="/useri">Useri</a></li>
             <% } %>

@@ -23,8 +23,6 @@ $var:1rem;
       xxl: 1400px
     ),
 
-
-  
   $grid-breakpoints: (
     xs: 0,
     sm: 300px,
@@ -48,11 +46,16 @@ $var:1rem;
 
     $hr-opacity: 1,
 
-    $input-btn-focus-color: #FFAD03,
-    $accordion-button-active-color: #FFAD03,
-    $btn-link-color: #FFAD03,
 
-    $btn-border-radius:       0.2rem,
-    $btn-border-radius-sm:    0.15rem,
-    $btn-border-radius-lg:    0.5rem,
+    // nu merg variabilele intreaba
+    $btn-border-width: 2px,
+
+    $btn-border-radius:     $var *2,
+    $btn-border-radius-sm:  $var * 0.15,
+    $btn-border-radius-lg:  $var * 0.5,
+
 );
+
+// @media screen and (max-width: 450px){
+  
+// }
