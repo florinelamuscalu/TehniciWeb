@@ -37,6 +37,7 @@ ul.meniu{
     transform-origin: 0% 0%;
 
     li{
+        position:relative;
         width:100% !important;
         display: block;
         position: relative;
@@ -46,6 +47,7 @@ ul.meniu{
         transition:none;
     }
     ul{
+            position:relative;
             display: block !important;
             visibility: visible !important;
             top: 100% !important;
