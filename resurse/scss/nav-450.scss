@@ -14,11 +14,29 @@ nav{
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     transform-origin: 0% 0%;
+    height: var(--inaltime-meniu);
+
+    &:hover{
+        height: auto;
+      }
 }
+
+#fa{
+    border: none;
+    display: flex;
+    justify-content: center;
+
+    &:hover{
+        background-color: var(--background-color) !important;
+        animation: none !important;
+        transition: none !important;
+      }
+  }
 
 #ch-menu:checked~ul,meniu{
     display: block;
 }
+
 
 .fa-house{
     display: block;
@@ -26,9 +44,13 @@ nav{
     left: 50%;
 
 }
-
 ul.meniu{
     display: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: var(--background-color);
+    position: relative;
     animation-name: animatie-meniu;
     animation-duration: 1s;
     animation-timing-function: linear;
@@ -40,31 +62,54 @@ ul.meniu{
         position:relative;
         width:100% !important;
         display: block;
-        position: relative;
         border: var(--latime-bord-meniu-selectat) solid white;
         border-radius: 1.5rem;
         animation: none;
         transition:none;
-    }
+    
     ul{
             position:relative;
             display: block !important;
             visibility: visible !important;
             top: 100% !important;
-            position:absolute;
             border: var(--latime-bord-meniu-selectat) solid white;
             border-radius: 1.5rem;
             width:100% !important;
+
+            li{
+                ul{
+                    left: 0px;
+                    animation: none;
+                }
+
+                &:hover{
+                    animation: none;
+                    height: auto;
+                    z-index: 10000;
+
+                    ul{
+                        animation: none;
+                        opacity: 1; 
+                    }
+                }
+            }
            
         }
 
-        &:hover{
-            ul{
-                animation: none;
-                opacity: 1;
-                transform: scale(1, 1); 
-            }
+    &:hover{
+        overflow: visible;
+        height: auto;
+        z-index: 10000;
+        display: block;
+
+        ul{
+            animation: none;
+            opacity: 1;
+            transform: scale(1, 1); 
         }
+    }
+
+    }
         
 
      >li:hover::before {
@@ -75,10 +120,10 @@ ul.meniu{
 @keyframes animatie-meniu {
     0%{
         transform: scale(0,0);
-        clip-path: circle(20%);
+        clip-path: circle(20% at 0% 0%);
 }
     100%{
         transform: scale(1,1);
-        clip-path: circle(100%);
+        clip-path: circle(300% at 0% 0%);
 }
 }

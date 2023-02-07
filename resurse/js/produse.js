@@ -1,6 +1,19 @@
 window.onload = function () {
     x = 100
 
+    // var produse = document.getElementsByClassName("produs");
+
+    // for (let produs of produse) {
+    //     id="descriere"+produs.id;
+    //     console.log(id)
+    //     const buton=document.getElementById(id)
+
+    //     buton.addEventListener('click', function handleClick() {
+    //         console.log('element clicked');
+    //       });
+
+    // }
+
     document.getElementById("inp-garantie").onchange = function () {
         //console.log(this.value);
         document.getElementById("infoRange").innerHTML = `(${this.value})`
@@ -12,7 +25,7 @@ window.onload = function () {
         var inpCategorie = document.getElementById("inp-categorie").value;
         var inpTipProd = document.getElementsByName("gr_rad");
         var inp_pret = document.getElementById("i-pret").options;
-        var inp_text = document.getElementById("inp_textare").value.toLowerCase().trim();
+        var inp_text = document.getElementById("validationTextarea").value.toLowerCase().trim();
         var desigilat = document.getElementsByName("gr_chck");
         var datalist = document.getElementById("i_datalist").value;
 
@@ -24,12 +37,6 @@ window.onload = function () {
         // }
         // document.getElementById("messaje_alert").innerHTML = text;
 
-        // var validateNume = inpNume.validate({
-        //         rules:{
-        //             require: true,
-        //         rangelenght: [1,500]
-        //     }
-        // });
 
         var tip_prod_value = "";
         for (let tp of inpTipProd) {
@@ -37,15 +44,15 @@ window.onload = function () {
                 tip_prod_value += tp.value
         }
 
-        var desigilat_value = "";
-        var desigilat_id = "";
+        let desigilat_value = "";
+        //var desigilat_id = "";
         for (let des of desigilat) {
             if (des.checked) {
-                desigilat_value += des.value + " ";
-                desigilat_id += des.id + " ";
+                desigilat_value += des.value;
+                //desigilat_id += des.id + " ";
             }
         }
-
+        //console.log(desigilat_value)
 
         var produse = document.getElementsByClassName("produs");
 
@@ -113,54 +120,72 @@ window.onload = function () {
             let text;
             let semn2;
             let text2;
-            console.log(inp_text.indexOf("+"))
+            //console.log("pozitia unde e +", inp_text.indexOf("+"))
             if (inp_text.indexOf("+") >= 0 && inp_text.indexOf("-") < 0) {
                 semn = inp_text.indexOf("+");
-                console.log('semn', semn);
+                //console.log('semn', semn);
                 text = inp_text.substr(semn + 1, space);
+                ///console.log(text);
+                if (descriere.includes(text)) {
+                    cond5 = true;
+                    //console.log("cond5=", cond5)
+                }
             } else if (inp_text.indexOf("-") >= 0 && inp_text.indexOf("+") < 0) {
                 semn2 = inp_text.indexOf("-")
                 text2 = inp_text.substr(semn2 + 1, space)
+                //console.log(text2)
+                if (!descriere.includes(text2)) {
+                    cond5 = true;
+                    //console.log("text2 cond5=", cond5)
+                }
             } else if (inp_text.indexOf("-") >= 0 && inp_text.indexOf("+") >= 0) {
-                console.log(inp_text.charAt(0))
+                //console.log(inp_text.charAt(0))
                 if (inp_text.charAt(0) == "+") {
                     semn = inp_text.indexOf("+");
                     text = inp_text.substr(semn + 1, space)
                     semn2 = inp_text.indexOf("-");
-                    text2 = inp_text.substr(semn2+1, inp_text.length)
-                }else{
+                    text2 = inp_text.substr(semn2 + 1, inp_text.length)
+                    //console.log("***text2", text2)
+                } else {
                     semn2 = inp_text.indexOf("-");
-                    text2 = inp_text.substr(semn2+1, space)
+                    text2 = inp_text.substr(semn2 + 1, space)
                     semn = inp_text.indexOf("+");
-                    text = inp_text.substr(semn +1, inp_text.length)
+                    text = inp_text.substr(semn + 1, inp_text.length)
+                    //console.log("****text1", text1)
+                }
+
+                if (descriere.includes(text) && !descriere.includes(text2)) {
+                    cond5 = true;
+                    //console.log("text & text2 cond5=", cond5)
                 }
             }
-            if (descriere.includes(text) || !descriere.includes(text2) || descriere.includes(text) && !descriere.includes(text2)) {
-                cond5 = true;
-            }
+            //console.log("--------", descriere.includes(text))
+            //console.log("cond5******", cond5)
 
             let disponibilitate = produs.getElementsByClassName("val-desigilat")[0].innerHTML.trim();
             //console.log("dis",disponibilitate)
             //console.log("des",desigilat_value)
-            for (let val in desigilat_value) {
-                //console.log("val", val)
-                if (disponibilitate = desigilat_value) {
-                    cond6 = true;
-                }
-            }
-            for (let id in desigilat_id) {
-                if (id == "promotii") {
-                    // go to page promotii 
-                    //console.log(id)
-                }
+            //console.log("****", disponibilitate.includes(desigilat_value))
+            if (disponibilitate == desigilat_value) {
+                cond6 = true;
             }
 
-            for (let id in desigilat_id) {
-                if (id == "desigilat") {
-                    // go to page desigilat 
-                    //console.log(id)
-                }
-            }
+            //console.log(cond6)
+
+            // am scos promotii
+            // for (let id in desigilat_id) {
+            //     if (id == "promotii") {
+            //         // go to page promotii 
+            //         //console.log(id)
+            //     }
+            // }
+
+            // for (let id in desigilat_id) {
+            //     if (id == "desigilat") {
+            //         // go to page desigilat 
+            //         //console.log(id)
+            //     }
+            // }
 
             let culoare = produs.getElementsByClassName("val-culoare")[0].innerHTML;
             if (culoare.includes(datalist)) {
@@ -171,13 +196,13 @@ window.onload = function () {
                 produs.style.display = "block";
                 //console.log(cond3)
             }
-            // console.log("1", cond1);
-            // console.log("2", cond2);
-            // console.log("3", cond3);
-            // console.log("4", cond4);
-            // console.log("5", cond5);
-            // console.log("6", cond6);
-            // console.log("7", cond7);
+            console.log("1", cond1);
+            console.log("2", cond2);
+            console.log("3", cond3);
+            console.log("4", cond4);
+            console.log("5", cond5);
+            console.log("6", cond6);
+            console.log("7", cond7);
 
         }
     }
@@ -193,10 +218,10 @@ window.onload = function () {
         document.getElementById("sel-toate").selected = true;
         document.getElementById("i-pret").selected = false;
         document.getElementById("i_datalist").value = "";
-        document.getElementById("inp_textare").value = "";
+        document.getElementById("validationTextarea").value = "";
         document.getElementById("stoc").checked = true;
         document.getElementById("resigilat").checked = false;
-        document.getElementById("promotii").checked = false;
+        // document.getElementById("promotii").checked = false;
         document.getElementById("i_rad4").checked = true;
 
 
@@ -240,7 +265,7 @@ window.onload = function () {
                 max = pret
             }
         }
-        console.log(max)
+        //console.log(max)
         return max;
     }
 
@@ -255,7 +280,7 @@ window.onload = function () {
                 min = pret
             }
         }
-        console.log("****", min)
+        //console.log("****", min)
         return min;
     }
 

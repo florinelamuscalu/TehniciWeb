@@ -13,10 +13,15 @@ body {
   --inaltime-nav: 50px;
 }
 
-ul.meniu ul li, ul li ul, ul.meniu>li {
+ul.meniu ul li, ul.meniu>li {
   /* background-color: var(--background-color); */
   position: relative;
   height: var(--inaltime-meniu);
+  width: var(--latime-buton);
+}
+ul li ul{
+  position: relative;
+  height: auto;
   width: var(--latime-buton);
 }
 

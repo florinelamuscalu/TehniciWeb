@@ -1,3 +1,19 @@
+@media only screen and (max-width: 800px)  {
+    #button{
+        margin-left: 80% !important;
+    }
+
+    .fa-heart{
+        margin-left: 70% !important;
+    }
+    .fa-user{
+        margin-left: 65% !important;
+    }
+}
+
+
+
+
 #user-button {
     display: flex;
     width: 100%;
@@ -8,8 +24,8 @@
     display: block;
     position: absolute;
     /* margin-right: 1%; */
-    margin-left: 95%;
-    margin-top: 1%;
+    margin-left: 90%;
+    margin-top: 0.5%;
     font-size: 150%;
 }
 
@@ -20,7 +36,7 @@
     position: absolute;
     /* margin-right: 1%; */
     margin-left: 80%;
-    margin-top: 1.5%;
+    margin-top: 1%;
     font-size: 150%;
 }
 
@@ -29,7 +45,7 @@
     position: absolute;
     /* margin-right: 2%; */
     margin-left: 82%;
-    margin-top: 1.5%;
+    margin-top: 1%;
     font-size: 150%;
 }
 

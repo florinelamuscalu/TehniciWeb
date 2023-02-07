@@ -17,10 +17,12 @@ i{
     top: 30%; */
 
  }  
- #filtrare, #resetare, #sortCrescNume, #sortDescrescNume, #maxim, #minim{
+ #filtrare span, #resetare span, #sortCrescNume span, #sortDescrescNume span, #maxim span, #minim span{
     /* text-indent: -9999rem; */
-    color: transparent;
+    /* color: transparent; */
+    display: none;
     /* background-color: transparent; */
  }
+
 }
 

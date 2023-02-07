@@ -33,9 +33,13 @@ h2{
     width:50%;
     height:auto;
 }
-@media screen and (max-width: 700px){
+@media screen and (max-width: 800px){
     #art-produs{
         margin:0 auto;
         width:95%;
     }
+}
+
+@media screen and (max-width: 450px){
+   
 }

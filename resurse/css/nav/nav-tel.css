@@ -17,6 +17,9 @@ nav {
   transform-origin: 0% 0%;
   height: var(--inaltime-meniu);
 }
+nav:hover{
+  height: auto;
+}
 
 #ch-menu:checked~ul, meniu {
   display: block;
@@ -45,6 +48,7 @@ ul.meniu {
   padding: 0;
   margin: 0;
   display: none;
+  position: relative;
   animation-name: animatie-meniu;
   animation-duration: 1s;
   animation-timing-function: linear;
@@ -68,7 +72,7 @@ ul.meniu li ul {
   display: block !important;
   visibility: visible !important;
   top: 100% !important;
-  position: absolute;
+  position: relative;
   border: var(--latime-bord-meniu-selectat) solid white;
   border-radius: 1.5rem;
   width: 100% !important;
@@ -78,6 +82,22 @@ ul.meniu li:hover ul {
   animation: none;
   opacity: 1;
   transform: scale(1, 1);
+}
+
+ul.meniu li:hover{
+  overflow: visible;
+  height: auto;
+  z-index: 10000;
+}
+
+ul.meniu li ul li ul{
+  left: 0px;
+  animation: none;
+}
+ul.meniu li ul li:hover ul{
+  animation: none;
+  -webkit-animation: none;
+  opacity: 1;
 }
 
 ul.meniu>li:hover::before {
