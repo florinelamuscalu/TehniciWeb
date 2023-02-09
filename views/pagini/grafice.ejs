@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+	<title>Grafice</title>
+	<%- include("../fragmente/head") %>
+
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<link rel="stylesheet" type="text/css" href="/resurse/css/pagini/grafice/grafice.css" />
+		<script src="/resurse/js/grafice.js"></script>
+</head>
+
+<body class="dark">
+
+	<%- include("../fragmente/header") %>
+		<main>
+			<div class="container-grafic">
+				<canvas id="grafic-exemplu"></canvas>
+			</div>
+			<div class="container-grafic">
+				<canvas id="grafic-facturi"></canvas>
+			</div>
+
+		</main>
+
+		<%- include("../fragmente/footer") %>
+
+</body>
+
+</html>

@@ -2,12 +2,13 @@
 <html lang="ro">
 
 <head>
-    <title>Informatii magazin</title>
+    <title>Inregistrare</title>
     <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
     <%- include("../fragmente/head") %>
     <script type="text/javascript" src=/resurse/js/inregistrare.js></script>
+    <link rel="stylesheet" href="/resurse/css/pagini/inregistrare/inregistrare.css" type="text/css" />
 </head>
 
 <body class="dark">
@@ -16,6 +17,7 @@
         <main>
             <div class="afisaj">
                 <h1>Inregistrare utilizator</h1>
+                <br>
                 <% if(!locals.raspuns) { %>
 
                     <%-include("../fragmente/formular", {action: "/inregistrare" }) %>

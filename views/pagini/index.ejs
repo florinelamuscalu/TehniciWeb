@@ -29,26 +29,7 @@
                     </figure>
                 </a>
             </div>
-            <div id="loggare">
-                <% if(!locals.utilizator) { %>
-                    <form id="form_inreg"  method="post" class="date"  action="/login"  enctype="multipart/form-data">
-                        <p>
-                            <label>
-                                Username: <input type="text" name="username" id="inp-username" value="" required pattern="[A-Za-z0-9]+">
-                            </label>
-                        </p>
-                        <p>
-                            <label>
-                                Parola: <input id="parl" type="password" required  name="parola" value="">
-                            </label>
-                        </p>
-                        <p><input type="submit" value="Logare"></p>
-                    </form>
-                    <% } else {%>
-                       <%-locals.erroareLogin%>
-                    <% }  %>
-    
-            </div>
+           <!-- div logare -->
             <!-- <p>Ip: <%- //locals.ip %>
             </p> -->
             <!-- <button class="btn btn-primary">click</button> -->
@@ -59,6 +40,14 @@
                     <track default src="/resurse/caption/mesaje_ro.vtt" kind="captions" srclang="ro" label="romana" />
                     <track src="/resurse/caption/mesaje_en.vtt" kind="captions" srclang="en" label="engleza" />
                 </video>
+            </div>
+            <div id="userOnline">
+                <p>Useri online:</p>
+                <ol>
+                    <% for(let u of locals.useriOnline) { %>
+                        <li><%- u.username %>(<%- u.prenume %> <%- u.nume %>)</li>
+                    <% } %>
+                </ol>
             </div>
     </main>
     <div id="footer">

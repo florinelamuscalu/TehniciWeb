@@ -38,6 +38,21 @@ class AccesBD{
         return this.client;
     }
 
+    //JsDOC
+
+     /**
+     * @typedef {object} ObiectConexiune - obiect primit de functiile care realizeaza un query
+     * @property {string} init - tipul de conexiune ("init", "render" etc.)
+     * 
+     * /
+
+    /**
+     * Returneaza instanta unica a clasei
+     *
+     * @param {ObiectConexiune} un obiect cu datele pentru query
+     * @returns {AccesBD}
+     */
+
     static getInstanta({init="local"}={}){
         console.log(this);//this-ul e clasa nu instanta pt ca metoda statica
         if(!this.#instanta){
@@ -64,14 +79,55 @@ class AccesBD{
         return this.#instanta;
     }
 
+     /**
+     * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query
+     * @property {string} tabel - numele tabelului
+     * @property {string []} campuri - o lista de stringuri cu numele coloanelor afectate de query; poate cuprinde si elementul "*"
+     * @property {string[]} conditiiAnd - lista de stringuri cu conditii pentru where
+     */
+
+    
+    /**
+     * callback pentru queryuri.
+     * @callback QueryCallBack
+     * @param {Error} err Eventuala eroare in urma queryului
+     * @param {Object} rez Rezultatul query-ului
+     */
+    /**
+     * Selecteaza inregistrari din baza de date
+     *
+     * @param {ObiectQuery} obj - un obiect cu datele pentru query
+     * @param {function} callback - o functie callback cu 2 parametri: eroare si rezultatul queryului
+     */
+
+
     select({tabel="",campuri=[],conditiiAnd=[]} = {}, callback){
+        let conditieWhere="";
+        if(conditiiAnd.length>0)
+            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
+        console.log("0000000000000000000000000000000000000000000000000000000000")
+        console.log(callback);
+        let comanda=`select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
+        console.error(comanda);
+        this.client.query(comanda,callback)
+    }
+
+    async selectAsync({tabel="",campuri=[],conditiiAnd=[]} = {}){
         let conditieWhere="";
         if(conditiiAnd.length>0)
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
         
         let comanda=`select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
-        console.error(comanda);
-        this.client.query(comanda,callback)
+        console.error("selectAsync:",comanda);
+        try{
+            let rez=await this.client.query(comanda);
+            console.log("selectasync: ",rez);
+            return rez;
+        }
+        catch (e){
+            console.log(e);
+            return null;
+        }
     }
 
     insert({tabel="",campuri=[],valori=[]} = {}, callback){

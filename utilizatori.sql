@@ -9,10 +9,13 @@ CREATE TABLE IF NOT EXISTS utilizatori (
    parola VARCHAR(500) NOT NULL,
    rol roluri NOT NULL DEFAULT 'comun',
    email VARCHAR(100) NOT NULL,
-   culoare_chat VARCHAR(50) NOT NULL,
+   culoare_chat VARCHAR(50) DEFAULT 'black',
+   ocupatie VARCHAR(100),
+   data_nastere TIMESTAMP,
    data_adaugare TIMESTAMP DEFAULT current_timestamp,
    cod character varying(200),
-   confirmat_mail boolean DEFAULT false
+   confirmat_mail boolean DEFAULT false,
+   cale_imagine VARCHAR(300) 
 );
 
 CREATE TABLE IF NOT EXISTS accesari (

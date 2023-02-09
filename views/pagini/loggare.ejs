@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title>Loggare</title>
+    <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
+    <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
+
+    <%- include("../fragmente/head") %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/resurse/css/pagini/loggare/loggare.css" type="text/css" />
+</head>
+
+
+<body class="dark">
+    <%- include("../fragmente/header") %>
+    <main>
+        <div id="loggare">
+            <% if(!locals.utilizator) { %>
+                <form id="form_inreg"  method="post" class="date"  action="/login"  enctype="multipart/form-data">
+                    <p>
+                        <label>
+                            Username: <input type="text" name="username" id="inp-username" value="" required pattern="[A-Za-z0-9]+">
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            Parola: <input id="parl" type="password" required  name="parola" value="">
+                        </label>
+                    </p>
+                    <p><input type="submit" value="Logare">&nbsp;&nbsp;Nu ai cont?<a href="/inregistrare">&nbsp;Inregistrare</p>
+                </form>
+                <p><%- locals.eroareLogin %></p>
+                <% } else {%>
+                  <p> <%-locals.succesLogin%> </p>
+                <% }  %>
+
+        </div>
+    </main>
+    <%- include("../fragmente/footer") %>
+</body>
+</html>
