@@ -6,12 +6,12 @@ app = express();
 const sharp = require("sharp");
 const formidable = require("formidable");
 const { Client } = require("pg");
-const { Utilizator } = require("./module_propri/utilizator.js")
+const { Utilizator } = require("./module_proprii/utilizator.js")
 const ejs = require("ejs");
 const session = require("express-session");
-const AccesBd = require("./module_propri/accesbd.js")
+const AccesBd = require("./module_proprii/accesbd.js")
 const path = require('path');
-const Drepturi = require("./module_propri/drepturi.js")
+const Drepturi = require("./module_proprii/drepturi.js")
 const sass = require("sass");
 const QRCode= require('qrcode');
 const puppeteer=require('puppeteer');
@@ -437,7 +437,7 @@ app.post("/profil", function (req, res) {
                 }
                 else {
                     //actualizare sesiune
-                    console.log("ceva");
+                    //console.log("ceva");
                     req.session.utilizator.nume = campuriText.nume;
                     req.session.utilizator.prenume = campuriText.prenume;
                     req.session.utilizator.email = campuriText.email;

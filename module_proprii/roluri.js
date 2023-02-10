@@ -1,4 +1,3 @@
-
 const Drepturi=require('./drepturi.js');
 
 
@@ -10,7 +9,7 @@ class Rol{
     }
 
     areDreptul(drept){ //drept trebuie sa fie tot Symbol
-        console.log("in metoda rol!!!!")
+        //console.log("in metoda rol!!!!")
         return this.constructor.drepturi.includes(drept); //pentru ca e admin
     }
 }
@@ -18,6 +17,15 @@ class Rol{
 class RolAdmin extends Rol{
     
     static get tip() {return "admin"}
+    static get drepturi() { return [
+        Drepturi.vizualizareUtilizatori,
+        Drepturi.stergereUtilizatori,
+        Drepturi.cumparareProduse,
+        Drepturi.vizualizareGrafice,
+        Drepturi.adaugaProduse,
+        Drepturi.stergeProduse,
+        Drepturi.modificaProduse
+    ] }
     constructor (){
         super();
     }
@@ -25,6 +33,7 @@ class RolAdmin extends Rol{
     areDreptul(){
         return true; //pentru ca e admin
     }
+
 }
 
 class RolModerator extends Rol{
@@ -47,6 +56,7 @@ class RolClient extends Rol{
     constructor (){
         super()
     }
+
 }
 
 class RolFactory{

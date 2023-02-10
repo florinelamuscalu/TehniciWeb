@@ -31,6 +31,7 @@ class AccesBD{
         this.client.connect();
     }
 
+
     getClient(){
         if(!AccesBD.#instanta ){
             throw new Error("Nu a fost instantiata clasa");
@@ -112,6 +113,19 @@ class AccesBD{
         this.client.query(comanda,callback)
     }
 
+     /**
+     * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query
+     * @property {string} tabel - numele tabelului
+     * @property {string []} campuri - o lista de stringuri cu numele coloanelor afectate de query; poate cuprinde si elementul "*"
+     * @property {string[]} conditiiAnd - lista de stringuri cu conditii pentru where
+     */
+
+    /**
+     * Selecteaza inregistrari din baza de date
+     *
+     * @param {ObiectQuery} obj - un obiect cu datele pentru query
+     */
+
     async selectAsync({tabel="",campuri=[],conditiiAnd=[]} = {}){
         let conditieWhere="";
         if(conditiiAnd.length>0)
@@ -130,6 +144,27 @@ class AccesBD{
         }
     }
 
+     /**
+     * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
+     * @property {string} tabel - numele tabelului
+     * @property {string []} campuri - o lista de stringuri cu numele coloanelor afectate de query; poate cuprinde si elementul "*"
+     * @property {string []} valori - o lista de stringuri cu numele atributelor care vor fii inserate in tabel
+     */
+
+    /**
+     * callback pentru queryuri.
+     * @callback QueryCallBack
+     * @param {Error} err Eventuala eroare in urma queryului
+     * @param {Object} rez Rezultatul query-ului
+     */
+
+    /**
+     * Selecteaza inregistrari din baza de date
+     *
+     * @param {ObiectQuery} obj - un obiect cu datele pentru query
+     * @param {function} callback - o functie callback cu 2 parametri: eroare si rezultatul queryului
+     */
+
     insert({tabel="",campuri=[],valori=[]} = {}, callback){
         if(campuri.length!=valori.length)
             throw new Error("Numarul de campuri difera de nr de valori")
@@ -139,6 +174,27 @@ class AccesBD{
         this.client.query(comanda,callback)
     }
 
+     /**
+     * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
+     * @property {string} tabel - numele tabelului
+     * @property {string []} campuri - o lista de stringuri cu numele coloanelor afectate de query; poate cuprinde si elementul "*"
+     * @property {string []} valori - o lista de stringuri cu numele atributelor care vor fii actualizate in tabel
+     * @property {string[]} conditiiAnd - lista de stringuri cu conditii pentru where
+     */
+
+    /**
+     * callback pentru queryuri.
+     * @callback QueryCallBack
+     * @param {Error} err Eventuala eroare in urma queryului
+     * @param {Object} rez Rezultatul query-ului
+     */
+
+    /**
+     * Selecteaza inregistrari din baza de date
+     *
+     * @param {ObiectQuery} obj - un obiect cu datele pentru query
+     * @param {function} callback - o functie callback cu 2 parametri: eroare si rezultatul queryului
+     */
     
     update({tabel="",campuri=[],valori=[], conditiiAnd=[]} = {}, callback){
         if(campuri.length!=valori.length)
@@ -153,6 +209,27 @@ class AccesBD{
         console.log(comanda);
         this.client.query(comanda,callback)
     }
+
+     /**
+     * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
+     * @property {string} tabel - numele tabelului
+     * @property {string[]} conditiiAnd - lista de stringuri cu conditii pentru where
+     */
+
+    /**
+     * callback pentru queryuri.
+     * @callback QueryCallBack
+     * @param {Error} err Eventuala eroare in urma queryului
+     * @param {Object} rez Rezultatul query-ului
+     */
+
+    /**
+     * Selecteaza inregistrari din baza de date
+     *
+     * @param {ObiectQuery} obj - un obiect cu datele pentru query
+     * @param {function} callback - o functie callback cu 2 parametri: eroare si rezultatul queryului
+     */
+
     delete({tabel="",conditiiAnd=[]} = {}, callback){
         let conditieWhere="";
         if(conditiiAnd.length>0)
