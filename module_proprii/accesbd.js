@@ -106,12 +106,23 @@ class AccesBD{
         let conditieWhere="";
         if(conditiiAnd.length>0)
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
-        console.log("0000000000000000000000000000000000000000000000000000000000")
-        console.log(callback);
+        //console.log("0000000000000000000000000000000000000000000000000000000000")
+        //console.log(callback);
         let comanda=`select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
         console.error(comanda);
         this.client.query(comanda,callback)
     }
+
+    selectParametrizat({tabel="",campuri=[],conditiiAnd=[]} = {}, callback, parametriQuery=[]){
+        let conditieWhere="";
+        if(conditiiAnd.length>0)
+            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
+        //console.log("0000000000000000000000000000000000000000000000000000000000")
+        //console.log(callback);
+        let comanda=`select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
+        console.error(comanda);
+        this.client.query(comanda,parametriQuery,callback)
+    } 
 
      /**
      * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query
@@ -132,7 +143,7 @@ class AccesBD{
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
         
         let comanda=`select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
-        console.error("selectAsync:",comanda);
+        //console.error("selectAsync:",comanda);
         try{
             let rez=await this.client.query(comanda);
             console.log("selectasync: ",rez);
@@ -170,7 +181,21 @@ class AccesBD{
             throw new Error("Numarul de campuri difera de nr de valori")
         
         let comanda=`insert into ${tabel}(${campuri.join(",")}) values ( ${valori.join(",")})`;
-        console.log(comanda);
+        //console.log(comanda);
+        this.client.query(comanda,callback)
+    }
+
+    insertParametrizat({tabel="",campuri=[],valori=[]} = {}, callback){
+        if(campuri.length!=valori.length)
+            throw new Error("Numarul de campuri difera de nr de valori")
+
+        //parametrizare
+        let camp =[]
+        for(let i=0; i<campuri.length; i++)
+            camp.push(`${campuri[i]}=$${i+1}`);
+
+        let comanda=`insert into ${tabel}(${camp.join(",")}) values (${camp.join(",")})`;
+        //console.log(comanda);
         this.client.query(comanda,callback)
     }
 
@@ -206,7 +231,7 @@ class AccesBD{
         if(conditiiAnd.length>0)
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
         let comanda=`update ${tabel} set ${campuriActualizate.join(", ")}  ${conditieWhere}`;
-        console.log(comanda);
+        //console.log(comanda);
         this.client.query(comanda,callback)
     }
 
@@ -236,8 +261,33 @@ class AccesBD{
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
         
         let comanda=`delete from ${tabel} ${conditieWhere}`;
-        console.log(comanda);
+        //console.log(comanda);
         this.client.query(comanda,callback)
+    }
+
+    deleteParametrizat({tabel="",conditiiAnd=[]} = {}, callback, parametriQuery){
+        let conditieWhere="";
+        if(conditiiAnd.length>0)
+            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
+        
+        let comanda=`delete from ${tabel} ${conditieWhere}`;
+        //console.log(comanda);
+        this.client.query(comanda,parametriQuery,callback)
+    }
+
+
+    updateParametrizat({tabel="",campuri=[],valori=[], conditiiAnd=[]} = {}, callback, parametriQuery){
+        if(campuri.length!=valori.length)
+            throw new Error("Numarul de campuri difera de nr de valori")
+        let campuriActualizate=[];
+        for(let i=0;i<campuri.length;i++)
+            campuriActualizate.push(`${campuri[i]}=$${i+1}`);
+        let conditieWhere="";
+        if(conditiiAnd.length>0)
+            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
+        let comanda=`update ${tabel} set ${campuriActualizate.join(", ")}  ${conditieWhere}`;
+        //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111",comanda);
+        this.client.query(comanda,valori, callback)
     }
 
 }

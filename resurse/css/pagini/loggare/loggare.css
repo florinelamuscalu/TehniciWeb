@@ -5,3 +5,11 @@
     height: 100%;
     margin-top: 5%;
 }
+
+#inreg{
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    text-decoration: none;
+    text-align: center;
+}

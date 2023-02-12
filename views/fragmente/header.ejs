@@ -7,8 +7,18 @@
 
         <!-- <input id="tema" type="checkbox" checked data-toggle="toggle" data-style="slow"> -->
     
+        <div id="user">
+        <% if(!locals.utilizator) {%>
+            <li id="loggare">
+                <a href="/loggare"><i class="fa-regular fa-user"></i></a>
+            </li>
+        <% } else{%>
+            <li id="loggare">
+                <a href="/profil"><i class="fa-regular fa-user"></i></a>
+            </li>
+            <% } %>
+        </div>
         
-        <li id="user"><a href="/loggare"><i class="fa-regular fa-user"></i></a></li>
         <i class="fa-regular fa-heart"></i>
 
         <div id="button">
@@ -40,7 +50,7 @@
     </div>
     <nav>
         <label id="hamburger" for="ch-menu">
-            <img src="resurse/imagini/Hamburger_icon_alb.png" alt="menu">
+            <img src="/resurse/imagini/Hamburger_icon_alb.png" alt="menu">
         </label>
         <input id="ch-menu" type="checkbox">
         <ul class="meniu">
@@ -92,10 +102,12 @@
                     <li><a href="info#galerie">Galerie</a></li>
                 </ul>
             </li>
-            <li> <a href="promotii">Promotii</a></li>
             <li> <a href="desigilate">Desigilate</a></li>
             <li> <a href="urmaresteColet">Urmareste Colet</a></li>
+            <li> <a href="termeniConditi">Termeni si Conditii</a></li>
             <li> <a href="/cos-virtual">Cos</a></li>
+            <li> <a href="/chat">Chat</a></li>
+            <li> <a href="/contact">Contact</a></li>
             <% if(locals?.utilizator?.areDreptul?.(Drepturi?.vizualizareUtilizatori)) { %>
                 <li><div id="nav-titlu">Administrare</div>
                         <ul>
@@ -106,13 +118,13 @@
                 </li>
             <% } %>
             <% if(locals.utilizator) { %>
-                <li><div  id="nav-titlu"><%- locals.utilizator.username %></div>
-                    <ul>
-                        <li><a href="/profil">Profil</a></li>
-                        <li><a href="/logout">Logout</a></li>
-                    </ul>
-                </li>
-            <%}%>
+                <li id="profil"><div>  <%- locals.utilizator.nume + ' ' + locals.utilizator.prenume %> </div>
+                <ul clas="utiliz">
+                    <li><a href="/profil">Profil</a></li>
+                    <li><a href="/logout">Logout <i class="bi bi-door-open"></i> </a></li>
+                </ul>
+            </li>
+        <% } %>
         </ul>
     </nav>
     <br/>

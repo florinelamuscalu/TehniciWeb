@@ -1,0 +1,41 @@
+main{
+    margin-top: 3%;
+    padding: 0.5rem;
+    /* margin-left: 2%; */
+}
+form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#mesaje{
+    display: block;
+    width: 98vw;
+    border: 1px solid #52ab98;
+    border-radius: 2rem;
+    box-shadow: 3px 5px 3px 5px #c8d8e4;
+}
+
+.mesaj-c{
+    background:var(--cl-light-t);
+    margin-left:var(--padding-intern);
+    min-height:5rem;
+}
+.mesaj-c h3{
+    background:var(--culoare-roz-inchis);
+    padding-left:1rem;
+}
+.mesaj-c p{
+    padding-left:1rem;
+}
+
+
+
+.mesaj-c time{
+    font-style: italic;
+}
+
+h1, p{
+    font-family:'Times New Roman', Times, serif;
+}

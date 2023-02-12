@@ -16,7 +16,7 @@ class Utilizator {
     #eroare;
 
     constructor({ id, username, nume, prenume, data_nastere, ocupatie, email, parola, rol, culoare_chat = "black", cale_imagine } = {}) {
-        this.id = id;
+        //this.id = id;
 
         // optinoal sa fcem asta in constructor
 
@@ -43,7 +43,7 @@ class Utilizator {
         this.#eroare = "";
     }
 
-
+      
     /**
     * @typedef {object} Check - obiect primit de functiile care realizeaza un query 
     * @property {string} nume - inputul care il verificam
@@ -57,7 +57,39 @@ class Utilizator {
      */
 
     checkName(nume) {
-        return nume != "" && nume.match(new RegExp("^[A-Z][a-z]+$"))
+        return nume != "" && !nume.match(/[<>\/\.]/) && nume.match(new RegExp("^[A-Z][a-z]+$"))
+    }
+
+
+     /**
+    * @typedef {object} Check - obiect primit de functiile care realizeaza un query 
+    * @property {string} ocupatie - inputul care il verificam
+    */
+
+    /**
+     * Verifica datele pentru inregistrare
+     *
+     * @param {Check} obj - un obiect cu datele pentru verifcare
+
+     */
+    checkOcupatie(ocupatie) {
+        return ocupatie != "" && !ocupatie.match(/[<>\/\.]/) 
+    }
+
+     /**
+    * @typedef {object} Check - obiect primit de functiile care realizeaza un query 
+    * @property {string} prenume - inputul care il verificam
+    */
+
+    /**
+     * Verifica datele pentru inregistrare
+     *
+     * @param {Check} obj - un obiect cu datele pentru verifcare
+
+     */
+
+    checkPrenume(prenume) {
+        return prenume != "" && !prenume.match(/[<>\/\.]/) && prenume.match(new RegExp("^[A-Z][a-z]+-[A-Z][a-z]+$"))
     }
 
     /**
@@ -80,6 +112,46 @@ class Utilizator {
         }
     }
 
+   /**
+* @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
+* @property {string} prenume - inputul care il verificam
+* 
+*/
+
+    /**
+     * Verifica datele pentru setare
+     *
+     * @param {ObiectQuery} obj - un obiect cu datele pentru setare
+
+     */
+    set setarePrenume(prenume) {
+        if (this.checkPrenume(prenume)) this.prenume = prenume
+        else {
+            throw new Error("Prenume gresit")
+        }
+    }
+
+       /**
+* @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
+* @property {string} prenume - inputul care il verificam
+* 
+*/
+
+    /**
+     * Verifica datele pentru setare
+     *
+     * @param {ObiectQuery} obj - un obiect cu datele pentru setare
+
+     */
+
+
+    set setareOcupatie(ocupatie) {
+        if (this.checkOcupatie(ocupatie)) this.ocupatie = ocupatie
+        else {
+            throw new Error("Ocupatie gresit")
+        }
+    }
+
     /**
    * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
    * @property {string} usernume - inputul care il verificam
@@ -93,7 +165,7 @@ class Utilizator {
 
      */
     checkUserName(usernume) {
-        return usernume != "" && usernume.match(new RegExp("^[A-Z-a-z0-9]+$"))
+        return (usernume != "" && !usernume.match(/[<>\/\.]/) && usernume.match(new RegExp("^[a-z]+[0-9]+$")))
     }
 
     /*
@@ -114,7 +186,7 @@ class Utilizator {
 
      */
     checkPassword(parola) {
-        return parola != "" && parola.match(new RegExp("^[A-Z-a-z0-9]+{6,}$"))
+        return parola != "" && parola.match(new RegExp("^[A-Z]+[a-z]+[0-9]{6,}$"))
     }
 
     /**
@@ -182,8 +254,8 @@ class Utilizator {
         AccesBD.getInstanta(Utilizator.tipConexiune).insert({ tabel: Utilizator.tabel, campuri: ["username", "nume", "prenume", "data_nastere", "ocupatie", "parola", "email", "culoare_chat", "cod", "cale_imagine"], valori: [`'${this.username}'`, `'${this.nume}'`, `'${this.prenume}'`, `'${this.data_nastere}'`, `'${this.ocupatie}'`, `'${parola_cryptata}'`, `'${this.email}'`, `'${this.culoare_chat}'`, `'${token}'`, `'${this.cale_imagine}'`] }, function (err, rez) {
             if (err)
                 console.log(err);
-            utiliz.trimiteMail("Te-ai inregistrat cu succes", "Username-ul tau este " + utiliz.username,
-                `<h1>Salut!</h1><p style='color:blue'>Username-ul tau este ${utiliz.username}.</p> <p><a href='http://${Utilizator.numeDomeniu}/cod/${utiliz.username}/${token}'>Click aici pentru confirmare</a></p>`)
+            utiliz.trimiteMail("Cont nou", "Bine ai venit în comunitatea PC Components. Username-ul tău este:" + utiliz.username,
+                `<h1>Salut!</h1><p style='color:green, font-style:bold'>Bine ai venit în comunitatea PC Components. Username-ul tau este ${utiliz.username}.</p> <p><a href='http://${Utilizator.numeDomeniu}/confirmare/${utiliz.username}/${token}'>Click aici pentru confirmare</a></p>`)
         });
     }
 

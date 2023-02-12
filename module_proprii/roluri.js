@@ -51,7 +51,8 @@ class RolModerator extends Rol{
 class RolClient extends Rol{
     static get tip() {return "comun"}
     static get drepturi() { return [
-        Drepturi.cumparareProduse
+        Drepturi.cumparareProduse,
+        Drepturi.scrieChat
     ] }
     constructor (){
         super()

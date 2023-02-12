@@ -26,7 +26,7 @@
                 <div class="col">
                     <div class="col">
                         <label> Nume:
-                            <input type="text" id="inp-nume" class="form-control btn btn-outline-info">
+                            <input type="text" id="inp-nume" onchanged="" class="form-control btn btn-outline-info">
                         </label>
                     </div>
                     <div class="col">
@@ -125,12 +125,15 @@
                     </div>
 
                     <div class="col">
-                        <label for="validationTextarea" class="form-label">Search:</label>
-                            <p>Shearch-ul trebuie sa fie de forma +ce_vreau sa fie si -ce_nu_vreau sa fie, o sa se caute dupa descrierea produsului</p>
+                        <p>Shearch-ul trebuie sa fie de forma +ce_vreau sa fie si -ce_nu_vreau sa fie, o sa se caute dupa descrierea produsului</p>
+                        <div class="form-floating">
+                        <label for="validationTextarea">Search:</label>
                             <textarea id="validationTextarea" class="form-control btn btn-outline-info"></textarea>
+                        </div>
                         <div class="invalid-feedback">
                             Please enter a message in the textarea.
                         </div>
+
                     </div>
 
                     <div class="col">
@@ -197,15 +200,13 @@
                                         <div class="accordion" id="accordionExample">
                                             <div class="descriereImg">
                                                 <div class="desc" id="descriere_<%-prod.id%>">
-                                                    <div class="accordion-item">
+                                                    <div class="accordion-item" id="panelsStayOpen-headingTwo">
                                                         <h2 class="accordion-header" id="headingOne">
-                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                                 Descriere
                                                             </button>
                                                         </h2>
-                                                        <div id="collapseOne" class="accordion-collapse collapse"
-                                                            aria-labelledby="headingOne"
-                                                            data-bs-parent="#accordionExample">
+                                                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                             <div class="accordion-body">
                                                                 <p class="descriere"><span class="val-descriere">
                                                                         <%- prod.descriere%>
@@ -345,11 +346,8 @@
                     </div>
                 </div>
             </div>
-
         </main>
-
-
-        <%- include("../fragmente/footer") %>
+    <%- include("../fragmente/footer") %>
 </body>
 
 </html>

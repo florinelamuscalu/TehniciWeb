@@ -7,58 +7,108 @@ window.onload = function () {
     // "cos_virtual": "3,1,10,4,2"
     // daca vreau si cantitate: "3|2,5|1,1|7" prajitura 3 (2 bucati), prajitura 5(1 bucata)...
 
-    let iduriProduse=localStorage.getItem("cos_virtual");
-    iduriProduse=iduriProduse?iduriProduse.split(","):[];      //["3","1","10","4","2"]
-/*
-    [value=3].select-cos{
-        color:red;
-    }
-
-*/
-    for(let idp of iduriProduse){
-        let ch = document.querySelector(`[value='${idp}'].select-cos`);
-        if(ch){
-            ch.checked=true;
+    let iduriProduse = localStorage.getItem("cos_virtual");
+    iduriProduse = iduriProduse ? iduriProduse.split(",") : [];      //["3","1","10","4","2"]
+    /*
+        [value=3].select-cos{
+            color:red;
         }
-        else{
+    
+    */
+    for (let idp of iduriProduse) {
+        let ch = document.querySelector(`[value='${idp}'].select-cos`);
+        if (ch) {
+            ch.checked = true;
+        }
+        else {
             console.log("id cos virtual inexistent:", idp);
         }
     }
 
     //----------- adaugare date in cosul virtual (din localStorage)
-    let checkboxuri= document.getElementsByClassName("select-cos");
-    for(let ch of checkboxuri){
-        ch.onchange=function(){
-            let iduriProduse=localStorage.getItem("cos_virtual");
-            iduriProduse=iduriProduse?iduriProduse.split(","):[];
+    let checkboxuri = document.getElementsByClassName("select-cos");
+    for (let ch of checkboxuri) {
+        ch.onchange = function () {
+            let iduriProduse = localStorage.getItem("cos_virtual");
+            iduriProduse = iduriProduse ? iduriProduse.split(",") : [];
 
-            if( this.checked){
+            if (this.checked) {
                 iduriProduse.push(this.value)
             }
-            else{
-                let poz= iduriProduse.indexOf(this.value);
-                if(poz != -1){
-                    iduriProduse.splice(poz,1);
+            else {
+                let poz = iduriProduse.indexOf(this.value);
+                if (poz != -1) {
+                    iduriProduse.splice(poz, 1);
                 }
             }
 
             localStorage.setItem("cos_virtual", iduriProduse.join(","))
         }
-        
+
     }
 
-    // var produse = document.getElementsByClassName("produs");
+    var produse = document.getElementsByClassName("produs");
 
-    // for (let produs of produse) {
-    //     id="descriere"+produs.id;
-    //     console.log(id)
-    //     const buton=document.getElementById(id)
+    for (let prod of produse) {
+        linie = prod.id.indexOf("_")
+        // text = inp_text.substr(semn + 1, space);
+        id = prod.id.substr(linie + 1, prod.id.length)
+        desc = "descriere_" + id;
+        //console.log("*******",id)
+        const acordeon = document.getElementById(desc)
+        ///console.log(acordeon)
+        numeClasa = document.getElementById("collapseOne").className;
+        //console.log("numeClasa", numeClasa)
+        //console.log(numeClasa.includes("show"))
+        let stare = []
+        for (let i = 1; i <= produse.length; i++) {
+            if (i < produse.length) {
+                if (numeClasa.includes("show")) {
+                    stare.push(1);
+                } else {
+                    stare.push(0);
+                }
+            } else {
+                if (numeClasa.includes("show")) {
+                    stare.push(1);
+                } else {
+                    stare.push(0);
+                }
+            }
+        }
+        // stare.push(",")
+        //console.log("stare", stare)
+        localStorage.setItem("stare", JSON.stringify(stare));
+        //console.log("stare_local_ir", localStorage.getItem("stare"))
+        //console.log(typeof stare)
+        window.addEventListener("beforeunload", function (event) {
+            numeClasa = document.getElementById("collapseOne").className;
+            var stare_local = localStorage.getItem("stare")
+            console.log("stare local", stare_local)
+            if (numeClasa.includes("show")) {
+                stare_local[acordeon] = 1
+            } else {
+                stare_local[acordeon] = 0
+            }
+            localStorage.setItem("stare", JSON.stringify(stare_local))
+        });
 
-    //     buton.addEventListener('click', function handleClick() {
-    //         console.log('element clicked');
-    //       });
+        stare = localStorage.getItem("stare")
+        console.log("stare_local_dupa", localStorage.getItem("stare"))
+        if (stare[acordeon] == 1) {
+            document.getElementById("collapseOne").classList.add("show");
+        } else {
+            document.getElementById("collapseOne").classList.remove("show");
+        }
 
-    // }
+
+        //let string
+
+        // buton.addEventListener('click', function handleClick() {
+        //     console.log('element clicked');
+        //   });
+
+    }
 
 
     document.getElementById("inp-garantie").onchange = function () {
@@ -67,7 +117,8 @@ window.onload = function () {
     }
 
 
-    document.getElementById("filtrare").onclick = function () {
+
+    function filtrare() {
         var inpNume = document.getElementById("inp-nume").value.toLowerCase().trim();
         var inpCategorie = document.getElementById("inp-categorie").value;
         var inpTipProd = document.getElementsByName("gr_rad");
@@ -75,6 +126,14 @@ window.onload = function () {
         var inp_text = document.getElementById("validationTextarea").value.toLowerCase().trim();
         var desigilat = document.getElementsByName("gr_chck");
         var datalist = document.getElementById("i_datalist").value;
+
+
+        //onchanged
+        var produseLista = document.getElementsByClassName("produs");
+        inpNume.onchange = function () {
+            produseLista.innerHTML = inpNume
+        }
+
 
         // var text;
         // if (inpNume == "" || inp_text == "" 
@@ -200,11 +259,18 @@ window.onload = function () {
                     text = inp_text.substr(semn + 1, inp_text.length)
                     //console.log("****text1", text1)
                 }
-
+                console.log("****************************" + inp_text)
                 if (descriere.includes(text) && !descriere.includes(text2)) {
                     cond5 = true;
                     //console.log("text & text2 cond5=", cond5)
                 }
+            }
+
+            if (inp_text == "") {
+                cond5 = true;
+            }
+            if (!cond5) {
+                document.getElementById("validationTextarea").classList.add("is-invalid");
             }
             //console.log("--------", descriere.includes(text))
             //console.log("cond5******", cond5)
@@ -254,6 +320,26 @@ window.onload = function () {
         }
     }
 
+    document.getElementById("filtrare").onclick = filtrare;
+    document.getElementById("inp-nume").onchange = filtrare;
+    document.getElementById("inp-nume").onkeydown = filtrare;
+    document.getElementById("inp-categorie").onchange = filtrare;
+    v = document.getElementsByName("gr_rad")
+    for (el of v) {
+        el.onchange = filtrare;
+    }
+
+    document.getElementById("i-pret").onchange = filtrare;
+    document.getElementById("validationTextarea").onchange = filtrare;
+    check = document.getElementsByName("gr_chck")
+    for (i of check) {
+        i.onchange = filtrare;
+    }
+   
+    document.getElementById("i_datalist").onchange = filtrare;
+    document.getElementById("inp-garantie").onchange = filtrare;
+
+
     document.getElementById("resetare").onclick = function () {
         //resteare produse
         var produse = document.getElementsByClassName("produs");
@@ -273,6 +359,7 @@ window.onload = function () {
 
 
     }
+
 
     function sorteaza(semn) {
         var produse = document.getElementsByClassName("produs");

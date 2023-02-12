@@ -1,0 +1,21 @@
+#chat{
+    margin-top: 5%;
+    margin-left: 3%;
+}
+
+#mesaje_chat{
+    border:1px solid #52ab98;
+    border-radius: 2rem;
+    height:200px;
+    overflow:auto;
+    width:95vw;
+}
+
+#nume #mesaj{
+    width: 70vw;
+}
+
+#buton {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

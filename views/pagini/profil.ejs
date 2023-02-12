@@ -5,7 +5,7 @@
 	<title>Profil</title>
 	<%- include("../fragmente/head") %>
 
-		<link rel="stylesheet" type="text/css" href="/resurse/css/contact.css" />
+		<link rel="stylesheet" type="text/css" href="/resurse/css/pagini/profil/profil.css" />
 		<% if(locals.utilizator) { %>
 			<script>
 
@@ -16,6 +16,7 @@
 					document.getElementById("inp-nume").value = "<%= locals.utilizator.nume %>";
 					document.getElementById("inp-prenume").value = "<%= locals.utilizator.prenume %>";
 					document.getElementById("inp-email").value = "<%= locals.utilizator.email %>";
+					document.getElementById("inp-ocupatie").value = "<%= locals.utilizator.ocupatie %>";
 					document.getElementById("p-reintrod").remove();
 					var optiuni = document.getElementById("sel-culoare").options
 					for (let opt of optiuni)
@@ -27,24 +28,33 @@
 </head>
 
 <body class="dark">
-	<header>
-		<%- include("../fragmente/header") %>
-	</header>
-	<main>
-		<% if(locals.utilizator) { %>
-			<section>
-				<h2>Profil</h2>
-				<p>
-					<%= locals.raspuns %>
-				</p>
-				<img src="/<%- locals.utilizator.poza%>" alt="nu ati incarcat poza de profil" />
-			</section>
-			<%- include("../fragmente/formular",{action:"/profil"}, {raspuns:locals.mesaj}) %>
-	</main>
-	<% } else { %>
-		<p>Nu sunteti logat</p>
-		<% } %>
-			<%- include("../fragmente/footer") %>
+
+	<%- include("../fragmente/header") %>
+		<main>
+			<% if(locals.utilizator) { %>
+				<section>
+					<h2>Profil</h2>
+					<p>
+						<%= locals.raspuns %>
+					</p><img src="/<%- locals.utilizator.cale_imagine%>" alt="nu ati incarcat poza de profil" />
+					
+				</section>
+				<%- include("../fragmente/formular",{action:"/profil"}, {raspuns:locals.mesaj}) %>
+		
+				<p>Vrei sa iti stergi contul?</p>
+				<form id="sterge" method="post" action="/sterge_utiliz">
+					<label>
+						Username: <input type="text" name="username" class="form-control" value="">
+					</label>
+
+					<input type="submit" class = "btn btn-info btn-lg active" value="Submit">
+				</form>
+				<br><br>
+			</main>
+		<% } else { %>
+			<p>Nu sunteti logat</p>
+			<% } %>
+				<%- include("../fragmente/footer") %>
 
 </body>
 

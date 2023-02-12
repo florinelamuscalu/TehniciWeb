@@ -1,0 +1,75 @@
+<form id="form_prod" method="post" class="date" action="<%= locals.action %>" enctype="multipart/form-data">
+    <p>
+        <label class="form-label">
+            Nume: <input class="form-control" type="text" name="nume" id="inp-numep" required value="">
+        </label>
+    </p>
+    <p>
+        <label class="form-label">
+            Descriere: <input class="form-control" type="text" name="descriere" id="inp-desc" required value="">
+        </label>
+    </p>
+    <p>
+        <label class="form-label">
+            Pret: <input class="form-control" type="number" name="pret" id="inp-pret" required value="">
+        </label>
+    </p>
+    <p>
+        <label class="form-label">
+            Greutate: <input class="form-control" type="text" name="greutate" id="inp-greutate" required value="">
+    </p>
+    <p>
+        <label class="form-label">
+            Data fabricare: <input class="form-control" type="date" name="data_fab" id="inp-dataF" required value="">
+        </label>
+    </p>
+    <p>
+        <label class="form-label">
+            Tip produs: <select class="form-control form-control-color" name="tip_produs" id="sel-prod">
+                <option value="gaming" selected>gaming</option>
+                <option value="office">office</option>
+                <option value="home">home</option>
+            </select>
+        </label>
+    </p>
+    <p>
+        <label class="form-label">
+            Specificatii: <input class="form-control" type="text" name="specificatii" id="inp-specificatii" required value="">
+    </p>
+    <p>
+        <label class="form-label">
+            Desigilate: <select class="form-control form-control-color" name="desigilate" id="sel-des">
+                <option value="true" selected>Da</option>
+                <option value="false">Nu</option>
+            </select>
+        </label>
+    </p>
+    <p>
+        <label class="form-label">
+            Culoare: <input class="form-control" type="text" name="culoare" id="inp-culoare" required value="">
+    </p>
+    <p>
+        <label class="form-label">
+            Data adugare: <input class="form-control" type="date" name="data_add" id="inp-dataA" required value="">
+        </label>
+    </p>
+    <p>
+        <label class="form-label">
+            Garantie: <input class="form-control" type="number" name="garantie" id="inp-garantie" required value="">
+        </label>
+    </p>
+    <p>
+        <label class="form-label">
+            Stoc: <input class="form-control" type="number" name="stoc" id="inp-stoc" required value="">
+        </label>
+    </p>
+        <label class="form-label">
+            Imagine: <input type="file" name="imagine" class="form-control" id="inputGroupFile04"
+                aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+        </label>
+    </p>
+    <p>
+        <input type="Adauga" value="Adauga" class="btn btn-outline-secondary">
+        <input type="Sterge" value="Sterge" class="btn btn-outline-secondary">
+    </p>
+</form>

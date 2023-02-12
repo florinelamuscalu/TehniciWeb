@@ -75,7 +75,7 @@ ul.meniu{
         }
         ul {
             list-style-type: none;
-            z-index: 10px;
+            z-index: 10000px;
             padding: 0;
             margin: 2px;
             display: block;
@@ -125,6 +125,7 @@ ul.meniu{
 
         &:hover{
             overflow: visible;
+            z-index:10000;
         }
         &::before{
             content: "";
@@ -133,7 +134,7 @@ ul.meniu{
             left: 0;
             background-image: linear-gradient(var(--culoare-meniu-select), white, var(--culoare-meniu-select));
             width: 100%;
-            z-index: 1;
+            z-index: 1000;
             height: 5px;
              opacity: 0;
             /*transition: transform 3s; */

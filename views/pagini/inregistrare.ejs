@@ -16,8 +16,9 @@
 
         <main>
             <div class="afisaj">
-                <h1>Inregistrare utilizator</h1>
+                <h1 id="titlu">Inregistrare utilizator</h1>
                 <br>
+                <p id="mesaj"><%- locals.mesaj %></p>
                 <% if(!locals.raspuns) { %>
 
                     <%-include("../fragmente/formular", {action: "/inregistrare" }) %>

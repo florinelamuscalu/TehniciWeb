@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title>Chat</title>
+    <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
+    <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
+
+    <%- include("../fragmente/head") %>
+        <script type="text/javascript" src="../../node_modules/socket.io/client-dist/socket.io.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <link rel="stylesheet" href="/resurse/css/pagini/chat/chat.css" type="text/css" />
+        <!-- aici trebuie sa fie pus posrtul dar primesc eroare de la ejs  -->
+    
+        <script>port = <%= locals.port %> </script>
+        <script type="text/javascript" src="/resurse/js/chat.js"></script>
+</head>
+
+<body class="dark">
+    <%- include("../fragmente/header") %>
+        <main>
+            <div id="chat">
+                <h1>Chat</h1>
+                <div id="mesaje_chat">
+                    <!-- <textarea class="form-control form-control-lg" id="mesaj_chat"></textarea> -->
+                </div>
+                <label>
+                    Nume: <input class="form-control form-control-lg" type="text" id="nume" name="nume" value="ionel">
+                </label><br />
+                <label for="floatingTextarea2">
+                    Mesaj: <textarea class="form-control form-control-lg" id="mesaj" name="mesaj" value="bau!"
+                        rows="3"></textarea>
+                </label><br />
+                <label>
+                    Culoare: <select class="form-control form-control-color" id="culoare" name="culoare">
+                        <option value="black">black</option>
+                        <option value="green">green</option>
+                        <option value="blue">blue</option>
+                    </select>
+                </label>
+                <label>
+                    Backgound: <select class="form-control form-control-color" id="b_culoare" name="culoare">
+                        <option value="white">white</option>
+                        <option value="yellow">yellow</option>
+                        <option value="pink">pink</option>
+                    </select>
+                </label><br />
+                <button class="btn btn-outline-primary btn-lg" id="buton" onclick="trimite()">Trimitere</button>
+            </div>
+            <div contenteditable style="border:1px solid black;">Ceva</div>
+        </main>
+        <%- include("../fragmente/footer") %>
+</body>
+
+</html>
