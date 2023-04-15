@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/resurse/css/pagini/produse/buttoane.css" type="text/css" />
     <script type="text/javascript" src="/resurse/js/produse.js"></script>
     <script type="text/javascript" src="/resurse/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/resurse/js/favorite.js"></script>
     <%- include("../fragmente/head") %>
 </head>
 
@@ -24,6 +25,28 @@
         <main>
             <div class="row">
                 <div class="col">
+                    <div class="col">
+                        <p>
+                            <button id="sortCrescNume" type="button" class="btn btn-outline-primary"> <span>Sorteaza crescator
+                                    dupa pret si
+                                    nume</span>
+                                <i class="bi bi-arrow-up"></i>
+                            </button><br><br>
+                            <button id="sortDescrescNume" type="button" class="btn btn-outline-primary "><span>Sorteaza
+                                    descrescator dupa
+                                    pret si nume</span>
+                                <i class="bi bi-arrow-down"></i>
+                            </button><br><br>
+                            <button id="maxim" type="button" class="btn btn-outline-primary"><span>Produsul cu pretul cel mai
+                                    mare</span>
+                                <i class="bi bi-caret-up"></i>
+                            </button><br><br>
+                            <button id="minim" type="button" class="btn btn-outline-primary"><span>Produsul cu pretul cel mai
+                                    mic</span>
+                                <i class="bi bi-caret-down"></i>
+                            </button>
+                        </p>
+                    </div>
                     <div class="col">
                         <label> Nume:
                             <input type="text" id="inp-nume" onchanged="" class="form-control btn btn-outline-info">
@@ -137,32 +160,13 @@
                     </div>
 
                     <div class="col">
-                        <p>
+                        <p><br>
                             <button id="filtrare" type="button" class="btn btn-primary"><span>Filtreaza</span>
                                 <i class="bi bi-filter-circle"></i>
                             </button>
                             <button id="resetare" type="button" class="btn btn-primary"><span>Reseteaza</span>
                                 <i class="bi bi-x-circle"></i>
                             </button><br />
-                            <button id="sortCrescNume" type="button" class="btn btn-primary"> <span>Sorteaza crescator
-                                    dupa pret si
-                                    nume</span>
-                                <i class="bi bi-arrow-up"></i>
-                            </button>
-                            <button id="sortDescrescNume" type="button" class="btn btn-primary "><span>Sorteaza
-                                    descrescator dupa
-                                    pret si nume</span>
-                                <i class="bi bi-arrow-down"></i>
-                            </button><br>
-                            <button id="maxim" type="button" class="btn btn-primary"><span>Produsul cu pretul cel mai
-                                    mare</span>
-                                <i class="bi bi-caret-up"></i>
-                            </button>
-                            <button id="minim" type="button" class="btn btn-primary"><span>Produsul cu pretul cel mai
-                                    mic</span>
-                                <i class="bi bi-caret-down"></i>
-                            </button>
-
                         </p>
                     </div>
                     <div class="col">
@@ -200,13 +204,13 @@
                                         <div class="accordion" id="accordionExample">
                                             <div class="descriereImg">
                                                 <div class="desc" id="descriere_<%-prod.id%>">
-                                                    <div class="accordion-item" id="panelsStayOpen-headingTwo">
+                                                    <div class="accordion-item">
                                                         <h2 class="accordion-header" id="headingOne">
-                                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                                                 Descriere
                                                             </button>
                                                         </h2>
-                                                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
                                                             <div class="accordion-body">
                                                                 <p class="descriere"><span class="val-descriere">
                                                                         <%- prod.descriere%>
@@ -233,7 +237,7 @@
                                                         </button>
                                                     </h2>
                                                     <div id="collapseTwo" class="accordion-collapse collapse"
-                                                        aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                        aria-labelledby="headingTwo">
                                                         <div class="accordion-body">
                                                             <p class="pret">Pret:<span class="val-pret"><%-
                                                                         prod.pret%></span></p>
@@ -250,8 +254,7 @@
                                                         </button>
                                                     </h2>
                                                     <div id="collapseThree" class="accordion-collapse collapse"
-                                                        aria-labelledby="headingThree"
-                                                        data-bs-parent="#accordionExample">
+                                                        aria-labelledby="headingThree">
                                                         <div class="accordion-body">
                                                             <p class="tip_produs"><span
                                                                     class="val-tip_produs"><%-prod.tip_produs%></span>
@@ -269,8 +272,7 @@
                                                         </button>
                                                     </h2>
                                                     <div id="collapseFour" class="accordion-collapse collapse"
-                                                        aria-labelledby="headingFour"
-                                                        data-bs-parent="#accordionExample">
+                                                        aria-labelledby="headingFour">
                                                         <div class="accordion-body">
                                                             <p class="specificatii"><span class="val-specificatii"><%-
                                                                         prod.specificatii%></span></p>
@@ -287,8 +289,7 @@
                                                         </button>
                                                     </h2>
                                                     <div id="collapseFive" class="accordion-collapse collapse"
-                                                        aria-labelledby="headingFive"
-                                                        data-bs-parent="#accordionExample">
+                                                        aria-labelledby="headingFive">
                                                         <div class="accordion-body">
                                                             <p class="data_fabricare"><span
                                                                     class="val-data_fabricare"><time
@@ -307,7 +308,7 @@
                                                         </button>
                                                     </h2>
                                                     <div id="collapseSix" class="accordion-collapse collapse"
-                                                        aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                                                        aria-labelledby="headingSix">
                                                         <div class="accordion-body">
                                                             <p class="culoare"><span class="val-culoare"><%-
                                                                         prod.culoare%></span></p>
@@ -324,8 +325,7 @@
                                                         </button>
                                                     </h2>
                                                     <div id="collapseSeven" class="accordion-collapse collapse"
-                                                        aria-labelledby="headingSeven"
-                                                        data-bs-parent="#accordionExample">
+                                                        aria-labelledby="headingSeven">
                                                         <div class="accordion-body">
                                                             <p class="desigilat"><span class="val-desigilat"><%-
                                                                         prod.desigilate%></span></p>
@@ -335,10 +335,13 @@
                                             </div>
                                             <br><br><br>
                                             <label class="selecteaza-cos">
-                                                Selectează:<br />
+                                                Adauga in cos:<br />
                                                 <input type="checkbox" class="select-cos" value="<%-prod.id %>"
                                                     autocomplete="off">
                                             </label>
+                                            <span id="favorite_icon_prod">   
+                                                <i id="icon_<%-prod.id%>" class="fa-solid fa-heart" onclick="adaugaFavorite(this.id)"></i>
+                                            </span>
                                     </article>
                                     <% }%>
                             </div>

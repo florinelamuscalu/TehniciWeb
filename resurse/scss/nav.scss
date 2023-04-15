@@ -49,6 +49,7 @@ ul.meniu{
     margin-left: 10%;
     margin-bottom: 0;
     margin-top: 0;
+    z-index: 100000000;
     a {
         color: var(--color-text);
         text-align: var(--text-align);

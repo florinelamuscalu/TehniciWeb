@@ -1,0 +1,144 @@
+INDEX.ejs
+
+<!-- <div id="promo">
+<a href="promotii" target="_self">
+    <figure style="width: 65%">
+        <picture>
+            <source srcset="resurse/imagini/promo-phone.jpg" media="(max-width: 450px)">
+            <source srcset="resurse/imagini/promo-tablet.jpg" media="(max-width: 800px)">
+            <img src="resurse/imagini/promo.jpg" alt="promo" style="width:100%">
+        </picture>
+        <figcaption style="text-align: center; color: black; width: 100%">Pana la ora 24:00 puteti sa va
+            cumparati
+            orice tip de ram si aveti 20% reducere</figcaption>
+    </figure>
+</a>
+</div> -->
+<!-- div logare -->
+<!-- <p>Ip: <%- //locals.ip %>
+</p> -->
+<!-- <button class="btn btn-primary">click</button> -->
+
+
+<div id="userOnline">
+                <p>Useri online:</p>
+                <ol>
+                    <% for(let u of locals.useriOnline) { %>
+                        <li> <%- u.username %> ( <%- u.prenume %> <%- u.nume %> ) </li>
+                    <% } %>
+                </ol>
+            </div>
+            <br><br>
+            
+<div id="userOnlineInactiv">
+<p>Useri online inactivi:</p>
+<ol>
+    <% for(let u of locals.useriOnlineInactiv) { %>
+        <li> <%- u.username %> ( <%- u.prenume %> <%- u.nume %> ) </li>
+    <% } %>
+</ol>
+</div>
+<br><br>
+<div id="oraLoc"></div>
+<%
+dataServer=new Date();
+sirData=dataServer.getHours()+":"+dataServer.getMinutes()+":"+dataServer.getSeconds()
+
+%>  
+<p>Ora server:<span id="data_server"><%= sirData %></span></p>
+<p>Ora client:<span id="data_client"></span></p>
+<script>
+    function zero(nr){
+        if (nr<10) return "0"+nr;
+        return nr;
+    }
+    
+    d=new Date()
+    document.getElementById("data_client").innerHTML=zero(d.getHours())+":"+zero(d.getMinutes())+":"+zero(d.getSeconds());
+
+    function actualizeazaElemData(id_div){
+        var data_div=document.getElementById(id_div);
+        if (data_div.innerHTML!="")
+        {
+            var timp=data_div.innerHTML.split(":")
+            var dt=new Date(2000,1,15, timp[0],timp[1], timp[2] );//nu conteaza data (am pus valori random pentru an, luna si zi) ci timpul
+        }
+        else
+            var dt=new Date();
+        dt.setSeconds(dt.getSeconds()+1)
+        data_div.innerHTML=zero(dt.getHours())+":"+zero(dt.getMinutes())+":"+zero(dt.getSeconds());
+    }
+    function actualizeazaData(){
+        actualizeazaElemData("data_client");
+        actualizeazaElemData("data_server");
+    }
+    actualizeazaData()
+    setInterval(actualizeazaData,1000)
+</script>
+
+
+
+INFO.ejs
+
+<div id="a-patra-zona">
+                    <section id="garantie">
+                        <h2>Garantia Securitatii</h2>
+                        <p>
+                            &nbsp; <b>PC components</b> este decis sa va respecte intimitatea. In general, puteti vizita
+                            PC
+                            components
+                            fara
+                            a furniza informatii despre dumneavoastra. Noi colectam date despre vizitatorii site-ului.
+                            Unele
+                            sunt
+                            necesare in procesarea comenzilor, de exemplu. Analizam aceste date in vederea identificarii
+                            de
+                            trenduri si
+                            realizarii de statistici care sa ne ajute in a va furniza servicii mai bune. <br>
+                            <strong>PC Components nu incalca intimitatea user-ilor doar incearca sa aduca de fiecare
+                                data
+                                oferte
+                                si produse pentru nevoile vizitatorilor</strong>
+                        </p>
+                    </section>
+                </div>
+
+                <!-- <div id="a-treia-zona">
+                <section id="contact">
+                    <h2> Contact</h2>
+                    <p>
+                        Suntem aici pentru tine, parerea ta conteaza!</p>
+
+                    <p>Program suport Clienti:</p>
+                    <dl>
+                        <dt>luni - vineri: </dt>
+                        <dd>08:00 - 20:00</dd>
+                        <dt>sambata: 09:00 - 18:00</dt>
+                        <dd>09:00 - 18:00</dd>
+                        <dt>duminica: </dt>
+                        <dd>inchis</dd>
+                    </dl>
+
+                    <p>&nbsp; Dragi clienti, pentru orice nelamurire va rugam sa ne contactati la mail-ul: <a
+                            href="mailto:pc.componets@gmail.com"> <em>ps components</em> </a> sau la numarul de
+                        telefon
+                        <a href="tel:+40712345678"> <em>0712345678</em></a>. De asemenea, ne poti trimite
+                        mesajul tau prin completarea formularului de mai jos. Te vom contacta cat de repede.
+                    </p>
+                    <p>&nbsp; Un mic citat pentru a ne face ziua mai buna:
+                        <q>Nu ma tem de calculatoare. Ma tem de lipsa acestora. – Isaac Asimov</q>
+                        <a href="https://ro.wikipedia.org/wiki/Isaac_Asimov" target="_blank">Mai multe despre Isaac
+                            Asimov</a>
+                    </p>
+                </section>
+            </div> -->
+
+                <div id="a-sasea-zona">
+                <section id="gdpr">
+                    <h2>GDPR</h2>
+
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus, sed itaque! Optio eos
+                        consectetur nostrum numquam ipsam modi sit? Dicta tempore optio aspernatur necessitatibus
+                        perspiciatis assumenda nesciunt voluptatem maiores aut.</p>
+                </section>
+            </div>

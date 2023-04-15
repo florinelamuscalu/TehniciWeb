@@ -1,0 +1,19 @@
+
+footer{
+    margin-top: 2%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+address{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 2%;
+
+}
+
+#copyright{
+    font-size: 1em;
+    
+}

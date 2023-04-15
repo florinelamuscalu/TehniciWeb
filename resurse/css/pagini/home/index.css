@@ -3,6 +3,25 @@
     display: flex;
     justify-content: center;
 }
+#hello{
+    /* margin-top: 2%;
+    margin-left: 30% !important; */
+    /* display:grid;
+    grid-template-columns:  1fr; */
+   display: inline;
+}
+
+#hello-img{
+    width: 50px;
+    height: auto;
+}
+
+#hello-p{
+    font-size: 1.2rem;
+    margin-top: 2%;
+    margin-left: 2%;
+}
+
 
 #video video{
     width: 50%;
@@ -16,24 +35,5 @@
     color: #023328
 }
 
-#grid{
-    margin-top: 2%;
-    /* display:grid;
-    grid-template-columns:  1fr; */
-   display: inline;
-}
 
-#grid-img{
-    width: 50px;
-    height: auto;
-
-}
-
-#userOnline{
-    margin-top: 2%;
-}
-
-p{
-    font-size: 1.3rem;
-}
 

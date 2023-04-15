@@ -1,0 +1,28 @@
+body {
+    background-color: white;
+    transition: font-size 0.2s;
+    --color-meniu-iframe:#52ab98 ;
+    --color-text-meniu-iframe: white;
+    font-family: 'Crimson Pro', serif;
+    --culoare-text: #2b6777;
+    --culoare-background: #FFAD03;
+}
+main {
+    margin-top: 1%;
+    margin-left: 1%;
+    margin-right: 1%;
+    padding: 0;
+}
+
+.downImg img{
+    margin: auto;
+    display: block;
+    margin-top: 2%; 
+}
+
+
+
+
+
+
+

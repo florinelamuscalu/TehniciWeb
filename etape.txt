@@ -43,6 +43,31 @@ alt="<% if (imag.alt){ %> <%- imag.alt %> <% }else{ %> <%- imag.titlu %> <%} %>"
 
 
 
+<% if(locals.utilizator) { %>
+    <li id="profil"><div>  <%- locals.utilizator.nume + ' ' + locals.utilizator.prenume %> </div>
+    <ul clas="utiliz">
+        <li><a href="/profil">Profil</a></li>
+        <li><a href="/logout">Logout<i class="bi bi-door-open"></i></a></li>
+    </ul>
+</li>
+<% } %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <%
                                 var date=new Date (); 

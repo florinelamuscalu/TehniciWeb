@@ -1,110 +1,65 @@
-@media only screen and (max-width: 800px) {
-    #button {
-        margin-left: 90% !important;
-    }
-
-    .fa-heart {
-        margin-left: 85% !important;
-    }
-
-    #user {
-        left: 35% !important;
-    }
-}
-
-#titlu{
-    margin-left: 1%;
-}
-
-#user-button {
+.titlu_icon{
     display: flex;
-    width: 100%;
-    height: 20%;
-
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 3%;
 }
 
-#user {
+a {
+    text-decoration: none;
+    background: linear-gradient(to right, #52ab98, #155c4d); 
+    background-clip: text; 
+    -webkit-background-clip: text; 
+    color: transparent; 
+ }
+a:hover{
+    text-decoration: none;
+    background: linear-gradient(to right, #52ab98, #155c4d); 
+    background-clip: text; 
+    -webkit-background-clip: text; 
+    color: transparent; 
+ }
+
+#user-button{
     display: flex;
+    flex-direction: row;
     justify-content: right;
-    position: relative;
-    left: 60%;
+    align-items: center;
+    margin-right: 3%;
+    font-size: 1.5em;
 }
 
-#button {
-    display: block;
-    position: absolute;
-    /* margin-right: 1%; */
-    margin-left: 90%;
-    margin-top: 0.5%;
-    font-size: 150%;
+.icon{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between !important; */
+    align-items: center;
+    margin-right: 30%;
 }
 
-
-.fa-regular {
-    font-size: 20px;
-    margin-right: 10px;
+.icon i{
+    margin-right: 30%;
+    text-decoration: none;
+    background: linear-gradient(to right, #52ab98, #155c4d); 
+    background-clip: text; 
+    -webkit-background-clip: text; 
+    color: transparent; 
+}
+#cos{
+    list-style-type: none; 
 }
 
-.fa-user{
-    position: relative;
-    top: 25%
+#favorite{
+    list-style-type: none; 
+    margin-right: 30%;
 }
 
-
-#loggare {
-    list-style-type: none;
+#user{
+    list-style-type: none;  
+    margin-right: 30%;
 }
 
-.fa-user {
-    display: block;
-    height: 100%;
-    position: relative;
-    left: 40%;
-    top: 35%;
-    font-size: 150%;
-    color: black;
-    padding: 0;
+#button{
+    margin-left: 30%;
 }
 
-
-/* logat */
-
-#profil{
-    color: white;
-}
-
-.bi-door-open{
-    display: block;
-    visibility: visible;
-}
-
-.fa-heart {
-    display: block;
-    position: absolute;
-    /* margin-right: 2%; */
-    margin-left: 82%;
-    margin-top: 1%;
-    font-size: 150%;
-}
-
-.fa-heart:hover {
-    color: red;
-    animation-name: animatie-heart;
-    animation-duration: 2s;
-    animation-timing-function: linear;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    transform-origin: 0% 0%;
-}
-
-
-@keyframes animatie-heart {
-    0% {
-        transform: rotate(0);
-
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}

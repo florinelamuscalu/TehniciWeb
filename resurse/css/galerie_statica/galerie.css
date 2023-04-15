@@ -1,6 +1,10 @@
-#a-noua-zona {
+/* #a-noua-zona {
   padding-left: var(--padding-intern);
   padding-right: var(--padding-intern);
+} */
+
+#galerie{
+  width: auto;
 }
 
 #grid-galerie {

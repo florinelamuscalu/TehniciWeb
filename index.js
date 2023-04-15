@@ -7,6 +7,7 @@ const sharp = require("sharp");
 const formidable = require("formidable");
 const { Client } = require("pg");
 const { Utilizator } = require("./module_proprii/utilizator.js")
+const {adaugaFavorite} = require("./resurse/js/favorite.js")
 const ejs = require("ejs");
 const session = require("express-session");
 const AccesBd = require("./module_proprii/accesbd.js")
@@ -18,6 +19,7 @@ const puppeteer = require('puppeteer');
 const mongodb = require('mongodb');
 const helmet = require('helmet')
 const xmljs=require('xml-js');
+const bodyParser = require('body-parser')
 
 
 // server 
@@ -28,11 +30,10 @@ var io = socket(server)
 io = io.listen(server);
 
 
-
-
 var cssBootstrap = sass.compile(__dirname + "/resurse/scss/customizare_bootstrap.scss", { sourceMap: true });
 fs.writeFileSync(__dirname + "/resurse/css/biblioteci/bootstrap_custom.css", cssBootstrap.css);
 
+app.use(bodyParser.json()); // pentru a lua datele din JSON body
 app.use(["/contact"], express.urlencoded({extended:true}));
 app.set("view engine", "ejs");
 //console.log("Cale proiect:", __dirname);
@@ -220,58 +221,58 @@ app.all("/*", function (req, res, next) {
     let ipReq = getIp(req);
     var ip_gasit = ipuri_active[ipReq + "|" + req.url];
     var timp_curent = new Date();
-    if (ip_gasit) {
+    // if (ip_gasit) {
 
-        if ((timp_curent - ip_gasit.data) < 20 * 1000) {//diferenta e in milisecunde; verific daca ultima accesare a fost pana in 10 secunde
-            if (ip_gasit.nr > 10) {//mai mult de 10 cereri 
-                res.send("<h1>Prea multe cereri intr-un interval scurt. Revino m-ai tarziu</h1>");
-                ip_gasit.data = timp_curent
-                return;
-            }
-            else {
+    //     if ((timp_curent - ip_gasit.data) < 20 * 1000) {//diferenta e in milisecunde; verific daca ultima accesare a fost pana in 10 secunde
+    //         if (ip_gasit.nr > 10) {//mai mult de 10 cereri 
+    //             res.send("<h1>Prea multe cereri intr-un interval scurt. Revino m-ai tarziu</h1>");
+    //             ip_gasit.data = timp_curent
+    //             return;
+    //         }
+    //         else {
 
-                ip_gasit.data = timp_curent;
-                ip_gasit.nr++;
-            }
-        }
-        else {
-            //console.log("Resetez: ", req.ip+"|"+req.url, timp_curent-ip_gasit.data)
-            ip_gasit.data = timp_curent;
-            ip_gasit.nr = 1;//a trecut suficient timp de la ultima cerere; resetez
-        }
-    }
-    else {
-        ipuri_active[ipReq + "|" + req.url] = { nr: 1, data: timp_curent };
-        //console.log("am adaugat ", req.ip+"|"+req.url);
-        //console.log(ipuri_active);        
+    //             ip_gasit.data = timp_curent;
+    //             ip_gasit.nr++;
+    //         }
+    //     }
+    //     else {
+    //         //console.log("Resetez: ", req.ip+"|"+req.url, timp_curent-ip_gasit.data)
+    //         ip_gasit.data = timp_curent;
+    //         ip_gasit.nr = 1;//a trecut suficient timp de la ultima cerere; resetez
+    //     }
+    // }
+    // else {
+    //     ipuri_active[ipReq + "|" + req.url] = { nr: 1, data: timp_curent };
+    //     //console.log("am adaugat ", req.ip+"|"+req.url);
+    //     //console.log(ipuri_active);        
 
-    }
-    let comanda_param = `insert into accesari(ip, user_id, pagina) values ($1::text, $2,  $3::text)`;
-    //console.log(comanda);
-    if (ipReq && ip_gasit) { //TO DO - nu depaseste 10 cereri in 5 secunde (atentie in cerinta aveti alte numere)
-        if ((timp_curent - ip_gasit.data) < 20 * 1000) {
-            if (ip_gasit.nr > 10) {//mai mult de 10 cereri 
-                res.send("<h1>Prea multe cereri intr-un interval scurt.Revino m-ai tarziu</h1>");
-                ip_gasit.data = timp_curent
-                return;
-            }
-            else {
+    // }
+    // let comanda_param = `insert into accesari(ip, user_id, pagina) values ($1::text, $2,  $3::text)`;
+    // //console.log(comanda);
+    // if (ipReq && ip_gasit) { //TO DO - nu depaseste 10 cereri in 5 secunde (atentie in cerinta aveti alte numere)
+    //     if ((timp_curent - ip_gasit.data) < 20 * 1000) {
+    //         if (ip_gasit.nr > 10) {//mai mult de 10 cereri 
+    //             res.send("<h1>Prea multe cereri intr-un interval scurt.Revino m-ai tarziu</h1>");
+    //             ip_gasit.data = timp_curent
+    //             return;
+    //         }
+    //         else {
 
-                ip_gasit.data = timp_curent;
-                ip_gasit.nr++;
-                var id_utiliz = req.session.utilizator ? req.session.utilizator.id : null;
-                //console.log("id_utiliz", id_utiliz);
-                client.query(comanda_param, [ipReq, id_utiliz, req.url], function (err, rez) {
-                    if (err) console.log(err);
-                });
-            }
-        }
+    //             ip_gasit.data = timp_curent;
+    //             ip_gasit.nr++;
+    //             var id_utiliz = req.session.utilizator ? req.session.utilizator.id : null;
+    //             //console.log("id_utiliz", id_utiliz);
+    //             client.query(comanda_param, [ipReq, id_utiliz, req.url], function (err, rez) {
+    //                 if (err) console.log(err);
+    //             });
+    //         }
+    //     }
         // var id_utiliz=req.session.utilizator?req.session.utilizator.id:null;
         // //console.log("id_utiliz", id_utiliz);
         // client.query(comanda_param, [ipReq, id_utiliz, req.url], function(err, rez){
         //     if(err) console.log(err);
         // });
-    }
+    //}
     next();
 });
 
@@ -703,6 +704,7 @@ app.get(["/produse"], function (req, res) {
                 console.log(err);
             } else {
                 res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
+                //res.render("pagini/favorite", { produse: rez.rows, optiuni: rezCateg.rows });
             }
         })
     })
@@ -732,12 +734,77 @@ app.get("/produse", function (req, res) {
             }
             else {
                 res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
+                //res.render("pagini/favorite", { produse: rez.rows, optiuni: rezCateg.rows });
                 console.log(rez);
             }
         });
     });
 });
 
+
+/////////////////////////////////////////////// FAVORITE
+
+app.post("/favorite", function (req, res){
+    //console.log("req.body.idProdus", req.body.idProdus)
+    let idProdus = req.body.idProdus
+    let id_utiliz = req?.session?.utilizator?.id;
+    id_utiliz = id_utiliz ? id_utiliz : null;
+    console.log("id_utiliz", id_utiliz)
+
+    if(id_utiliz != null){
+        AccesBd.getInstanta().select({ tabel: "favorite", campuri: "id_produs".split(","), conditiiAnd: [`id_produs in (${idProdus})`, `id_user in (${id_utiliz})` ] },
+        function (err, rez) {
+            if(!err && rez.rowCount <=0){
+                try{
+                    AccesBd.getInstanta().insert({
+                        tabel: "favorite",
+                        campuri: ["id_user", "id_produs"],
+                        valori: [ `${id_utiliz}`, `'${idProdus}'`]
+                    }, function (err, rezQuery) {
+                        // console.log("eorare adaugare la favorite1", err);
+                        // console.log("eorare adaugare la favorite1 rezQuery", rezQuery);
+                    })
+                    res.sendStatus(200);
+        
+                }catch(error){
+                    console.error('Eroare la adăugarea la favorite2:', error);
+                    res.sendStatus(500);
+                }
+            }else{
+                //res.send("Produsul se afla deja in lista de favorite");
+                res.sendStatus(500);
+            }
+        
+        });
+    }else{
+        //res.send("Nu puteti adauga produse la favorite daca nu sunteti logat");
+        res.sendStatus(500);
+    }
+
+
+    //next();
+});
+
+
+app.get("/favorite", function (req, res) {
+    let id_utiliz = req?.session?.utilizator?.id;
+    id_utiliz = id_utiliz ? id_utiliz : null;
+    if (id_utiliz != null){
+        AccesBd.getInstanta().selectJoin({ tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,data_adaugare,garantie,stoc".split(","), joinTabel: "produse" ,joinConditiile: [`favorite.id_produs = produse.id`], conditiiAnd: [ `favorite.id_user in (${id_utiliz})` ] },
+        function (err, rez) {
+            if (err) {
+                renderError(res, 2);
+                //console.log(err);
+            } else {
+                //console.log(rez)
+                res.render("pagini/favorite", { favorite: rez.rows});
+            }
+        });
+    }else{
+        res.render("pagini/favorite_gol")
+    }
+
+})
 
 //////////////////////////////Cos virtual
 app.post("/produse_cos", function (req, res) {

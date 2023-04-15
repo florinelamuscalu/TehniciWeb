@@ -1,6 +1,6 @@
-GRANT ALL PRIVILEGES ON DATABASE pc TO flori ;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO flori;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO flori;
+GRANT ALL PRIVILEGES ON DATABASE pc TO flori2 ;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO flori2;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO flori2;
 
 
 ALTER TABLE produse
@@ -80,6 +80,3 @@ INSERT into produse (nume,descriere, pret, greutate, data_fabricare, tip_produs,
 
 ('HDD Seagate Constellation','HDD Seagate Constellation ES.3 4TB', 415, 100, '2021-04-10', 'gaming', '2-componente-3-HDD', '{"4 TB", "7200 rpm", "128 MB"}', False,'negru', 'HDD3.png')
 
-GRANT ALL PRIVILEGES ON DATABASE pc TO flori2 ;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO flori2;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO flori2;

@@ -113,6 +113,20 @@ class AccesBD{
         this.client.query(comanda,callback)
     }
 
+    selectJoin({tabel="",campuri=[], joinTabel="", joinConditiile=[], conditiiAnd=[],} = {}, callback){
+        let conditieWhere="";
+        if(conditiiAnd.length>0)
+            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
+        let joinClause = "";
+        if(joinTabel && joinConditiile.length > 0) {
+            joinClause = `join ${joinTabel} ON ${joinConditiile.join(" and ")}`;
+        }
+        let comanda=`select ${campuri.join(",")} from ${tabel} ${joinClause} ${conditieWhere}`;
+        console.error(comanda);
+        this.client.query(comanda,callback)
+    }
+
+
     selectParametrizat({tabel="",campuri=[],conditiiAnd=[]} = {}, callback, parametriQuery=[]){
         let conditieWhere="";
         if(conditiiAnd.length>0)
