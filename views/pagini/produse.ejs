@@ -182,7 +182,7 @@
                             <div class="grid-produse">
                                 <% for( let prod of locals.produse) { %>
                                     <article class="produs" id="articol_<%-prod.id%>">
-                                        <h3 class="nume">Nume<a href="/produs/<%-prod.id %>"><span class="val-nume"><%-prod.nume%></span></a></h3>
+                                        <h3 class="nume">Nume: <a href="/produs/<%-prod.id %>"><span class="val-nume"><%-prod.nume%></span></a></h3>
                                         <div class="categorie">
                                             <% let cat=prod.categorie.replace(/{/g, "" );
                                             cat=cat.replace(/}/g, "" ); // let
@@ -334,10 +334,9 @@
                                                 </div>
                                             </div>
                                             <br><br><br>
-                                            <label class="selecteaza-cos">
-                                                Adauga in cos:<br />
-                                                <input type="checkbox" class="select-cos" value="<%-prod.id %>"
-                                                    autocomplete="off">
+                                            <label class="selecteaza-cos" >
+                                                Adauga in cos<br>
+                                                <input type="checkbox" class="select-cos" value="<%-prod.id %>" autocomplete="off">
                                             </label>
                                             <span id="favorite_icon_prod">   
                                                 <i id="icon_<%-prod.id%>" class="fa-solid fa-heart" onclick="adaugaFavorite(this.id)"></i>

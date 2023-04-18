@@ -7,7 +7,7 @@ const sharp = require("sharp");
 const formidable = require("formidable");
 const { Client } = require("pg");
 const { Utilizator } = require("./module_proprii/utilizator.js")
-const {adaugaFavorite} = require("./resurse/js/favorite.js")
+const { adaugaFavorite } = require("./resurse/js/favorite.js")
 const ejs = require("ejs");
 const session = require("express-session");
 const AccesBd = require("./module_proprii/accesbd.js")
@@ -18,7 +18,7 @@ const QRCode = require('qrcode');
 const puppeteer = require('puppeteer');
 const mongodb = require('mongodb');
 const helmet = require('helmet')
-const xmljs=require('xml-js');
+const xmljs = require('xml-js');
 const bodyParser = require('body-parser')
 
 
@@ -34,7 +34,7 @@ var cssBootstrap = sass.compile(__dirname + "/resurse/scss/customizare_bootstrap
 fs.writeFileSync(__dirname + "/resurse/css/biblioteci/bootstrap_custom.css", cssBootstrap.css);
 
 app.use(bodyParser.json()); // pentru a lua datele din JSON body
-app.use(["/contact"], express.urlencoded({extended:true}));
+app.use(["/contact"], express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 //console.log("Cale proiect:", __dirname);
 app.use("/resurse", express.static(__dirname + "/resurse"));
@@ -170,7 +170,7 @@ app.post('/mesaj', function (req, res) {
         io.sockets.emit('mesaj_nou', req.body.nume, req.body.culoare, req.body.mesaj);
         res.send("Submit");
         //}
-    }else{
+    } else {
         console.log("Trebuie să fii logat să vezi chatul")
         res.send("Trebuie să fii logat să scri chatul")
     }
@@ -267,11 +267,11 @@ app.all("/*", function (req, res, next) {
     //             });
     //         }
     //     }
-        // var id_utiliz=req.session.utilizator?req.session.utilizator.id:null;
-        // //console.log("id_utiliz", id_utiliz);
-        // client.query(comanda_param, [ipReq, id_utiliz, req.url], function(err, rez){
-        //     if(err) console.log(err);
-        // });
+    // var id_utiliz=req.session.utilizator?req.session.utilizator.id:null;
+    // //console.log("id_utiliz", id_utiliz);
+    // client.query(comanda_param, [ipReq, id_utiliz, req.url], function(err, rez){
+    //     if(err) console.log(err);
+    // });
     //}
     next();
 });
@@ -469,8 +469,8 @@ app.post("/inregistrare", function (req, res) {
             }
 
             Utilizator.getUtilizDupaUsername(campuriText.username, {}, function (u, parametru, eroareUser) {
-                
-                var mesaj; 
+
+                var mesaj;
                 if (eroareUser == -1) {//nu exista username-ul in BD
                     utilizNou.salvareUtilizator();
 
@@ -489,7 +489,7 @@ app.post("/inregistrare", function (req, res) {
 
                 }
                 else
-                    res.render("pagini/inregistrare", { err: "Eroare:  " + eroare, mesaj:mesaj });
+                    res.render("pagini/inregistrare", { err: "Eroare:  " + eroare, mesaj: mesaj });
             })
             //utilizNou.salvareUtilizator();
         }
@@ -713,9 +713,27 @@ app.get(["/produse"], function (req, res) {
 
 
 app.get("/produs/:id", function (req, res) {
+    //console.log("!!!!!!!!!!!!req.params.id", typeof req.params.id)
+    // id= req.params.id
+    // if(/\d/.id){
+    //     client.query("select * from produse where id =" + req.params.id, function (err, rez) {
+    //         if (err) {
+    //             console.log(err);
+    //             console.log("------------> produs:", rez)
+    //             renderError(2);
+    //         }
+    //         else {
+    //             res.render("pagini/produs", { prod: rez.rows[0] });
+    //             //console.log(rez);
+    //         }
+    //     })
+    // }else{
+    //     res.render("pagini/index");
+    // }
     client.query("select * from produse where id =" + req.params.id, function (err, rez) {
         if (err) {
             console.log(err);
+            //console.log("------------> produs:", rez)
             renderError(2);
         }
         else {
@@ -734,7 +752,6 @@ app.get("/produse", function (req, res) {
             }
             else {
                 res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
-                //res.render("pagini/favorite", { produse: rez.rows, optiuni: rezCateg.rows });
                 console.log(rez);
             }
         });
@@ -744,39 +761,39 @@ app.get("/produse", function (req, res) {
 
 /////////////////////////////////////////////// FAVORITE
 
-app.post("/favorite", function (req, res){
+app.post("/favorite", function (req, res) {
     //console.log("req.body.idProdus", req.body.idProdus)
     let idProdus = req.body.idProdus
     let id_utiliz = req?.session?.utilizator?.id;
     id_utiliz = id_utiliz ? id_utiliz : null;
     console.log("id_utiliz", id_utiliz)
 
-    if(id_utiliz != null){
-        AccesBd.getInstanta().select({ tabel: "favorite", campuri: "id_produs".split(","), conditiiAnd: [`id_produs in (${idProdus})`, `id_user in (${id_utiliz})` ] },
-        function (err, rez) {
-            if(!err && rez.rowCount <=0){
-                try{
-                    AccesBd.getInstanta().insert({
-                        tabel: "favorite",
-                        campuri: ["id_user", "id_produs"],
-                        valori: [ `${id_utiliz}`, `'${idProdus}'`]
-                    }, function (err, rezQuery) {
-                        // console.log("eorare adaugare la favorite1", err);
-                        // console.log("eorare adaugare la favorite1 rezQuery", rezQuery);
-                    })
-                    res.sendStatus(200);
-        
-                }catch(error){
-                    console.error('Eroare la adăugarea la favorite2:', error);
+    if (id_utiliz != null) {
+        AccesBd.getInstanta().select({ tabel: "favorite", campuri: "id_produs".split(","), conditiiAnd: [`id_produs in (${idProdus})`, `id_user in (${id_utiliz})`] },
+            function (err, rez) {
+                if (!err && rez.rowCount <= 0) {
+                    try {
+                        AccesBd.getInstanta().insert({
+                            tabel: "favorite",
+                            campuri: ["id_user", "id_produs"],
+                            valori: [`${id_utiliz}`, `'${idProdus}'`]
+                        }, function (err, rezQuery) {
+                            // console.log("eorare adaugare la favorite1", err);
+                            // console.log("eorare adaugare la favorite1 rezQuery", rezQuery);
+                        })
+                        res.sendStatus(200);
+
+                    } catch (error) {
+                        console.error('Eroare la adăugarea la favorite2:', error);
+                        res.sendStatus(500);
+                    }
+                } else {
+                    //res.send("Produsul se afla deja in lista de favorite");
                     res.sendStatus(500);
                 }
-            }else{
-                //res.send("Produsul se afla deja in lista de favorite");
-                res.sendStatus(500);
-            }
-        
-        });
-    }else{
+
+            });
+    } else {
         //res.send("Nu puteti adauga produse la favorite daca nu sunteti logat");
         res.sendStatus(500);
     }
@@ -786,25 +803,54 @@ app.post("/favorite", function (req, res){
 });
 
 
+app.delete("/favorite", function (req, res) {
+    let idProdus = req.body.idProdus
+    let id_utiliz = req?.session?.utilizator?.id;
+    id_utiliz = id_utiliz ? id_utiliz : null;
+    if (id_utiliz != null) {
+        AccesBd.getInstanta().delete({ tabel: "favorite", conditiiAnd: [`id_produs = ${idProdus}`, `id_user = ${id_utiliz}`] }, function (err, rez) {
+            if (!err) {
+                AccesBd.getInstanta().selectJoin({
+                    tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,data_adaugare,garantie,stoc".split(","), 
+                    joinTabel: "produse", 
+                    joinConditiile: [`favorite.id_produs = produse.id`], conditiiAnd: [`favorite.id_user in (${id_utiliz})`]
+                }, function (err, rez) {
+                    if (!err) {
+                        res.status(200).render("pagini/favorite", { favorite: rez.rows });
+                    } else {
+                        console.error('Eroare la selectarea produselor ramase din favorite:', err);
+                        res.sendStatus(500);
+                    }
+                });
+            } else {
+                console.error('Eroare la ștergerea din favorite:', error);
+                res.sendStatus(500);
+            }
+        });
+    } else {
+        res.sendStatus(500);
+    }
+});
+
 app.get("/favorite", function (req, res) {
     let id_utiliz = req?.session?.utilizator?.id;
     id_utiliz = id_utiliz ? id_utiliz : null;
-    if (id_utiliz != null){
-        AccesBd.getInstanta().selectJoin({ tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,data_adaugare,garantie,stoc".split(","), joinTabel: "produse" ,joinConditiile: [`favorite.id_produs = produse.id`], conditiiAnd: [ `favorite.id_user in (${id_utiliz})` ] },
-        function (err, rez) {
-            if (err) {
-                renderError(res, 2);
-                //console.log(err);
-            } else {
-                //console.log(rez)
-                res.render("pagini/favorite", { favorite: rez.rows});
-            }
-        });
-    }else{
+    if (id_utiliz != null) {
+        AccesBd.getInstanta().selectJoin({ tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,data_adaugare,garantie,stoc".split(","), joinTabel: "produse", joinConditiile: [`favorite.id_produs = produse.id`], conditiiAnd: [`favorite.id_user in (${id_utiliz})`] },
+            function (err, rez) {
+                if (err) {
+                    renderError(res, 2);
+                    //console.log(err);
+                } else {
+                    //console.log(rez)
+                    res.render("pagini/favorite", { favorite: rez.rows });
+                }
+            });
+    } else {
         res.render("pagini/favorite_gol")
     }
 
-})
+});
 
 //////////////////////////////Cos virtual
 app.post("/produse_cos", function (req, res) {
@@ -856,11 +902,18 @@ app.post("/cumpara", function (req, res) {
     //console.log("Utilizator:", req?.utilizator);
     //console.log("Utilizator are dreptul:", req?.utilizator?.rol?.areDreptul?.(Drepturi.cumparareProduse));
     //console.log("Drept:", req?.utilizator?.areDreptul?.(Drepturi.cumparareProduse));
+    var prodid;
+    var cantitate = req.body.cantitate;
+    console.log("cant122", cantitate)
+    for(let i =0; i< cantitate.length -1; ++i){
+        prodid = cantitate[i].id
+    } 
+    console.log(prodid)
     if (req?.utilizator?.areDreptul?.(Drepturi.cumparareProduse)) {
         AccesBd.getInstanta().select({
             tabel: "produse",
             campuri: ["*"],
-            conditiiAnd: [`id in (${req.body.ids_prod})`]
+            conditiiAnd: [`id in (${prodid})`]
         }, function (err, rez) {
             if (!err && rez.rowCount > 0) {
                 //console.log("produse:", rez.rows);
@@ -868,7 +921,8 @@ app.post("/cumpara", function (req, res) {
                     protocol: obGlobal.protocol,
                     domeniu: obGlobal.numeDomeniu,
                     utilizator: req.session.utilizator,
-                    produse: rez.rows
+                    produse: rez.rows,
+                    cantitate: req.body.cantitate
                 });
                 //console.log(rezFactura);
                 let numeFis = `./temp/factura${(new Date()).getTime()}.pdf`;
@@ -927,13 +981,13 @@ app.get("/update_grafice", function (req, res) {
 
 ////////////////////////////// Contact //////////////////////////
 
-caleXMLMesaje="resurse/xml/contact.xml";
-headerXML=`<?xml version="1.0" encoding="utf-8"?>`;
-function creeazaXMlContactDacaNuExista(){
-    if (!fs.existsSync(caleXMLMesaje)){
-        let initXML={
-            "declaration":{
-                "attributes":{
+caleXMLMesaje = "resurse/xml/contact.xml";
+headerXML = `<?xml version="1.0" encoding="utf-8"?>`;
+function creeazaXMlContactDacaNuExista() {
+    if (!fs.existsSync(caleXMLMesaje)) {
+        let initXML = {
+            "declaration": {
+                "attributes": {
                     "version": "1.0",
                     "encoding": "utf-8"
                 }
@@ -941,61 +995,61 @@ function creeazaXMlContactDacaNuExista(){
             "elements": [
                 {
                     "type": "element",
-                    "name":"contact",
+                    "name": "contact",
                     "elements": [
                         {
                             "type": "element",
-                            "name":"mesaje",
-                            "elements":[]                            
+                            "name": "mesaje",
+                            "elements": []
                         }
                     ]
                 }
             ]
         }
-        let sirXml=xmljs.js2xml(initXML,{compact:false, spaces:4});//obtin sirul xml (cu taguri)
+        let sirXml = xmljs.js2xml(initXML, { compact: false, spaces: 4 });//obtin sirul xml (cu taguri)
         console.log(sirXml);
-        fs.writeFileSync(caleXMLMesaje,sirXml);
+        fs.writeFileSync(caleXMLMesaje, sirXml);
         return false; //l-a creat
     }
     return true; //nu l-a creat acum
 }
 
 
-function parseazaMesaje(){
-    let existaInainte=creeazaXMlContactDacaNuExista();
-    let mesajeXml=[];
+function parseazaMesaje() {
+    let existaInainte = creeazaXMlContactDacaNuExista();
+    let mesajeXml = [];
     let obJson;
-    if (existaInainte){
-        let sirXML=fs.readFileSync(caleXMLMesaje, 'utf8');
-        obJson=xmljs.xml2js(sirXML,{compact:false, spaces:4});
-        
+    if (existaInainte) {
+        let sirXML = fs.readFileSync(caleXMLMesaje, 'utf8');
+        obJson = xmljs.xml2js(sirXML, { compact: false, spaces: 4 });
 
-        let elementMesaje=obJson.elements[0].elements.find(function(el){
-                return el.name=="mesaje"
-            });
-        let vectElementeMesaj=elementMesaje.elements?elementMesaje.elements:[];// conditie ? val_true: val_false
-        console.log("Mesaje: ",obJson.elements[0].elements.find(function(el){
-            return el.name=="mesaje"
+
+        let elementMesaje = obJson.elements[0].elements.find(function (el) {
+            return el.name == "mesaje"
+        });
+        let vectElementeMesaj = elementMesaje.elements ? elementMesaje.elements : [];// conditie ? val_true: val_false
+        console.log("Mesaje: ", obJson.elements[0].elements.find(function (el) {
+            return el.name == "mesaje"
         }))
-        let mesajeXml=vectElementeMesaj.filter(function(el){return el.name=="mesaj"});
-        return [obJson, elementMesaje,mesajeXml];
+        let mesajeXml = vectElementeMesaj.filter(function (el) { return el.name == "mesaj" });
+        return [obJson, elementMesaje, mesajeXml];
     }
-    return [obJson,[],[]];
+    return [obJson, [], []];
 }
 
 
-app.get("/contact", function(req, res){
+app.get("/contact", function (req, res) {
     let obJson, elementMesaje, mesajeXml;
-    [obJson, elementMesaje, mesajeXml] =parseazaMesaje();
+    [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
 
-    res.render("pagini/contact",{ utilizator:req.session.utilizator, mesaje:mesajeXml})
+    res.render("pagini/contact", { utilizator: req.session.utilizator, mesaje: mesajeXml })
 });
 
-app.post("/contact", function(req, res){
+app.post("/contact", function (req, res) {
     let obJson, elementMesaje, mesajeXml;
-    [obJson, elementMesaje, mesajeXml] =parseazaMesaje();
-        
-    let u= req.session.utilizator?req.session.utilizator.username:"anonim";
+    [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
+
+    let u = req.session.utilizator ? req.session.utilizator.username : "anonim";
     // mesaj = document.getElementsByClassName("mesaje").value
     // console.log(document.getElementsByClassName("mesaje"))
     // if(u.includes("admin")){
@@ -1003,25 +1057,25 @@ app.post("/contact", function(req, res){
     // }else{
     //     mesaj.style.backgroundColor="Aquamarine"
     // }
-    let mesajNou={
-        type:"element", 
-        name:"mesaj", 
-        attributes:{
-            username:u, 
-            data:new Date()
+    let mesajNou = {
+        type: "element",
+        name: "mesaj",
+        attributes: {
+            username: u,
+            data: new Date()
         },
-        elements:[{type:"text", "text":req.body.mesaj}]
+        elements: [{ type: "text", "text": req.body.mesaj }]
     };
-    if(elementMesaje.elements)
+    if (elementMesaje.elements)
         elementMesaje.elements.push(mesajNou);
-    else 
-        elementMesaje.elements=[mesajNou];
+    else
+        elementMesaje.elements = [mesajNou];
     console.log(elementMesaje.elements);
-    let sirXml=xmljs.js2xml(obJson,{compact:false, spaces:4});
-    console.log("XML: ",sirXml);
-    fs.writeFileSync("resurse/xml/contact.xml",sirXml);
-    
-    res.render("pagini/contact",{ utilizator:req.session.utilizator, mesaje:elementMesaje.elements})
+    let sirXml = xmljs.js2xml(obJson, { compact: false, spaces: 4 });
+    console.log("XML: ", sirXml);
+    fs.writeFileSync("resurse/xml/contact.xml", sirXml);
+
+    res.render("pagini/contact", { utilizator: req.session.utilizator, mesaje: elementMesaje.elements })
 });
 
 
@@ -1101,9 +1155,9 @@ app.get(["/", "/index", "/home", "/login"], async function (req, res) {
 
 // pentru port 
 
-app.get('/chat', function(req, res) {
+app.get('/chat', function (req, res) {
     console.log(req.ip);
-    res.render('pagini/chat', {port:s_port});
+    res.render('pagini/chat', { port: s_port });
 });
 
 // app.get("/info.html", function(req, res, next){

@@ -83,3 +83,13 @@ main{
     padding:0.3rem;
     border:1px solid transparent;
 }
+#sterge-fav{
+    position:absolute;
+    bottom: 1rem;
+    left:1.5rem;
+    font-size: 1.5rem;
+    background: linear-gradient(to right, #52ab98, #155c4d); 
+    background-clip: text; 
+    -webkit-background-clip: text; 
+    color: transparent; 
+}

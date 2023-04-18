@@ -1,11 +1,14 @@
-
-footer{
+footer {
+    /* position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0; */
     margin-top: 2%;
     margin-left: 1%;
     margin-right: 1%;
 }
 
-address{
+address {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -13,7 +16,6 @@ address{
 
 }
 
-#copyright{
-    font-size: 1em;
-    
+#copyright {
+    font-size: 0.9em;
 }

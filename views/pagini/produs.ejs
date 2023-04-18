@@ -9,6 +9,8 @@
 
     <%-include("../fragmente/head")%>
     <link rel="stylesheet" href="/resurse/css/pagini/produse/produs.css" type="text/css"/>
+    <script type="text/javascript" src="/resurse/js/produse.js"></script>
+    <script type="text/javascript" src="/resurse/js/favorite.js"></script>
     <!-- <script type="text/javascript" src="/resurse/js/bootstrap.js"></script> -->
 </head>
 
@@ -17,45 +19,60 @@
 
         <main>
             <section>
-                <h2>Pagină produs</h2>
+               
                 <article id="art-produs">
                     <h3><span class="nume">
                             <%- locals.prod.nume %>
                         </span></h3>
-                    <p>Pret: <span class="pret">
-                            <%- locals.prod.pret %>
-                        </span></p>
-                    <p>Descriere: <span class="descriere">
-                            <%- locals.prod.descriere %>
-                        </span></p>
-                    <p>Ingrediente: <span class="ingrediente">
-                            <%- locals.prod.ingrediente %>
-                        </span></p>
-                    <p>Calorii: <span class="calorii">
-                            <%- locals.prod.calorii %>
-                        </span></p>
-                    <p>Gramaj: <span class="gramaj">
-                            <%- locals.prod.gramaj %>
-                        </span></p>
-                    <p>Categorie: <span class="categorie">
-                            <%- locals.prod.categorie %>
-                        </span></p>
-                    <p>Pentru diabetici: <span class="pt_diabetici">
-                            <%- locals.prod.pt_diabetici %>
-                        </span></p>
-                    <p>Data adăugare: <span class="categorie">
-                            <%- locals.prod.data_adaugare %>
-                        </span></p>
-                    <figure class="imag-produs">
-                        <img src="/resurse/imagini/produse/<%- locals.prod.imagine %>"
-                            alt="[imagine <%- locals.prod.nume %>]" />
-                    </figure>
+                    <div class="container">   
+                        <div class="row">
+                            <div class="col">
+                                <figure class="imag-produs">
+                                    <img src="/resurse/imagini/produse/<%- locals.prod.imagine %>"
+                                        alt="[imagine <%- locals.prod.nume %>]" />
+                                </figure>
+                            </div>
+                            <div class="col" id="detalii_produs">    
+                                <p>Pret: <span class="pret">
+                                        <%- locals.prod.pret %>
+                                    </span> RON</p>
+                                <p>Descriere: <span class="descriere">
+                                        <%- locals.prod.descriere %>
+                                    </span></p>
+                                <p> Tip produs: <span
+                                        class="val-tip_produs"><%-prod.tip_produs%></span>
+                                </p>
+                                <p> Specificatii<span class="val-specificatii"><%-
+                                    prod.specificatii%></span></p>
+                                    <p class="data_fabricare">Data fabricare: <span class="val-data_fabricare"><time datetime="<%- prod.data_fabricare.toISOString().substring(0,10) %>"><%-
+                                        prod.data_fabricare.toISOString().substring(0,10) %></time></span></p>
+                                <p class="culoare">Culoare: <span class="val-culoare"><%-
+                                                    prod.culoare%></span></p>
+                                <% if(prod.desigilat == 'true') { %>
+                                    <p>Produsul a fost desigilat inainte </p>
+                                <%}%>
+                                
+                                </div>
+                                <div class="col" id="col3">
+                                    <div class="d-grid gap-2 col-6 mx-auto">
+                                        <span id="favorite_icon_prod">
+                                            <button type="button" class="btn btn-outline-primary" id="icon_<%-prod.id%>" onclick="adaugaFavorite(this.id)"><i class="fa-solid fa-heart"></i> Adauga la favorite</button>   
+                                        </span><br>
+                                        <label class="btn btn-outline-primary selecteaza-cos" for="btn-check"><i class="fa-solid fa-cart-shopping"></i> 
+                                            Adauga in cos 
+                                            <input type="checkbox" class="btn-check select-cos" id="btn-check" value="<%-prod.id %>"
+                                                    autocomplete="off">
+                                        </label>
+                                    </div>
+                                    
+                                </div>
+                        </div>
+                    </div>    
                 </article>
 
             </section>
         </main>
-
-        <%- include("../fragmente/footer") %>
+    <%- include("../fragmente/footer") %>
 </body>
 
 </html>

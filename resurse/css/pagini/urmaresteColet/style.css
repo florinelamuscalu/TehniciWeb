@@ -17,7 +17,7 @@ body {
     height: 800px;
     background-position: center;
     animation-name: animatie_background;
-    animation-duration: 30s;
+    animation-duration: 15s;
     animation-iteration-count: infinite;
 }
 
@@ -32,6 +32,10 @@ body {
     50% {
         background-image: url('/resurse/imagini/urmaresteColet/box1.png');
     }
+}
+
+#div_tabel{
+    margin-top: 2%;
 }
 
 
