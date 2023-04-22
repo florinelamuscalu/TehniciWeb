@@ -20,6 +20,7 @@ const mongodb = require('mongodb');
 const helmet = require('helmet')
 const xmljs = require('xml-js');
 const bodyParser = require('body-parser')
+const multer = require('multer');
 
 
 // server 
@@ -1045,38 +1046,65 @@ app.get("/contact", function (req, res) {
     res.render("pagini/contact", { utilizator: req.session.utilizator, mesaje: mesajeXml })
 });
 
-app.post("/contact", function (req, res) {
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      // Obținem numele utilizatorului din sesiune
+      let u = req.session.utilizator ? req.session.utilizator.username : 'anonim';
+      // Specificăm calea directorului în care dorim să salvăm fișierele încărcate
+      let director = `resurse/imagini/comentarii/${u}`;
+      // Verificăm dacă directorul există, în caz contrar îl cream
+      if (!fs.existsSync(director)) {
+        fs.mkdirSync(director, { recursive: true });
+      }
+      cb(null, director);
+    },
+    filename: function (req, file, cb) {
+      // Generăm un nume unic pentru fiecare fișier încărcat, care include și data la care a fost adăugat
+      let numeImagine = `${Date.now()}_${file.originalname}`;
+      cb(null, numeImagine);
+    }
+  });
+  
+  const upload = multer({ storage: storage });
+  
+  app.post("/contact", upload.array('imagine'), function (req, res) {
     let obJson, elementMesaje, mesajeXml;
+  
     [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
-
+  
     let u = req.session.utilizator ? req.session.utilizator.username : "anonim";
-    // mesaj = document.getElementsByClassName("mesaje").value
-    // console.log(document.getElementsByClassName("mesaje"))
-    // if(u.includes("admin")){
-    //     mesaj.style.backgroundColor="LightGreen"
-    // }else{
-    //     mesaj.style.backgroundColor="Aquamarine"
-    // }
+    let caleImagini = "";
+  
+    // Verificăm dacă există fișiere atașate în cererea POST
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => {
+        let numeImagine = file.filename;
+        caleImagini += `resurse/imagini/comentarii/${u}/${numeImagine}, `;
+      });
+      caleImagini = caleImagini.slice(0, -2); // Eliminăm ultimul ", " din caleImagini
+    }
+  
     let mesajNou = {
-        type: "element",
-        name: "mesaj",
-        attributes: {
-            username: u,
-            data: new Date()
-        },
-        elements: [{ type: "text", "text": req.body.mesaj }]
+      type: "element",
+      name: "mesaj",
+      attributes: {
+        username: u,
+        data: new Date(),
+        cale_imagine: caleImagini // Adăugăm calea imaginii ca atribut în elementul "mesaj"
+      },
+      elements: [{ type: "text", "text": req.body.mesaj }]
     };
     if (elementMesaje.elements)
-        elementMesaje.elements.push(mesajNou);
+      elementMesaje.elements.push(mesajNou);
     else
-        elementMesaje.elements = [mesajNou];
-    console.log(elementMesaje.elements);
+      elementMesaje.elements = [mesajNou];
+  
     let sirXml = xmljs.js2xml(obJson, { compact: false, spaces: 4 });
-    console.log("XML: ", sirXml);
-    fs.writeFileSync("resurse/xml/contact.xml", sirXml);
-
+    fs.writeFileSync(caleXMLMesaje, sirXml); // Salvăm XML-ul actualizat în fișier
+    console.log(sirXml)
     res.render("pagini/contact", { utilizator: req.session.utilizator, mesaje: elementMesaje.elements })
-});
+  });
+  
 
 
 app.get(["/", "/index", "/home", "/login"], async function (req, res) {
