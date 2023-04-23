@@ -1,0 +1,69 @@
+main{
+    margin-top: 3%;
+    padding: 0.5rem;
+    /* margin-left: 2%; */
+}
+form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#mesaje{
+    display: block;
+    width: 98vw;
+    border: 1px solid #90ccbf;
+    border-radius: 2rem;
+    box-shadow: 3px 5px 3px 5px #c8d8e4;
+}
+
+article{
+    border-radius: 2rem;
+}
+
+.mesaj-c{
+    background:var(--cl-light-t);
+    margin-left:var(--padding-intern);
+    min-height:5rem;
+}
+.mesaj-c h3{
+    background:var(--culoare-roz-inchis);
+    padding-left:1rem;
+}
+.mesaj-c p{
+    padding-left:1rem;
+}
+
+
+
+.mesaj-c time{
+    font-style: italic;
+}
+
+h1, p{
+    font-family:'Times New Roman', Times, serif;
+}
+
+.img_feedback {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px; /* spațiu între imaginile de pe aceeași linie */
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+  
+  .img-container {
+    flex: 0 0 auto; /* asigură că imaginile au aceeași lățime */
+    width: 200px; /* poți ajusta lățimea imaginilor după preferință */
+    height: 200px; /* poți ajusta înălțimea imaginilor după preferință */
+    cursor: pointer;
+  }
+  
+  .img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  

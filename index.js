@@ -35,7 +35,7 @@ var cssBootstrap = sass.compile(__dirname + "/resurse/scss/customizare_bootstrap
 fs.writeFileSync(__dirname + "/resurse/css/biblioteci/bootstrap_custom.css", cssBootstrap.css);
 
 app.use(bodyParser.json()); // pentru a lua datele din JSON body
-app.use(["/contact"], express.urlencoded({ extended: true }));
+app.use(["/feedback"], express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 //console.log("Cale proiect:", __dirname);
 app.use("/resurse", express.static(__dirname + "/resurse"));
@@ -691,27 +691,44 @@ app.get(["/info", "info"], function (req, res) {
 
 
 
-app.get(["/produse"], function (req, res) {
-    //console.log('req1', req.query);
-    client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
-        continuareQuery = ""
-        if (req.query.tip)
-            continuareQuery += ` and categorie::text like '%${req.query.tip}%'`
-        //  console.log('req', req.query.tip)
-
-        client.query("select * from produse where 1=1" + continuareQuery, function (err, rez) {
-            if (err) {
+app.get("/produse", function (req, res) {
+    const page = req.query.page || 1; // Numărul de pagină primit din query params, sau 1 dacă nu este specificat
+    const itemsPerPage = 8; // Numărul de elemente afișate pe pagină
+    const startIndex = (page - 1) * itemsPerPage; // Indexul de start al elementelor din pagină
+    const endIndex = page * itemsPerPage; // Indexul de sfârșit al elementelor din pagină
+  
+    const continuareQuery = req.query.tip ? ` AND categorie::text LIKE '%${req.query.tip}%'` : ""; // Adaugă filtrul pentru categorie dacă este specificat
+  
+    // Query pentru a obține numărul total de produse
+    client.query("SELECT COUNT(*) FROM produse WHERE 1=1" + continuareQuery, function (err, rezCount) {
+      if (err) {
+        renderError(res, 2);
+        console.log(err);
+      } else {
+        const totalItems = rezCount.rows[0].count; // Numărul total de produse
+        const totalPages = Math.ceil(totalItems / itemsPerPage); // Numărul total de pagini
+  
+        // Query pentru a obține doar produsele pentru pagina curentă
+        client.query("SELECT * FROM produse WHERE 1=1" + continuareQuery + " OFFSET $1 LIMIT $2", [startIndex, itemsPerPage], function (err, rez) {
+          if (err) {
+            renderError(res, 2);
+            console.log(err);
+          } else {
+            // Query pentru a obține categoriile de produse
+            client.query("SELECT * FROM unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
+              if (err) {
                 renderError(res, 2);
                 console.log(err);
-            } else {
-                res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
-                //res.render("pagini/favorite", { produse: rez.rows, optiuni: rezCateg.rows });
-            }
-        })
-    })
-});
-
-
+              } else {
+                res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows, currentPage: page, totalPages: totalPages });
+              }
+            });
+          }
+        });
+      }
+    });
+  });
+  
 
 app.get("/produs/:id", function (req, res) {
     //console.log("!!!!!!!!!!!!req.params.id", typeof req.params.id)
@@ -982,7 +999,7 @@ app.get("/update_grafice", function (req, res) {
 
 ////////////////////////////// Contact //////////////////////////
 
-caleXMLMesaje = "resurse/xml/contact.xml";
+caleXMLMesaje = "resurse/xml/feedback.xml";
 headerXML = `<?xml version="1.0" encoding="utf-8"?>`;
 function creeazaXMlContactDacaNuExista() {
     if (!fs.existsSync(caleXMLMesaje)) {
@@ -996,7 +1013,7 @@ function creeazaXMlContactDacaNuExista() {
             "elements": [
                 {
                     "type": "element",
-                    "name": "contact",
+                    "name": "feedback",
                     "elements": [
                         {
                             "type": "element",
@@ -1039,11 +1056,11 @@ function parseazaMesaje() {
 }
 
 
-app.get("/contact", function (req, res) {
+app.get("/feedback/:id", function (req, res) {
     let obJson, elementMesaje, mesajeXml;
     [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
 
-    res.render("pagini/contact", { utilizator: req.session.utilizator, mesaje: mesajeXml })
+    res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: mesajeXml })
 });
 
 const storage = multer.diskStorage({
@@ -1067,7 +1084,7 @@ const storage = multer.diskStorage({
   
   const upload = multer({ storage: storage });
   
-  app.post("/contact", upload.array('imagine'), function (req, res) {
+  app.post("/feedback", upload.array('imagine'), function (req, res) {
     let obJson, elementMesaje, mesajeXml;
   
     [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
@@ -1102,7 +1119,7 @@ const storage = multer.diskStorage({
     let sirXml = xmljs.js2xml(obJson, { compact: false, spaces: 4 });
     fs.writeFileSync(caleXMLMesaje, sirXml); // Salvăm XML-ul actualizat în fișier
     console.log(sirXml)
-    res.render("pagini/contact", { utilizator: req.session.utilizator, mesaje: elementMesaje.elements })
+    res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: elementMesaje.elements })
   });
   
 

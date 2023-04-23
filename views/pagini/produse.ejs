@@ -13,10 +13,12 @@
         crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="/resurse/css/pagini/produse/produse.css" type="text/css" />
+    <link rel="stylesheet" href="/resurse/css/pagini/produse/paginator.css" type="text/css" />
     <link rel="stylesheet" href="/resurse/css/pagini/produse/buttoane.css" type="text/css" />
     <script type="text/javascript" src="/resurse/js/produse.js"></script>
     <script type="text/javascript" src="/resurse/js/bootstrap.js"></script>
     <script type="text/javascript" src="/resurse/js/favorite.js"></script>
+    <script type="text/javascript" src="/resurse/js/paginator.js"></script>
     <%- include("../fragmente/head") %>
 </head>
 
@@ -344,7 +346,11 @@
                                     </article>
                                     <% }%>
                             </div>
-                        </section>
+                        </section> 
+                        <div class="pagination">
+                            <button id="prevBtn"  disabled>&lt; Prev</button>
+                            <button id="nextBtn">Next &gt;</button>
+                        </div> 
                     </div>
                 </div>
             </div>

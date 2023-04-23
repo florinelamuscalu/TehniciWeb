@@ -1,65 +1,67 @@
-document.addEventListener('DOMContentLoaded', init, false);
+window.addEventListener("DOMContentLoaded", function () {
+  const itemsPerPage = 8; // Numărul de elemente afișate pe pagină
+  const list = document.getElementById('list');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  let totalPages = 1;
+  let currentPage = 1;
 
-let data, table, sortCol;
-let sortAsc = false;
-const pageSize = 3;
-let curPage = 1;
+  // Funcție pentru afișarea listei de elemente pe pagină
+  function showItems(items, page) {
+    list.innerHTML = '';
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = page * itemsPerPage;
+    for (let i = startIndex; i < endIndex && i < items.length; i++) {
+      const li = document.createElement('li');
+      li.textContent = items[i].nume;
+      list.appendChild(li);
+    }
+  }
 
-async function init() {
-  
- 
-  table = document.querySelector('#useri tbody');
- 
-  let resp = await fetch('https://www.raymondcamden.com/.netlify/functions/get-cats');
-  data = await resp.json();
-  renderTable();
-  
-  
-  document.querySelectorAll('#catTable thead tr th').forEach(t => {
-     t.addEventListener('click', sort, false);
+  // Funcție pentru actualizarea stării butoanelor de navigare
+  function updateButtons(page, totalPages) {
+    if (page === 1) {
+      prevBtn.disabled = true;
+    } else {
+      prevBtn.disabled = false;
+    }
+
+    if (page === totalPages) {
+      nextBtn.disabled = true;
+    } else {
+      nextBtn.disabled = false;
+    }
+  }
+
+  // Eveniment pentru butonul "Prev"
+  prevBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      getItemsFromServer(currentPage);
+    }
   });
-  
-  document.querySelector('#nextButton').addEventListener('click', nextPage, false);
-  document.querySelector('#prevButton').addEventListener('click', previousPage, false);
-}
 
-function renderTable() {
-  // create html
-  let result = '';
-  data.filter((row, index) => {
-        let start = (curPage-1)*pageSize;
-        let end =curPage*pageSize;
-        if(index >= start && index < end) return true;
-  }).forEach(c => {
-     result += `<tr>
-     <td>${c.name}</td>
-     <td>${c.age}</td>
-     <td>${c.breed}</td>
-     <td>${c.gender}</td>
-     </tr>`;
+  // Eveniment pentru butonul "Next"
+  nextBtn.addEventListener('click', () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      getItemsFromServer(currentPage);
+    }
   });
-  table.innerHTML = result;
-}
 
-function sort(e) {
-  let thisSort = e.target.dataset.sort;
-  if(sortCol === thisSort) sortAsc = !sortAsc;
-  sortCol = thisSort;
-  console.log('sort dir is ', sortAsc);
-  data.sort((a, b) => {
-    if(a[sortCol] < b[sortCol]) return sortAsc?1:-1;
-    if(a[sortCol] > b[sortCol]) return sortAsc?-1:1;
-    return 0;
-  });
-  renderTable();
-}
+  // Funcție pentru a obține datele de la server
+  function getItemsFromServer(page) {
+    // Face cererea către server pentru a obține datele actualizate
+    fetch(`/produse?page=${page}`) // Modifică ruta și parametrii cererii pentru a se potrivi cu ruta și parametrii din server
+      .then(response => response.json())
+      .then(data => {
+        showItems(data.items, data.currentPage);
+        updateButtons(data.currentPage, data.totalPages);
+      })
+      .catch(error => console.error(error));
+  }
 
-function previousPage() {
-  if(curPage > 1) curPage--;
-  renderTable();
-}
+  // Inițializează lista de produse și butoanele de navigare
+  getItemsFromServer(currentPage);
 
-function nextPage() {
-  if((curPage * pageSize) < data.length) curPage++;
-  renderTable();
-}
+});

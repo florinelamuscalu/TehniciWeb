@@ -57,12 +57,17 @@
                                     <div class="d-grid gap-2 col-6 mx-auto">
                                         <span id="favorite_icon_prod">
                                             <button type="button" class="btn btn-outline-primary" id="icon_<%-prod.id%>" onclick="adaugaFavorite(this.id)"><i class="fa-solid fa-heart"></i> Adauga la favorite</button>   
-                                        </span><br>
+                                        </span>
                                         <label class="btn btn-outline-primary selecteaza-cos" for="btn-check"><i class="fa-solid fa-cart-shopping"></i> 
                                             Adauga in cos 
                                             <input type="checkbox" class="btn-check select-cos" id="btn-check" value="<%-prod.id %>"
                                                     autocomplete="off">
                                         </label>
+                                        <a href="/feedback/<%-prod.id %>">
+                                            <button type="button" class="btn btn-outline-primary">Adauga review</button>
+                                        </a>
+
+                                        
                                     </div>
                                     
                                 </div>
@@ -70,8 +75,7 @@
                     </div>    
                 </article>
 
-            </section><br><br>
-
+            </section>
             
         </main>
     <%- include("../fragmente/footer") %>
