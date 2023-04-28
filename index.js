@@ -314,48 +314,53 @@ app.post("/login", function (req, res) {
             res: res,
             parola: campuriText.parola
         }, function (u, obparam) {
+            console.log("utiliz loggin", u)
             let parolaCriptata = Utilizator.criptareParola(obparam.parola);
             //console.log("u.parola confirmat mail parola cripatat", u.parola, u.confirmat_mail, parolaCriptata)
-            if (u.parola == parolaCriptata && u.confirmat_mail) {
-                u.cale_imagine = u.cale_imagine ? path.join("poze_uploadate", u.username, u.cale_imagine) : "";
-                obparam.req.session.utilizator = u;
+            if (u.confirmat_mail) {
+                if (u.parola == parolaCriptata) {
+                    u.cale_imagine = u.cale_imagine ? path.join("poze_uploadate", u.username, u.cale_imagine) : "";
+                    obparam.req.session.utilizator = u;
 
-                obparam.req.session.succesLogin = "Bravo! Te-ai logat!";
-                obparam.res.redirect("/index");
-                req.session.incercari = 0
-                var timpCurent = new Date();
-                //obparam.res.render("/login");
-            }
-            else {
-                req.session.ultimulTimp = timpCurent;
-                if (req.session.ultimulTimp || (timpCurent - req.session.ultimulTimp) > 600000) {
-                    req.session.incercari = 1
-                } else {
-                    req.session.incercari++
-                }
-
-                obparam.req.session.succesLogin = "Date logare incorecte sau nu a fost confirmat mailul!";
-                //obparam.res.redirect("/index");
-
-                if (req.session.incercari >= 3) {
-                    req.session.timp_b = new Date()
-                    // req.session.timp_d = new Date()
-                    mesajText = `Stimate ${u.username} ati introdus parola de 3 ori.`;
-                    mesajHTML = `<h2>Stimate ${u.username},</h2> ati introdus parola de 3 ori.`;
-                    u.trimiteMail("Parola incorecta", mesajText, mesajHTML, [{
-                        filename: "",
-                        content: ""
-                    }]);
-                    res.send("Totul nu e bine! Poti sa te logezi dupa 5 minute :)))");
-                    //console.log("___________________________")
-
-                } else {
-                    obparam.res.redirect("/loggare");
-                }
-                let timp_trecut = req.session.timp_b + 500000
-                if (req.session.timp_b >= timp_trecut) {
+                    obparam.req.session.succesLogin = "Bravo! Te-ai logat!";
+                    obparam.res.redirect("/index");
                     req.session.incercari = 0
+                    var timpCurent = new Date();
+                    //obparam.res.render("/login");
                 }
+                else {
+                    req.session.ultimulTimp = timpCurent;
+                    if (req.session.ultimulTimp || (timpCurent - req.session.ultimulTimp) > 600000) {
+                        req.session.incercari = 1
+                    } else {
+                        req.session.incercari++
+                    }
+
+                    obparam.req.session.succesLogin = "Date logare incorecte sau nu a fost confirmat mailul!";
+                    //obparam.res.redirect("/index");
+
+                    if (req.session.incercari >= 3) {
+                        req.session.timp_b = new Date()
+                        // req.session.timp_d = new Date()
+                        mesajText = `Stimate ${u.username} ati introdus parola de 3 ori.`;
+                        mesajHTML = `<h2>Stimate ${u.username},</h2> ati introdus parola de 3 ori.`;
+                        u.trimiteMail("Parola incorecta", mesajText, mesajHTML, [{
+                            filename: "",
+                            content: ""
+                        }]);
+                        res.send("Totul nu e bine! Poti sa te logezi dupa 5 minute :)))");
+                        //console.log("___________________________")
+
+                    } else {
+                        obparam.res.redirect("/loggare");
+                    }
+                    let timp_trecut = req.session.timp_b + 500000
+                    if (req.session.timp_b >= timp_trecut) {
+                        req.session.incercari = 0
+                    }
+                }
+            } else {
+                res.send("Nu aveti mail-ul confirmat si nu va puteti loga. Va rugam sa va confirmati mail-ul")
             }
         })
     })
@@ -400,13 +405,12 @@ app.post("/resetare", function (req, res) {
     var formular = new formidable.IncomingForm()
     formular.parse(req, function (err, campuriText, campuriFisier) {
         var parolaCriptata = Utilizator.criptareParola(campuriText.parola);
-        console.log(campuriText.username)
-        AccesBd.getInstanta().update(
+        console.log("campuri resetare", campuriText.email, campuriText.username)
+        AccesBd.getInstanta().select(
             {
                 tabel: "utilizatori",
-                campuri: ["parola"],
-                valori: [parolaCriptata],
-                conditiiAnd: [`username = '${campuriText.username}'`]
+                campuri: ["email"],
+                conditiiAnd: [`email = '${campuriText.email}`]
 
             },
             function (err, rez) {
@@ -416,20 +420,85 @@ app.post("/resetare", function (req, res) {
                     renderError(res, 2);
                     return;
                 }
-                //console.log(rez.rowCount);
+                console.log("RESETARE", rez.rowCount);
                 if (rez.rowCount == 0) {
-                    res.render("pagini/resetare", { mesaj: "Resetarea nu s-a realizat" });
+                    //res.render("pagini/resetare", { mesaj: "Email-ul nu este corect" });
+                    res.send("Email-ul nu este corect")
+                    //console.log("a ajuns aici !!!")
                     return;
                 }
                 else {
-                    // req.session.utilizator.parola = parolaCriptata;
-                    // res.locals.utilizator = req.session.utilizator;
-                    res.render("pagini/loggare", { mesaj: "Resetarea s-a realizat cu succes." });
+                    AccesBd.getInstanta().update(
+                        {
+                            tabel: "utilizatori",
+                            campuri: ["parola"],
+                            valori: [parolaCriptata],
+                            conditiiAnd: [`username = '${campuriText.username}`]
+
+                        },
+                        function (err, rez) {
+                            console.log("rez", rez);
+                            if (err) {
+                                console.log("error", err);
+                                renderError(res, 2);
+                                return;
+                            }
+                            //console.log(rez.rowCount);
+                            if (rez.rowCount == 0) {
+                                res.render("pagini/resetare", { mesaj: "Resetarea nu s-a realizat" });
+                                return;
+                            }
+                            else {
+                                // req.session.utilizator.parola = parolaCriptata;
+                                // res.locals.utilizator = req.session.utilizator;
+                                res.render("pagini/loggare", { mesaj: "Resetarea s-a realizat cu succes." });
+                                Utilizator.trimiteMail("V-ati schimbat parola de la cont", mesajText, mesajHTML, [{
+                                    filename: "",
+                                    content: ""
+                                }])
+                            }
+
+                        });
                 }
 
             });
     });
 });
+
+// app.post("/resetareParola", function (req, res) {
+//     var formular = new formidable.IncomingForm()
+//     formular.parse(req, function (err, campuriText, campuriFisier) {
+//         var parolaCriptata = Utilizator.criptareParola(campuriText.parola);
+//         console.log('campuri resetare username',campuriText.username)
+//         AccesBd.getInstanta().update(
+//             {
+//                 tabel: "utilizatori",
+//                 campuri: ["parola"],
+//                 valori: [parolaCriptata],
+//                 conditiiAnd: [`username = '${campuriText.username}'`]
+
+//             },
+//             function (err, rez) {
+//                 console.log("rez", rez);
+//                 if (err) {
+//                     console.log("error", err);
+//                     renderError(res, 2);
+//                     return;
+//                 }
+//                 //console.log(rez.rowCount);
+//                 if (rez.rowCount == 0) {
+//                     res.render("pagini/resetare", { mesaj: "Resetarea nu s-a realizat" });
+//                     return;
+//                 }
+//                 else {
+//                     // req.session.utilizator.parola = parolaCriptata;
+//                     // res.locals.utilizator = req.session.utilizator;
+//                     res.render("pagini/loggare", { mesaj: "Resetarea s-a realizat cu succes." });
+//                 }
+
+//             });
+//     });
+// });
 
 function generateUsernameSuggestion(username) {
     // Adaugam un numar la sfarsitul username-ului existent
@@ -522,7 +591,7 @@ app.post("/inregistrare", function (req, res) {
         //fisier.filepath=folderUser+"/"+fisier.originalFilename
     })
     formular.on("file", function (nume, fisier) {//3
-        console.log("file");
+        //console.log("file");
         console.log(nume, fisier);
     });
 });
@@ -655,7 +724,95 @@ app.post("/sterge_utiliz", function (req, res) {
     }
 })
 
+
+app.post("/sterge_cont", function (req, res) {
+    if (req?.utilizator?.areDreptul?.(Drepturi.stergereUtilizatori)) {
+        var formular = new formidable.IncomingForm();
+        //var utiliz = new Utilizator();
+
+        formular.parse(req, function (err, campuriText, campuriFile) {
+            var user
+            username = campuriText.username
+            AccesBd.getInstanta().select({ tabel: "utilizatori", campuri: ["*"], conditiiAnd: [`username='${username}'`] }, function (err, rez) {
+                // console.log(err);
+                if (err) {
+                    console.log('err', err);
+                } else {
+                    console.log("a tecut de select")
+                    user = rez.rows[0];
+                    AccesBd.getInstanta().select({ tabel: "accesari", campuri: ["*"], conditiiAnd: [`user_id=${user.id}`] }, function (err, rezAcc) {
+                        if(rezAcc.rows.length >= 1){
+                            AccesBd.getInstanta().delete({ tabel: "accesari", conditiiAnd: [`user_id=${user.id}`] }, function (err, rezQuery) {
+                                if(err)
+                                    console.log("delete accesari", err);
+                                else{
+                                //res.redirect("/useri");
+                                req.utilizator.stergeUtilizator(campuriText.username);
+                                console.log("trece de utiliz.stergeUtilizator(); ")
+        
+                                var folder = __dirname + "/resurse/imagini/poze_uploadate"
+                                if (campuriText.username == user.username) {
+                                    let folder2 = path.join(folder, user.username)
+                                    fs.rmSync(folder2, { recursive: true, force: true })
+                                }
+        
+                                //res.redirect("/index");
+
+                            }
+        
+                            });
+                        }if(!err){
+                            req.utilizator.stergeUtilizator(campuriText.username);
+                                console.log("trece de utiliz.stergeUtilizator(); ")
+        
+                                var folder = __dirname + "/resurse/imagini/poze_uploadate"
+                                if (campuriText.username == user.username) {
+                                    let folder2 = path.join(folder, user.username)
+                                    fs.rmSync(folder2, { recursive: true, force: true })
+                                }
+        
+                        }
+                    });
+                res.redirect("/logout");
+            }
+
+        });
+    })
+    } else {
+    renderError(res, 403);
+}
+});
+
+
+
 //http://${Utilizator.numeDomeniu}/cod/${utiliz.username}/${token}
+
+// app.get("/stergere/:username/:token", function (req, res) {
+//     console.log("/stergere/:username/:token", req.params) // parametrii functiei 
+//     try {
+//         Utilizator.getUtilizDupaUsername(req.params.username, { res: res, token: req.params.token }, function (u, obparam) {
+//             AccesBd.getInstanta().update({
+//                 tabel: "utilizatori",
+//                 campuri: ['sterge_cont'],
+//                 valori: ['true'],
+//                 conditiiAnd: [`cod = '${obparam.token}'`]
+//             },
+//                 function (err, rezUpdate) {
+//                     if (err || rezUpdate.rowCount == 0) {
+//                         console.error("cod sterge", err)
+//                         renderError(res, 3);
+//                     } else {
+//                         res.render("pagini/confirmare_stergere.ejs");
+//                     }
+//                 }
+//             )
+//         })
+//     }
+//     catch (e) {
+//         console.log(e);
+//         renderError(res, 2);
+//     }
+// });
 
 app.get("/confirmare/:username/:token", function (req, res) {
     console.log(req.params) // parametrii functiei 
@@ -691,44 +848,25 @@ app.get(["/info", "info"], function (req, res) {
 
 
 
-app.get("/produse", function (req, res) {
-    const page = req.query.page || 1; // Numărul de pagină primit din query params, sau 1 dacă nu este specificat
-    const itemsPerPage = 8; // Numărul de elemente afișate pe pagină
-    const startIndex = (page - 1) * itemsPerPage; // Indexul de start al elementelor din pagină
-    const endIndex = page * itemsPerPage; // Indexul de sfârșit al elementelor din pagină
-  
-    const continuareQuery = req.query.tip ? ` AND categorie::text LIKE '%${req.query.tip}%'` : ""; // Adaugă filtrul pentru categorie dacă este specificat
-  
-    // Query pentru a obține numărul total de produse
-    client.query("SELECT COUNT(*) FROM produse WHERE 1=1" + continuareQuery, function (err, rezCount) {
-      if (err) {
-        renderError(res, 2);
-        console.log(err);
-      } else {
-        const totalItems = rezCount.rows[0].count; // Numărul total de produse
-        const totalPages = Math.ceil(totalItems / itemsPerPage); // Numărul total de pagini
-  
-        // Query pentru a obține doar produsele pentru pagina curentă
-        client.query("SELECT * FROM produse WHERE 1=1" + continuareQuery + " OFFSET $1 LIMIT $2", [startIndex, itemsPerPage], function (err, rez) {
-          if (err) {
-            renderError(res, 2);
-            console.log(err);
-          } else {
-            // Query pentru a obține categoriile de produse
-            client.query("SELECT * FROM unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
-              if (err) {
+app.get(["/produse"], function (req, res) {
+    //console.log('req1', req.query);
+    client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
+        continuareQuery = ""
+        if (req.query.tip)
+            continuareQuery += ` and categorie::text like '%${req.query.tip}%'`
+        //  console.log('req', req.query.tip)
+
+        client.query("select * from produse where 1=1" + continuareQuery, function (err, rez) {
+            if (err) {
                 renderError(res, 2);
                 console.log(err);
-              } else {
-                res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows, currentPage: page, totalPages: totalPages });
-              }
-            });
-          }
-        });
-      }
-    });
-  });
-  
+            } else {
+                res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
+                //res.render("pagini/favorite", { produse: rez.rows, optiuni: rezCateg.rows });
+            }
+        })
+    })
+});
 
 app.get("/produs/:id", function (req, res) {
     //console.log("!!!!!!!!!!!!req.params.id", typeof req.params.id)
@@ -829,8 +967,8 @@ app.delete("/favorite", function (req, res) {
         AccesBd.getInstanta().delete({ tabel: "favorite", conditiiAnd: [`id_produs = ${idProdus}`, `id_user = ${id_utiliz}`] }, function (err, rez) {
             if (!err) {
                 AccesBd.getInstanta().selectJoin({
-                    tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,data_adaugare,garantie,stoc".split(","), 
-                    joinTabel: "produse", 
+                    tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,data_adaugare,garantie,stoc".split(","),
+                    joinTabel: "produse",
                     joinConditiile: [`favorite.id_produs = produse.id`], conditiiAnd: [`favorite.id_user in (${id_utiliz})`]
                 }, function (err, rez) {
                     if (!err) {
@@ -923,9 +1061,9 @@ app.post("/cumpara", function (req, res) {
     var prodid;
     var cantitate = req.body.cantitate;
     console.log("cant122", cantitate)
-    for(let i =0; i< cantitate.length -1; ++i){
+    for (let i = 0; i < cantitate.length - 1; ++i) {
         prodid = cantitate[i].id
-    } 
+    }
     console.log(prodid)
     if (req?.utilizator?.areDreptul?.(Drepturi.cumparareProduse)) {
         AccesBd.getInstanta().select({
@@ -1060,68 +1198,87 @@ app.get("/feedback/:id", function (req, res) {
     let obJson, elementMesaje, mesajeXml;
     [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
 
-    res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: mesajeXml })
+    AccesBd.getInstanta().select({
+        tabel: "produse",
+        campuri: "id".split(","),
+        conditiiAnd: [`id = ${req.params.id}`]
+    }, function (err, rez) {
+        if (!err) {
+            if (rez.rows.length > 0) {
+                // Exista produsul in baza de date
+                res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: mesajeXml, produse: rez.rows, id: req.params.id });
+            } else {
+                // Nu exista produsul in baza de date
+                res.send("Nu avem niciun produs la care vreti sa daugati review");
+            }
+        } else {
+            console.error('Eroare la selectarea produselor la feedback: ', err);
+            res.send("A intervenit o eroare la selectarea produselor la feedback");
+        }
+    });
+
+    // res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: mesajeXml })
 });
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      // Obținem numele utilizatorului din sesiune
-      let u = req.session.utilizator ? req.session.utilizator.username : 'anonim';
-      // Specificăm calea directorului în care dorim să salvăm fișierele încărcate
-      let director = `resurse/imagini/comentarii/${u}`;
-      // Verificăm dacă directorul există, în caz contrar îl cream
-      if (!fs.existsSync(director)) {
-        fs.mkdirSync(director, { recursive: true });
-      }
-      cb(null, director);
+        // Obținem numele utilizatorului din sesiune
+        let u = req.session.utilizator ? req.session.utilizator.username : 'anonim';
+        // Specificăm calea directorului în care dorim să salvăm fișierele încărcate
+        let director = `resurse/imagini/comentarii/${u}`;
+        // Verificăm dacă directorul există, în caz contrar îl cream
+        if (!fs.existsSync(director)) {
+            fs.mkdirSync(director, { recursive: true });
+        }
+        cb(null, director);
     },
     filename: function (req, file, cb) {
-      // Generăm un nume unic pentru fiecare fișier încărcat, care include și data la care a fost adăugat
-      let numeImagine = `${Date.now()}_${file.originalname}`;
-      cb(null, numeImagine);
+        // Generăm un nume unic pentru fiecare fișier încărcat, care include și data la care a fost adăugat
+        let numeImagine = `${Date.now()}_${file.originalname}`;
+        cb(null, numeImagine);
     }
-  });
-  
-  const upload = multer({ storage: storage });
-  
-  app.post("/feedback", upload.array('imagine'), function (req, res) {
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/feedback", upload.array('imagine'), function (req, res) {
     let obJson, elementMesaje, mesajeXml;
-  
+
     [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
-  
+
     let u = req.session.utilizator ? req.session.utilizator.username : "anonim";
     let caleImagini = "";
-  
+
     // Verificăm dacă există fișiere atașate în cererea POST
     if (req.files && req.files.length > 0) {
-      req.files.forEach(file => {
-        let numeImagine = file.filename;
-        caleImagini += `resurse/imagini/comentarii/${u}/${numeImagine}, `;
-      });
-      caleImagini = caleImagini.slice(0, -2); // Eliminăm ultimul ", " din caleImagini
+        req.files.forEach(file => {
+            let numeImagine = file.filename;
+            caleImagini += `resurse/imagini/comentarii/${u}/${numeImagine}, `;
+        });
+        caleImagini = caleImagini.slice(0, -2); // Eliminăm ultimul ", " din caleImagini
     }
-  
+
     let mesajNou = {
-      type: "element",
-      name: "mesaj",
-      attributes: {
-        username: u,
-        data: new Date(),
-        cale_imagine: caleImagini // Adăugăm calea imaginii ca atribut în elementul "mesaj"
-      },
-      elements: [{ type: "text", "text": req.body.mesaj }]
+        type: "element",
+        name: "mesaj",
+        attributes: {
+            username: u,
+            data: new Date(),
+            cale_imagine: caleImagini, // Adăugăm calea imaginii ca atribut în elementul "mesaj"
+        },
+        elements: [{ type: "text", "text": req.body.mesaj }]
     };
     if (elementMesaje.elements)
-      elementMesaje.elements.push(mesajNou);
+        elementMesaje.elements.push(mesajNou);
     else
-      elementMesaje.elements = [mesajNou];
-  
+        elementMesaje.elements = [mesajNou];
+
     let sirXml = xmljs.js2xml(obJson, { compact: false, spaces: 4 });
     fs.writeFileSync(caleXMLMesaje, sirXml); // Salvăm XML-ul actualizat în fișier
     console.log(sirXml)
     res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: elementMesaje.elements })
-  });
-  
+});
+
 
 
 app.get(["/", "/index", "/home", "/login"], async function (req, res) {
@@ -1277,6 +1434,7 @@ app.get("/*.ejs", function (req, res) {
 app.get("/*", function (req, res) {
     //console.log("url:", req.url);
     res.render("pagini" + req.url, function (err, rezRandare) {
+        console.log(req.url)
         if (err) {
             // console.log(err)
             if (err.message.includes("Failed to lookup view")) {

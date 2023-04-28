@@ -2,40 +2,36 @@
 <html lang="ro">
 
 <head>
-    <title>Inregistrare</title>
+    <title>Resetare Parola</title>
     <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
-    <%- include("../fragmente/head") %>
-    <script type="text/javascript" src=/resurse/js/inregistrare.js></script>
+
+    <script type="text/javascript" src="/resurse/js/inregistrare.js"></script>
     <link rel="stylesheet" href="/resurse/css/pagini/inregistrare/inregistrare.css" type="text/css" />
+
+    <%- include("../fragmente/head") %>
 </head>
 
 <body class="dark">
     <%- include("../fragmente/header") %>
-
         <main>
             <div class="afisaj">
-                <h1>Resetare parola</h1>
+                <h1 id="titlu">Resetare parola</h1>
                 <br>
+                <p> Introduceti datele dumneavoastra</p><br>
+                <p id="mesaj"><%- locals.mesaj %></p>  
                 <% if(!locals.raspuns) { %>
-
-                    <%-include("../fragmente/formular_reset", {action: "/resetare" }) %>
+                    <%- include("../fragmente/formula_reset", {action: "/resetare" }) %>
                         <% } %>
-
-                            <% if(locals.raspuns) { %>
-                                <%- locals.raspuns+"<br />"%>
-                                <% } %>
-                                    <% if(locals.err) { %>
-                                        <%- locals.err %>
-                                            <% } %>
+                <% if(locals.raspuns) { %>
+                    <%- locals.raspuns+"<br />"%>
+                <% } %>
+                <% if(locals.err) { %>
+                    <%- locals.err %>
+                <% } %>  
             </div>
         </main>
-
-        <footer>
-            <%- include("../fragmente/footer") %>
-        </footer>
-
+    <%- include("../fragmente/footer") %>
 </body>
-
 </html>

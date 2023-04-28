@@ -15,10 +15,12 @@
     <link rel="stylesheet" href="/resurse/css/pagini/produse/produse.css" type="text/css" />
     <link rel="stylesheet" href="/resurse/css/pagini/produse/paginator.css" type="text/css" />
     <link rel="stylesheet" href="/resurse/css/pagini/produse/buttoane.css" type="text/css" />
+    
     <script type="text/javascript" src="/resurse/js/produse.js"></script>
     <script type="text/javascript" src="/resurse/js/bootstrap.js"></script>
     <script type="text/javascript" src="/resurse/js/favorite.js"></script>
     <script type="text/javascript" src="/resurse/js/paginator.js"></script>
+    
     <%- include("../fragmente/head") %>
 </head>
 
@@ -348,8 +350,9 @@
                             </div>
                         </section> 
                         <div class="pagination">
-                            <button id="prevBtn"  disabled>&lt; Prev</button>
-                            <button id="nextBtn">Next &gt;</button>
+                            <button id="prevBtn"  disabled>Prev</button>
+                            <span id="currentPage"></span> <p> / </p> <span id="totalPages"></span>
+                            <button id="nextBtn">Next</button>
                         </div> 
                     </div>
                 </div>

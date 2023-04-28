@@ -43,7 +43,7 @@ class Utilizator {
         this.#eroare = "";
     }
 
-      
+
     /**
     * @typedef {object} Check - obiect primit de functiile care realizeaza un query 
     * @property {string} nume - inputul care il verificam
@@ -61,10 +61,10 @@ class Utilizator {
     }
 
 
-     /**
-    * @typedef {object} Check - obiect primit de functiile care realizeaza un query 
-    * @property {string} ocupatie - inputul care il verificam
-    */
+    /**
+   * @typedef {object} Check - obiect primit de functiile care realizeaza un query 
+   * @property {string} ocupatie - inputul care il verificam
+   */
 
     /**
      * Verifica datele pentru inregistrare
@@ -73,13 +73,13 @@ class Utilizator {
 
      */
     checkOcupatie(ocupatie) {
-        return ocupatie != "" && !ocupatie.match(/[<>\/\.]/) 
+        return ocupatie != "" && !ocupatie.match(/[<>\/\.]/)
     }
 
-     /**
-    * @typedef {object} Check - obiect primit de functiile care realizeaza un query 
-    * @property {string} prenume - inputul care il verificam
-    */
+    /**
+   * @typedef {object} Check - obiect primit de functiile care realizeaza un query 
+   * @property {string} prenume - inputul care il verificam
+   */
 
     /**
      * Verifica datele pentru inregistrare
@@ -112,11 +112,11 @@ class Utilizator {
         }
     }
 
-   /**
-* @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
-* @property {string} prenume - inputul care il verificam
-* 
-*/
+    /**
+ * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
+ * @property {string} prenume - inputul care il verificam
+ * 
+ */
 
     /**
      * Verifica datele pentru setare
@@ -131,7 +131,7 @@ class Utilizator {
         }
     }
 
-       /**
+    /**
 * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query 
 * @property {string} prenume - inputul care il verificam
 * 
@@ -251,12 +251,29 @@ class Utilizator {
         let parola_cryptata = Utilizator.criptareParola(this.parola)
         let utiliz = this;
         let token = parole.genereazaToken(100);
-        AccesBD.getInstanta(Utilizator.tipConexiune).insert({ tabel: Utilizator.tabel, campuri: ["username", "nume", "prenume", "data_nastere", "ocupatie", "parola", "email", "culoare_chat", "cod", "cale_imagine"], valori: [`'${this.username}'`, `'${this.nume}'`, `'${this.prenume}'`, `'${this.data_nastere}'`, `'${this.ocupatie}'`, `'${parola_cryptata}'`, `'${this.email}'`, `'${this.culoare_chat}'`, `'${token}'`, `'${this.cale_imagine}'`] }, function (err, rez) {
+        console.log("salvare utilis", utiliz)
+        AccesBD.getInstanta(Utilizator.tipConexiune).insert({ tabel: Utilizator.tabel, 
+            campuri: ["username", "nume", "prenume", "data_nastere", "ocupatie", "parola", "email", "culoare_chat", "cod", "cale_imagine"], 
+            valori: [`'${this.username}'`, `'${this.nume}'`, `'${this.prenume}'`, `'${this.data_nastere}'`, `'${this.ocupatie}'`, `'${parola_cryptata}'`, `'${this.email}'`, `'${this.culoare_chat}'`, `'${token}'`, `'${this.cale_imagine}'`] }, function (err, rez) {
             if (err)
                 console.log(err);
             utiliz.trimiteMail("Cont nou", "Bine ai venit în comunitatea PC Components. Username-ul tău este:" + utiliz.username,
                 `<h1>Salut!</h1><p style='color:green, font-style:bold'>Bine ai venit în comunitatea PC Components. Username-ul tau este ${utiliz.username}.</p> <p><a href='http://${Utilizator.numeDomeniu}/confirmare/${utiliz.username}/${token}'>Click aici pentru confirmare</a></p>`)
         });
+    }
+
+    stergeUtilizator(username) {
+        let utiliz = this;
+        AccesBD.getInstanta(Utilizator.tipConexiune).delete({ tabel: Utilizator.tabel, conditiiAnd: [`username='${username}'`] }, function (err, rez) {
+            if (err) {
+                console.log("eorare delete utilizator.js", err);
+            }
+            else {
+                utiliz.trimiteMail("Sterge cont", "Hello, " + utiliz.username + " acesta este un email pentru confirmarea stergerii contului",
+                    `<h1>Hello, </h1><p style='color:green, font-style:bold'> ${utiliz.username} acesta este un email pentru confirmarea stergerii contului. Va multimim pentru ca ati fost alaturi de noi!.</p>`)
+            }
+        });
+        console.log("utilizator utiliz", utiliz);
     }
 
 
@@ -337,14 +354,14 @@ class Utilizator {
 
     }
 
-      /**
-     * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query
-     * @property {string} username - username-ul userului
-     * @property {string []} obparam - obiectele functiei
-     * @property {string[]} proceseazaUtiliz - 
-     */
+    /**
+   * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query
+   * @property {string} username - username-ul userului
+   * @property {string []} obparam - obiectele functiei
+   * @property {string[]} proceseazaUtiliz - 
+   */
 
-    
+
     /**
      * callback pentru queryuri.
      * @callback QueryCallBack
@@ -387,7 +404,7 @@ class Utilizator {
      * @property {string []} listaUtiliz - lista utilizatorilor
      */
 
-    
+
     /**
      * callback pentru queryuri.
      * @callback QueryCallBack
@@ -429,11 +446,11 @@ class Utilizator {
     //   });
 
 
-      /**
-     * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query
-     * @property {string []} obparam - obiectele functiei
-     * @property {string []} listaUtiliz - lista utilizatorilor
-     */
+    /**
+   * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query
+   * @property {string []} obparam - obiectele functiei
+   * @property {string []} listaUtiliz - lista utilizatorilor
+   */
     /**
      * cauta un user dupa filtre
      *

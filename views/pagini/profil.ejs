@@ -32,24 +32,36 @@
 	<%- include("../fragmente/header") %>
 		<main>
 			<% if(locals.utilizator) { %>
-				<section>
-					<h2>Profil</h2>
-					<p>
-						<%= locals.raspuns %>
-					</p><img src="/<%- locals.utilizator.cale_imagine%>" alt="nu ati incarcat poza de profil" />
+				<h2 id="profil">Profil</h2>
+				
 					
-				</section>
-				<%- include("../fragmente/formular",{action:"/profil"}, {raspuns:locals.mesaj}) %>
-		
-				<p>Vrei sa iti stergi contul?</p>
-				<form id="sterge" method="post" action="/sterge_utiliz">
-					<label>
-						Username: <input type="text" name="username" class="form-control" value="">
-					</label>
+				<div id="user">
+					<div id="imagine">
+						<p>
+							<%= locals.raspuns %>
+						</p>
+						<% if(!locals.utilizator.cale_imagine.includes('undefined')) {%>
+							<img src="/<%- locals.utilizator.cale_imagine%>" alt="poza de profil" />
+						<% } else {%>
+							<p>Nu aveti poza de profil</p>
+						<%}%>
+					</div><br>
+					<p>Pentru a va actualiza datele puteti completa formularul de mai jos</p>
+					<%- include("../fragmente/formular",{action:"/profil"}, {raspuns:locals.mesaj}) %>
+			
+					<p> Vrei sa te deloghezi? <a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a></p>
+					<p>Vrei sa iti stergi contul? </p>
+					<form id="sterge" method="post" action="/sterge_cont">
+						<label>
+							Username: <input type="text" name="username" class="form-control" value="">
+						</label><br><br>
 
-					<input type="submit" class = "btn btn-info btn-lg active" value="Submit">
-				</form>
-				<br><br>
+						<input type="submit" class = "btn btn-outline-secondary" value="Submit">
+					</form>
+					<br><br>
+
+					<!-- <a href="/sterge_cont"><i class="fa-regular fa-trash"></i></a> -->
+			</div>
 			</main>
 		<% } else { %>
 			<p>Nu sunteti logat</p>

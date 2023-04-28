@@ -245,7 +245,7 @@ class AccesBD{
         if(conditiiAnd.length>0)
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
         let comanda=`update ${tabel} set ${campuriActualizate.join(", ")}  ${conditieWhere}`;
-        //console.log(comanda);
+        console.log("update comanda", comanda);
         this.client.query(comanda,callback)
     }
 

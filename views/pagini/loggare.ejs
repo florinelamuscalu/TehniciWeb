@@ -6,9 +6,10 @@
     <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
-    <%- include("../fragmente/head") %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/resurse/css/pagini/loggare/loggare.css" type="text/css" />
+
+    <%- include("../fragmente/head") %>
 </head>
 
 
@@ -29,8 +30,8 @@
                         </label>
                     </p>
                     <p><input class="form-control" type="submit" value="Logare"></p>
-                    <p id="inreg">Nu ai cont?<a href="/inregistrare">&nbsp;Inregistrare</p>
-                    <p id="inreg">Ti-ai uitat parola?<a href="/resetare">&nbsp;Resetare parola</p>
+                    <p id="inreg"> Nu ai cont? <a href="/inregistrare">&nbsp;Inregistrare </a> </p>
+                    <p id="inreg"> Ti-ai uitat parola? <a href="/resetare">&nbsp;Resetare parola </a> </p>
                 </form>
                 <p><%- locals.eroareLogin %></p>
                 <% } else {%>

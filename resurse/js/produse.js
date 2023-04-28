@@ -84,7 +84,7 @@ window.onload = function () {
         window.addEventListener("beforeunload", function (event) {
             numeClasa = document.getElementById("collapseOne").className;
             var stare_local = localStorage.getItem("stare")
-            console.log("stare local", stare_local)
+            //console.log("stare local", stare_local)
             if (numeClasa.includes("show")) {
                 stare_local[acordeon] = 1
             } else {
@@ -94,7 +94,7 @@ window.onload = function () {
         });
 
         stare = localStorage.getItem("stare")
-        console.log("stare_local_dupa", localStorage.getItem("stare"))
+        //console.log("stare_local_dupa", localStorage.getItem("stare"))
         if (stare[acordeon] == 1) {
             document.getElementById("collapseOne").classList.add("show");
         } else {

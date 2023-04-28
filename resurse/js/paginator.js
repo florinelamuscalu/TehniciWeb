@@ -1,67 +1,81 @@
 window.addEventListener("DOMContentLoaded", function () {
-  const itemsPerPage = 8; // Numărul de elemente afișate pe pagină
-  const list = document.getElementById('list');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  let totalPages = 1;
+  let prevBtn = document.getElementById('prevBtn');
+  let nextBtn = document.getElementById('nextBtn');
+  let currentPageElement = document.getElementById('currentPage');
+  let totalPagesElement = document.getElementById('totalPages');
+
+  // console.log("produse", produseContainer)
+  // console.log("prevBtn", prevBtn)
+  // console.log("nextBtn", nextBtn)
+
+  const produsePerPage = 8;
   let currentPage = 1;
 
-  // Funcție pentru afișarea listei de elemente pe pagină
-  function showItems(items, page) {
-    list.innerHTML = '';
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = page * itemsPerPage;
-    for (let i = startIndex; i < endIndex && i < items.length; i++) {
-      const li = document.createElement('li');
-      li.textContent = items[i].nume;
-      list.appendChild(li);
-    }
-  }
+  prevBtn.addEventListener('click', handlePrevClick);
+  nextBtn.addEventListener('click', handleNextClick);
 
-  // Funcție pentru actualizarea stării butoanelor de navigare
-  function updateButtons(page, totalPages) {
-    if (page === 1) {
-      prevBtn.disabled = true;
-    } else {
-      prevBtn.disabled = false;
-    }
+  // console.log("prevBtn", prevBtn)
+  // console.log("nextBtn", nextBtn)
+  
 
-    if (page === totalPages) {
-      nextBtn.disabled = true;
-    } else {
-      nextBtn.disabled = false;
-    }
-  }
 
-  // Eveniment pentru butonul "Prev"
-  prevBtn.addEventListener('click', () => {
+  function handlePrevClick() {
     if (currentPage > 1) {
       currentPage--;
-      getItemsFromServer(currentPage);
+      renderProduse();
+      updatePaginator();
     }
-  });
-
-  // Eveniment pentru butonul "Next"
-  nextBtn.addEventListener('click', () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      getItemsFromServer(currentPage);
-    }
-  });
-
-  // Funcție pentru a obține datele de la server
-  function getItemsFromServer(page) {
-    // Face cererea către server pentru a obține datele actualizate
-    fetch(`/produse?page=${page}`) // Modifică ruta și parametrii cererii pentru a se potrivi cu ruta și parametrii din server
-      .then(response => response.json())
-      .then(data => {
-        showItems(data.items, data.currentPage);
-        updateButtons(data.currentPage, data.totalPages);
-      })
-      .catch(error => console.error(error));
   }
 
-  // Inițializează lista de produse și butoanele de navigare
-  getItemsFromServer(currentPage);
 
+  function handleNextClick() {
+    const numarTotalProduse = document.getElementsByClassName('produs').length;
+    //console.log('numarTotalProduse', numarTotalProduse)
+    const numarTotalPagini = Math.ceil(numarTotalProduse / produsePerPage);
+    if (currentPage < numarTotalPagini) {
+      currentPage++;
+      renderProduse();
+      updatePaginator();
+    }
+  }
+
+
+  function renderProduse() {
+    const produse = document.getElementsByClassName('produs');
+    //console.log('produse', produse)
+    const startIndex = (currentPage - 1) * produsePerPage;
+    const endIndex = startIndex + produsePerPage;
+
+
+    for(let i = 0; i < produse.length; ++i){
+      if(i >= startIndex && i < endIndex){
+        produse[i].style.display='block'
+      }else{
+        produse[i].style.display='none'
+      }
+    }
+
+    currentPageElement.textContent = currentPage.toString(); 
+    const numarTotalProduse = document.getElementsByClassName('produs').length;
+    const numarTotalPagini = Math.ceil(numarTotalProduse / produsePerPage);
+    totalPagesElement.textContent = numarTotalPagini.toString(); 
+
+    // produse.forEach((produs, index) => {
+    //   if (index >= startIndex && index < endIndex) {
+    //     produs.style.display = 'block';
+    //   } else {
+    //     produs.style.display = 'none';
+    //   }
+    // });
+  }
+
+
+  function updatePaginator() {
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === Math.ceil(document.querySelectorAll('.produs').length / produsePerPage);
+  }
+
+
+  renderProduse();
+  updatePaginator();
 });

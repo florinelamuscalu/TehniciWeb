@@ -41,7 +41,6 @@ class RolModerator extends Rol{
     static get tip() {return "moderator"}
     static get drepturi() { return [
         Drepturi.vizualizareUtilizatori,
-        Drepturi.stergereUtilizatori
     ] }
     constructor (){
         super()
@@ -52,7 +51,8 @@ class RolClient extends Rol{
     static get tip() {return "comun"}
     static get drepturi() { return [
         Drepturi.cumparareProduse,
-        Drepturi.scrieChat
+        Drepturi.scrieChat,
+        Drepturi.stergereUtilizatori,
     ] }
     constructor (){
         super()

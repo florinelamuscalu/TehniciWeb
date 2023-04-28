@@ -2,3 +2,21 @@ main {
     margin-top: 2%;
     margin-left: 1%;
 }
+
+#profil{
+    margin-left: 3%;
+}
+
+#user{
+    margin-top: 2%;
+    margin-left:30%;
+    margin-right: 30%;
+}
+
+#user label{
+    width:100%
+}
+
+#user p{
+    font-size: 1.2em;
+}

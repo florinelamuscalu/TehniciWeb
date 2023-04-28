@@ -7,7 +7,7 @@
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
     <%- include("../fragmente/head") %>
-    <script type="text/javascript" src=/resurse/js/inregistrare.js></script>
+    <script type="text/javascript" src="/resurse/js/inregistrare.js"></script>
     <link rel="stylesheet" href="/resurse/css/pagini/inregistrare/inregistrare.css" type="text/css" />
 </head>
 
@@ -17,26 +17,23 @@
         <main>
             <div class="afisaj">
                 <h1 id="titlu">Inregistrare utilizator</h1>
-                <br>
-                <p id="mesaj"><%- locals.mesaj %></p>
-                <% if(!locals.raspuns) { %>
+                <div class="formular">
+                    <br>
+                    <p id="mesaj"><%- locals.mesaj %></p>
+                    <% if(!locals.raspuns) { %>
 
-                    <%-include("../fragmente/formular", {action: "/inregistrare" }) %>
-                        <% } %>
+                        <%-include("../fragmente/formular", {action: "/inregistrare" }) %>
+                            <% } %>
 
-                            <% if(locals.raspuns) { %>
-                                <%- locals.raspuns+"<br />"%>
-                                <% } %>
-                                    <% if(locals.err) { %>
-                                        <%- locals.err %>
-                                            <% } %>
+                                <% if(locals.raspuns) { %>
+                                    <%- locals.raspuns+"<br />"%>
+                                    <% } %>
+                                        <% if(locals.err) { %>
+                                            <%- locals.err %>
+                                                <% } %>
+                </div>
             </div>
         </main>
-
-        <footer>
-            <%- include("../fragmente/footer") %>
-        </footer>
-
+        <%- include("../fragmente/footer") %>
 </body>
-
 </html>
