@@ -4,6 +4,7 @@ const Drepturi=require('./drepturi.js');
 class Rol{
     static get tip() {return "generic"}
     static get drepturi() {return []}
+    //static get dreptCurierat(){return []}
     constructor (){
         this.cod=this.constructor.tip;
     }
@@ -12,6 +13,10 @@ class Rol{
         //console.log("in metoda rol!!!!")
         return this.constructor.drepturi.includes(drept); //pentru ca e admin
     }
+
+    // areDreptuldeCurierat(drept){
+    //     return this.constructor.dreptCurierat.includes(drept);
+    // }
 }
 
 class RolAdmin extends Rol{
@@ -30,8 +35,8 @@ class RolAdmin extends Rol{
         super();
     }
 
-    areDreptul(){
-        return true; //pentru ca e admin
+    areDreptul(drept){
+        return this.constructor.drepturi.includes(drept);
     }
 
 }
@@ -60,12 +65,49 @@ class RolClient extends Rol{
 
 }
 
+class RolCurier extends Rol{
+    static get tip() {return "curier"}
+    static get drepturi() { return [
+        Drepturi.curierat,
+    ] }
+    
+    constructor (){
+        super()
+    }
+
+
+    areDreptul(drept) {
+        return this.constructor.drepturi.includes(drept); //returneaza true daca dreptul este inclus in drepturile curierului
+    }
+
+}
+
+class RolComerciant extends Rol{
+    static get tip() {return "comerciant"}
+    static get drepturi() { return [
+        Drepturi.adaugaProduse,
+        Drepturi.stergeProduse,
+        Drepturi.modificaProduse,
+    ] }
+    
+    constructor (){
+        super()
+    }
+  
+    areDreptul(drept) {
+        return this.constructor.drepturi.includes(drept); 
+    }
+
+}
+
 class RolFactory{
     static creeazaRol(tip) {
         switch(tip){
             case RolAdmin.tip : return new RolAdmin();
             case RolModerator.tip : return new RolModerator();
             case RolClient.tip : return new RolClient();
+            case RolCurier.tip : return new RolCurier();
+            case RolComerciant.tip : return new RolComerciant();
         }
     }
 }

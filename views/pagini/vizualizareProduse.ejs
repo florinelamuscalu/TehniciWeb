@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title>Vizualizare Produse</title>
+    <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
+    <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/resurse/css/pagini/vizualizareProduse/vizualizareProduse.css" type="text/css" />
+    <%- include("../fragmente/head") %>
+
+
+</head>
+
+<body class="dark">
+    <%- include("../fragmente/header") %>
+        <main>
+            <section class="tabel produse">
+                <div class="table-responsive-lg">
+                  <table class="table table-bordered">
+                    <thead >
+                      <tr>
+                        <th scope="col">Numar</th>
+                        <th scope="col">Nume</th>
+                        <th scope="col">Descriere</th>
+                        <th scope="col">Pret</th>
+                        <th scope="col">Greutate</th>
+                        <th scope="col">Data fabricare</th>
+                        <th scope="col">Tip produs</th>
+                        <th scope="col">Categorie</th>
+                        <th scope="col">Specificatii</th>
+                        <th scope="col">Desigilate</th>
+                        <th scope="col">Culoare</th>
+                        <th scope="col">Imagine</th>
+                        <th scope="col">Data adaugare</th>
+                        <th scope="col">Garantie</th>
+                        <th scope="col">Stoc</th>
+                        <th scope="col">Adaugare produse</th>
+                        <th scope="col">Modificare produse</th>
+                        <th scope="col">Stergere produse</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                      <%for(let i =0 ; i < locals.comerciantiLen; ++i) {
+                        const produs = locals.comercianti[i].produse
+                        //console.log("categore", produs.categorie)
+                        if (produs.categorie.includes("-")) {
+                            const arr = produs.categorie.split("-");
+                            const lastWord = arr[arr.length - 1];
+                            const penultimateWord = arr[arr.length - 2];
+                            if (penultimateWord !== 'componente' && isNaN(parseInt(penultimateWord))) {
+                              var cat = penultimateWord + ' ' + lastWord;
+                            } else {
+                              var cat = lastWord;
+                            }
+                          } else {
+                            var cat = produs.categorie;
+                          }
+
+                          console.log("vizualizareProd.ejs spec", produs.specificatii)
+                        %>
+                        <tr class="align-middle table-active">
+                            <th scope="row"><%- i+1 %></th>
+                            <td><%= produs.nume %></td>
+                            <td><%= produs.descriere %></td>
+                            <td><%= produs.pret %></td>
+                            <td><%= produs.greutate %></td>
+                            <td><%= produs.data_fabricare %></td>
+                            <td><%= produs.tip_produs %></td>
+                            <td><%- cat %></td>
+                            <td><%= produs.specificatii %></td>
+                            <td><%= produs.desigilate %></td>
+                            <td><%= produs.culoare %></td>
+                            <td><img src="/resurse/imagini/produse/<%= produs.imagine %>"></td>
+                            <td><%= produs.data_adaugare %></td>
+                            <td><%= produs.garantie %></td>
+                            <td><%= produs.stoc %></td>
+                            <td><a href="/adaugaProduse" class="btn btn-primary">Adaugare</a></td>
+                            <td><a href="/modificaProduse/<%- encodeURIComponent(produs.specificatii) %>" class="btn btn-primary">Modificare</a></td>
+                            <%console.log("!!!!!!!!!!!!!!!!!!!!!!!", produs.specificatii)%>
+                            <td><button onclick="stergeProdus('<%= produs.id %>')" class="btn btn-danger">Stergere</button></td>
+                          </tr>
+                      <%}%>
+                    </tbody>
+                  </table>
+                </div>
+              </section> 
+        </main>
+        <%- include("../fragmente/footer") %>
+</body>
+
+</html>

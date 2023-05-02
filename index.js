@@ -7,6 +7,7 @@ const sharp = require("sharp");
 const formidable = require("formidable");
 const { Client } = require("pg");
 const { Utilizator } = require("./module_proprii/utilizator.js")
+const { Produse } = require("./module_proprii/produse.js")
 const { adaugaFavorite } = require("./resurse/js/favorite.js")
 const ejs = require("ejs");
 const session = require("express-session");
@@ -513,7 +514,7 @@ app.post("/inregistrare", function (req, res) {
     var formular = new formidable.IncomingForm()
     formular.parse(req, function (err, campuriText, campuriFisier) {
 
-        console.log("username", campuriText.username);
+        //console.log("username", campuriText.username);
 
         // console.log()
 
@@ -521,8 +522,8 @@ app.post("/inregistrare", function (req, res) {
         var eroare = "";
 
         var utilizNou = new Utilizator();
-        console.log(utilizNou)
-        console.log("*****************************", utilizNou.setareUserName = campuriText.username)
+        //console.log("utilizator nou", utilizNou)
+        //console.log("", utilizNou.setareUserName = campuriText.username)
         try {
             utilizNou.setareNume = campuriText.nume;
             utilizNou.setareUserName = campuriText.username;
@@ -532,6 +533,13 @@ app.post("/inregistrare", function (req, res) {
             utilizNou.setarePrenume = (campuriText.prenume)
             utilizNou.culoare_chat = (campuriText.culoare_chat);
             utilizNou.setareParola = (campuriText.parola);
+
+            // if(campuriText.ocupatie == "moderator"){
+            //     utilizNou.rol= campuriText.ocupatie
+            //     rol = campuriText.ocupatie
+            // }else{
+            //     rol = 'comun'
+            // }
 
             if (campuriFisier.poza.originalFilename && validateFileName(campuriFisier.poza.originalFilename)) {
                 utilizNou.cale_imagine = campuriFisier.poza.originalFilename;
@@ -543,7 +551,7 @@ app.post("/inregistrare", function (req, res) {
                 var mesaj;
                 if (eroareUser == -1) {//nu exista username-ul in BD
                     utilizNou.salvareUtilizator();
-
+                    console.log("utilizator dupa salvare", utilizNou)
                 }
                 else {
                     let sugestie = generateUsernameSuggestion(username); // genereaza username 
@@ -741,46 +749,46 @@ app.post("/sterge_cont", function (req, res) {
                     console.log("a tecut de select")
                     user = rez.rows[0];
                     AccesBd.getInstanta().select({ tabel: "accesari", campuri: ["*"], conditiiAnd: [`user_id=${user.id}`] }, function (err, rezAcc) {
-                        if(rezAcc.rows.length >= 1){
+                        if (rezAcc.rows.length >= 1) {
                             AccesBd.getInstanta().delete({ tabel: "accesari", conditiiAnd: [`user_id=${user.id}`] }, function (err, rezQuery) {
-                                if(err)
+                                if (err)
                                     console.log("delete accesari", err);
-                                else{
-                                //res.redirect("/useri");
-                                req.utilizator.stergeUtilizator(campuriText.username);
-                                console.log("trece de utiliz.stergeUtilizator(); ")
-        
-                                var folder = __dirname + "/resurse/imagini/poze_uploadate"
-                                if (campuriText.username == user.username) {
-                                    let folder2 = path.join(folder, user.username)
-                                    fs.rmSync(folder2, { recursive: true, force: true })
-                                }
-        
-                                //res.redirect("/index");
+                                else {
+                                    //res.redirect("/useri");
+                                    req.utilizator.stergeUtilizator(campuriText.username);
+                                    console.log("trece de utiliz.stergeUtilizator(); ")
 
-                            }
-        
-                            });
-                        }if(!err){
-                            req.utilizator.stergeUtilizator(campuriText.username);
-                                console.log("trece de utiliz.stergeUtilizator(); ")
-        
-                                var folder = __dirname + "/resurse/imagini/poze_uploadate"
-                                if (campuriText.username == user.username) {
-                                    let folder2 = path.join(folder, user.username)
-                                    fs.rmSync(folder2, { recursive: true, force: true })
+                                    var folder = __dirname + "/resurse/imagini/poze_uploadate"
+                                    if (campuriText.username == user.username) {
+                                        let folder2 = path.join(folder, user.username)
+                                        fs.rmSync(folder2, { recursive: true, force: true })
+                                    }
+
+                                    //res.redirect("/index");
+
                                 }
-        
+
+                            });
+                        } if (!err) {
+                            req.utilizator.stergeUtilizator(campuriText.username);
+                            console.log("trece de utiliz.stergeUtilizator(); ")
+
+                            var folder = __dirname + "/resurse/imagini/poze_uploadate"
+                            if (campuriText.username == user.username) {
+                                let folder2 = path.join(folder, user.username)
+                                fs.rmSync(folder2, { recursive: true, force: true })
+                            }
+
                         }
                     });
-                res.redirect("/logout");
-            }
+                    res.redirect("/logout");
+                }
 
-        });
-    })
+            });
+        })
     } else {
-    renderError(res, 403);
-}
+        renderError(res, 403);
+    }
 });
 
 
@@ -810,7 +818,7 @@ app.post("/sterge_cont", function (req, res) {
 //     }
 //     catch (e) {
 //         console.log(e);
-//         renderError(res, 2);
+//         renderError(res, 2);comanda
 //     }
 // });
 
@@ -914,6 +922,206 @@ app.get("/produse", function (req, res) {
     });
 });
 
+function transformaSirSpecificatii(sir) {
+    const elemente = sir.split(',').map(s => `"${s.trim()}"`);
+    const json = `{${elemente.join(', ')}}`;
+    return json;
+}
+
+
+app.post("/adaugaProduse", function (req, res) {
+    var formular = new formidable.IncomingForm()
+    formular.parse(req, function (err, campuriText, campuriFisier) {
+        var eroare = "";
+        utiliz = req.utilizator;
+        produsNou = new Produse();
+        var specificatii_trans = transformaSirSpecificatii(campuriText.specificatii)
+        try {
+            produsNou.setareNume = campuriText.nume,
+                produsNou.setareDescriere = campuriText.descriere,
+                produsNou.setarePret = campuriText.pret,
+                produsNou.setareGreutate = campuriText.greutate,
+                produsNou.data_fabricare = campuriText.data_fabricare,
+                produsNou.tip_produs = campuriText.tip_produs,
+                produsNou.categorie = campuriText.categorie,
+                produsNou.setareSpecificatii = specificatii_trans,
+                produsNou.desigilate = campuriText.desigilate,
+                produsNou.setareCuloare = campuriText.culoare,
+                produsNou.data_adaugare = campuriText.data_add,
+                produsNou.garantie = campuriText.garantie,
+                produsNou.stoc = campuriText.stoc
+            //console.log("!!!!!!!!!!!!!!!!!!!Campuri Fisier", campuriFisier)
+            if (campuriFisier.imagine.originalFilename && validateFileName(campuriFisier.imagine.originalFilename)) {
+                produsNou.imagine = campuriFisier.imagine.originalFilename;
+
+            }
+
+            //console.log('!!!!!!!!!!specificatii trans', specificatii_trans)
+
+            AccesBd.getInstanta().select({
+                tabel: "produse",
+                campuri: "nume,descriere, pret, greutate, data_fabricare, tip_produs, categorie, specificatii, desigilate, culoare, imagine, garantie, stoc".split(","),
+                conditiiAnd: [ `descriere = '${campuriText.descriere}'`, `specificatii = '${specificatii_trans}'`]
+            },
+                function (err, rezSelectP) {
+                    if (err)
+                        console.log("eorare select produse din adauga produse", err);
+                    if (rezSelectP.rowCount == 0) {
+                        console.log("rezultat selet adauga produse", rezSelectP.rows)
+                        produsNou.salvareProdus();
+                        mesajText = `Hello, ${req.utilizator.username} ne bucuram ca vei sa colaborezi cu noi.`;
+                        mesajHTML = `<h2>Hello, ${req.utilizator.username},</h2> ne bucuram ca vei sa colaborezi cu noi.`;
+                        req.utilizator.trimiteMail("Ai adaugat un produs", mesajText, mesajHTML, [{
+                            filename: "",
+                            content: ""
+                        }]);
+
+                        if (req.utilizator.rol.cod != "comerciant") {
+                            AccesBd.getInstanta().update({
+                                tabel: "utilizatori",
+                                campuri: ['rol'],
+                                valori: ['comerciant'],
+                                conditiiAnd: [`username = '${req.utilizator.username}'`]
+                            },
+                                function (err, rezUpdate) {
+                                    if (err || rezUpdate.rowCount == 0) {
+                                        console.error("rol", err)
+                                        renderError(res, 3);
+                                    }
+                                })
+                        }
+
+                        const data = new Date();
+                        const day = data.getDate().toString().padStart(2, '0');
+                        const month = (data.getMonth() + 1).toString().padStart(2, '0');
+                        const year = data.getFullYear().toString();
+                        const date = `${day}-${month}-${year}`;
+                        //console.log(date); // afișează data curentă în formatul dd-mm-yyyy
+
+                        let jsoncomerciant = {
+                            utilizator: req.utilizator,
+                            produse: produsNou,
+                            data_creare_cont: date
+                        }
+                        if (obGlobal.bdMongo) {
+                            obGlobal.bdMongo.collection("comercianti").find({ "produse": produsNou, "utilizatoe": req.utilizator }).toArray(
+                                function (err, rezgasire) {
+                                    if (err) console.log(err)
+                                    if (rezgasire.length == 0) {
+                                        obGlobal.bdMongo.collection("comercianti").insertOne(jsoncomerciant, function (err, rezmongo) {
+                                            if (err) console.log(err)
+                                            else console.log("Am inserat comercianti in mongodb");
+
+                                            obGlobal.bdMongo.collection("comercianti").find({}).toArray(
+                                                function (err, rezInserare) {
+                                                    if (err) console.log(err)
+                                                    else console.log(rezInserare);
+                                                })
+                                        })
+                                    }
+                                })
+                        }
+
+                        // adaugare imagine 
+
+                        formular.on("field", function (nume, val) {  // 1
+
+                            console.log(`--- ${nume}=${val}`);
+
+                            if (nume == "nume")
+                                nume = val;
+                        })
+                        formular.on("fileBegin", function (nume, fisier) { //2
+                            console.log("fileBegin");
+
+                            console.log(nume, fisier);
+                            let folderProdus = path.join(__dirname, "/resurse/imagini/produse");
+                            if (!fs.existsSync(folderProdus))
+                                fs.mkdirSync(folderProdus);
+                            fisier.filepath = path.join(folderProdus, fisier.originalFilename)
+                        })
+                        formular.on("file", function (nume, fisier) {//3
+                            console.log(nume, fisier);
+                        });
+
+                        res.render("pagini/adaugaProduse", { raspuns: "Adaugare cu succes!" })
+                    }else{
+                        res.render("pagini/adaugaProduse", { raspuns: "Produsul pe care vreti sa il adaugati exista deja in baza noastra de date. Noi comapram produsul pe care vreti sa il adaugati cu produsele deja existente in baza noastra dupa descriere si specificatile!" })
+                    }
+                });
+
+
+        }
+        catch (e) {
+            console.log(e.message);
+            eroare += "Eroare site; reveniti mai tarziu";
+            console.log("*******", eroare);
+            res.render("pagini/adaugaProduse", { err: "Eroare: " + eroare })
+        }
+    });
+
+});
+
+app.get("/vizualizareProduse", function (req, res) {
+    utiliz = req.utilizator;
+
+    if (obGlobal.bdMongo) {
+        obGlobal.bdMongo
+            .collection("comercianti")
+            .find({ "utilizator.username": utiliz.username })
+            .toArray(function (err, rezultat) {
+                if (err) console.log(err);
+                else {
+                    if (rezultat.length > 0) {
+                        //console.log("rezultat", rezultat);
+                        res.render("pagini/vizualizareProduse", { comercianti: rezultat, comerciantiLen: rezultat.length });
+                    } else {
+                        //console.log("Nu s-au gasit produse pentru utilizatorul specificat");
+                        res.redirect("/");
+                    }
+                }
+            });
+    } else {
+        //console.log("Nu s-a putut conecta la baza de date");
+        res.redirect("/");
+    }
+});
+
+app.get("/modificaProduse/:specificatii", function (req, res) {
+    console.log("!!!!!!!!!!!nodejs modifica prod spec", req.params.specificatii)
+    const spec = decodeURIComponent(req.params.specificatii);
+    console.log("!!!spec modificare produs",spec)
+    const utiliz = req.utilizator;
+  
+    if (obGlobal.bdMongo) {
+      obGlobal.bdMongo
+        .collection("comercianti")
+        .findOne(
+          {
+            "utilizator.username": utiliz.username,
+            "produse.specificatii": spec,
+          },
+          function (err, rez) {
+            if (err) console.log(err);
+            else {
+              //console.log("rez.rows modificaProduse index,js", rez.produse)
+              if (rez) {
+                //console.log("produs modificare produs", rez.produse);
+                res.render("pagini/modificaProduse", { produs: rez.produse});
+              } else {
+                console.log("Nu s-a gasit produsul cu specificatia specificata");
+                res.redirect("/");
+              }
+            }
+          }
+        );
+    } else {
+      console.log("Nu s-a putut conecta la baza de date");
+      res.redirect("/");
+    }
+  });
+  
+  
 
 /////////////////////////////////////////////// FAVORITE
 
@@ -1053,6 +1261,15 @@ async function genereazaPdf(stringHTML, numeFis, callback) {
         callback(numeFis);
 }
 
+function* numarComanda() {
+    let counter = 1;
+    while (true) {
+        yield counter++;
+    }
+}
+
+
+
 app.post("/cumpara", function (req, res) {
     //console.log(req.body);
     //console.log("Utilizator:", req?.utilizator);
@@ -1092,8 +1309,15 @@ app.post("/cumpara", function (req, res) {
                     res.send("Totul e bine!");
                 });
                 rez.rows.forEach(function (elem) { elem.cantitate = 1 });
+                const data = new Date();
+                const day = data.getDate().toString().padStart(2, '0');
+                const month = (data.getMonth() + 1).toString().padStart(2, '0');
+                const year = data.getFullYear().toString();
+                const date = `${day}-${month}-${year}`;
+                console.log(date); // afișează data curentă în formatul dd-mm-yyyy
+
                 let jsonFactura = {
-                    data: new Date(),
+                    data: date,
                     username: req.session.utilizator.username,
                     produse: rez.rows
                 }
@@ -1110,6 +1334,32 @@ app.post("/cumpara", function (req, res) {
                             })
                     })
                 }
+
+                //comnezi
+                comanda = numarComanda();
+                numarComanda = comanda.next().value;
+                let jsonComenzi = {
+                    numarComanda: numarComanda,
+                    statusComanda: 0,
+                    data: date,
+                    username: req.session.utilizator.username,
+                    produse: rez.rows,
+                }
+                if (obGlobal.bdMongo) {
+                    //console.log(")))))))))))))))))))))))))))))))))))))))))))))))))))")
+                    obGlobal.bdMongo.collection("comenzi").insertOne(jsonComenzi, function (err, rezmongo) {
+                        if (err) console.log(err)
+                        else console.log("Am inserat comanda in mongodb");
+
+                        obGlobal.bdMongo.collection("comenzi").find({}).toArray(
+                            function (err, rezInserare) {
+                                if (err) console.log(err)
+                                else console.log("post comanda", rezInserare);
+                            })
+                    })
+                }
+
+
             }
         })
     }
@@ -1118,6 +1368,21 @@ app.post("/cumpara", function (req, res) {
     }
 
 });
+
+app.get("/comenzi", function (req, res) {
+    if (obGlobal.bdMongo) {
+        obGlobal.bdMongo.collection("comenzi").find({}).toArray(
+            function (err, rez) {
+                if (err)
+                    console.log(err)
+                if (rez.rowCount > 0) {
+                    res.render("pagini/comenzi", { comenzi: rez.rows })
+                    console.log("get comenzi", rez.rows)
+                }
+            })
+    }
+
+})
 
 
 app.get("/grafice", function (req, res) {

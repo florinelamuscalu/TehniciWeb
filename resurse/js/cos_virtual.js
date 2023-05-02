@@ -41,6 +41,7 @@ window.addEventListener("load", function () {
 					descriere.innerHTML = prod.descriere + "<br>" + " <b>Pret:</b>" + prod.pret + " RON";
 					article.appendChild(descriere);
 
+					console.log("a trecut de descriere!!")
 					var cantitate = document.createElement("input");
 					cantitate.type = "number"; // Seteaza tipul input-ului la numar
 					cantitate.min = 0; // Seteaza valoarea minima a input-ului la 1
@@ -50,11 +51,13 @@ window.addEventListener("load", function () {
 					article.appendChild(cantitate);
 					main.insertBefore(article, btn);
 					
-					var ok = 0;
+					console.log("cantitate!!", cantitate.value)
+					var ok = 1;
 				
 					cantitate.addEventListener("input", function () {
 						if (cantitate.value === "0") { // Verifica daca valoarea input-ului de cantitate este 0
 							article.parentNode.removeChild(article);
+							ok = 0
 						  } else {
 							descriere.innerHTML = prod.descriere + "<br>" + " <b>Pret:</b>" + prod.pret * cantitate.value;
 							ok = 1

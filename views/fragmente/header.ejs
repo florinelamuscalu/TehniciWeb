@@ -15,10 +15,17 @@
                     <% } %>
                 </div>
             
-                <li id="favorite">
+                <% if(!locals?.utilizator?.areDreptul?.(Drepturi?.curierat)) { %>
+                        <li id="favorite">
+                            <a href="/favorite"><i class="fa-regular fa-heart"></i></a>
+                        </li>
+                        <li id="cos"> <a href="/cos-virtual"><i class="fa-solid fa-cart-shopping"></i></a></li>  
+                <% } %>
+                
+                <!-- <li id="favorite">
                     <a href="/favorite"><i class="fa-regular fa-heart"></i></a>
                 </li>
-                <li id="cos"> <a href="/cos-virtual"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <li id="cos"> <a href="/cos-virtual"><i class="fa-solid fa-cart-shopping"></i></a></li> -->
             </div>
 
             <div id="button">
@@ -55,65 +62,68 @@
         </label>
         <input id="ch-menu" type="checkbox">
         <ul class="meniu">
-            <li id="fa"><a href="index">
-                    <div id="home">
-                        <i class="fa-solid fa-house"></i>
-                    </div>
-                </a>
-            </li>
-            <li id="li-home"> <a href="index" id="but-home">Home</a></li>
-            <li> <a href="/produse">Produse</a>
-                <ul>
-                    <% var nume3 =[];
-                      for(let opt of locals.optiuni) {  %>
-                        <% 
-                            var cat1 = opt.unnest
-                            if(cat1.startsWith(1) == false && cat1.startsWith(2) == false && cat1.startsWith(3) == false && cat1.startsWith(4) == false) { %>
-                                <li><a href="/produse?tip=<%- cat1 %>"><%- cat1 %></a></li>
-                           <% } else if(cat1.startsWith(1) == true || cat1.startsWith(2) == true || cat1.startsWith(3) == true || cat1.startsWith(4) == true) {%>
-                                <%
-                                    let index = cat1.indexOf("-")
-                                    var nume1 = cat1.substr(index +1 )
-                                    let index2 = nume1.indexOf("-")
-                                    var nume2= nume1.substr(index -1, index2)
-                                    //nume2 contine numele meniului == componente
-                                    nume3.push(nume1.substr(index2 + 3))
-                                    // in nume 1 salvez numele submeniului
-                                %> 
-                            <%}%>
-                        <%}%>
-                            
-                        <li><a href="/produse?tip=<%-nume2%>"><%-nume2 %></a>
-                            <ul>
-                                <%for(let menu of nume3) {%>
-                                    <li><a href="/produse?tip=<%-cat1%>"><%-menu %></a></li>
-                                <%}%>
-                            </ul>
-                        </li>
-                </ul>
-            </li>
-            <li> <a href="urmaresteColet">Urmareste Colet</a></li>
-            <li> <a href="termeniConditi">Termeni si Conditii</a></li>
-            <li> <a href="/chat">Chat</a></li>
-            <li> <a href="/contact">Contact</a></li>
-            <% if(locals?.utilizator?.areDreptul?.(Drepturi?.vizualizareUtilizatori)) { %>
-                <li><div id="nav-titlu">Administrare</div>
-                        <ul>
-                            <li><a href="/useri">Useri</a></li>
-                            <li><a href="/grafice">Grafice</a></li>
-                            <li><a href="/comenzi">Comenzi</a></li>
-                        </ul>
+                <li id="fa"><a href="index">
+                        <div id="home">
+                            <i class="fa-solid fa-house"></i>
+                        </div>
+                    </a>
                 </li>
-            <% } %>
-            <li> <a href="info">Info</a>
-                <ul>
-                    <li><a href="info#despre">Despre Noi</a></li>
-                    <li><a href="info#garantie">Garantia Securitatii</a></li>
-                    <li><a href="info#CalcularePret">Calcul pret redus</a></li>
-                    <li><a href="info#Shops">Sedii magazine</a></li> 
-                    <li><a href="info#galerie">Galerie</a></li>
-                </ul>
-            </li>
+                <li id="li-home"> <a href="index" id="but-home">Home</a></li>
+                <% if(locals?.utilizator?.areDreptul?.(Drepturi?.curierat)) { %>
+                    <li><a href="/comenzi">Comenzi</a></li>     
+                <% }else  { %>
+                    <li> <a href="/produse">Produse</a>
+                        <ul>
+                            <% var nume3 =[];
+                            for(let opt of locals.optiuni) {  %>
+                                <% 
+                                    var cat1 = opt.unnest
+                                    if(cat1.startsWith(1) == false && cat1.startsWith(2) == false && cat1.startsWith(3) == false && cat1.startsWith(4) == false) { %>
+                                        <li><a href="/produse?tip=<%- cat1 %>"><%- cat1 %></a></li>
+                                <% } else if(cat1.startsWith(1) == true || cat1.startsWith(2) == true || cat1.startsWith(3) == true || cat1.startsWith(4) == true) {%>
+                                        <%
+                                            let index = cat1.indexOf("-")
+                                            var nume1 = cat1.substr(index +1 )
+                                            let index2 = nume1.indexOf("-")
+                                            var nume2= nume1.substr(index -1, index2)
+                                            //nume2 contine numele meniului == componente
+                                            nume3.push(nume1.substr(index2 + 3))
+                                            // in nume 1 salvez numele submeniului
+                                        %> 
+                                    <%}%>
+                                <%}%>
+                                    
+                                <li><a href="/produse?tip=<%-nume2%>"><%-nume2 %></a>
+                                    <ul>
+                                        <%for(let menu of nume3) {%>
+                                            <li><a href="/produse?tip=<%-cat1%>"><%-menu %></a></li>
+                                        <%}%>
+                                    </ul>
+                                </li>
+                        </ul>
+                    </li>
+                    <li> <a href="urmaresteColet">Urmareste Colet</a></li>
+                <%} %>
+                <li> <a href="termeniConditi">Termeni si Conditii</a></li>
+                <li> <a href="/chat">Chat</a></li>
+                <li> <a href="/contact">Contact</a></li>
+                <% if(locals?.utilizator?.areDreptul?.(Drepturi?.vizualizareUtilizatori)) { %>
+                    <li><div id="nav-titlu">Administrare</div>
+                            <ul>
+                                <li><a href="/useri">Useri</a></li>
+                                <li><a href="/grafice">Grafice</a></li>
+                            </ul>
+                    </li>
+                <% } %>
+                <li> <a href="info">Info</a>
+                    <ul>
+                        <li><a href="info#despre">Despre Noi</a></li>
+                        <li><a href="info#garantie">Garantia Securitatii</a></li>
+                        <li><a href="info#CalcularePret">Calcul pret redus</a></li>
+                        <li><a href="info#Shops">Sedii magazine</a></li> 
+                        <li><a href="info#galerie">Galerie</a></li>
+                    </ul>
+                </li>   
         </ul>
     </nav>
     <br/>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+	<title>Adauga produse</title>
+	<meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
+    <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
+
+	<link rel="stylesheet" href="/resurse/css/pagini/adaugaProduse/adaugaProduse.css" type="text/css" />
+	<%- include("../fragmente/head") %>
+
+</head>
+
+<body class="dark">
+
+	<%- include("../fragmente/header") %>
+
+		<main>
+			<div class="afisaj">
+                <h1 id="titlu">Adauga Produse</h1>
+                <div class="formular">
+                    <br>
+                    <p id="mesaj"><%- locals.mesaj %></p>
+                    <% if(!locals.raspuns) { %>
+
+                        <%-include("../fragmente/formular_produse", {action: "/adaugaProduse" }) %>
+                            <% } %>
+
+                                <% if(locals.raspuns) { %>
+                                    <%- locals.raspuns+"<br />"%>
+                                    <% } %>
+                                        <% if(locals.err) { %>
+                                            <%- locals.err %>
+                                                <% } %>
+                </div>
+            </div>
+           		
+		</main>
+	<%- include("../fragmente/footer") %>
+</body>
+</html>

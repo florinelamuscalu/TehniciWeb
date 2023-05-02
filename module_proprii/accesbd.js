@@ -195,7 +195,7 @@ class AccesBD{
             throw new Error("Numarul de campuri difera de nr de valori")
         
         let comanda=`insert into ${tabel}(${campuri.join(",")}) values ( ${valori.join(",")})`;
-        //console.log(comanda);
+        //console.log("comanda insert", comanda);
         this.client.query(comanda,callback)
     }
 

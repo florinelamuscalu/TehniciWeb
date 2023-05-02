@@ -251,12 +251,12 @@ class Utilizator {
         let parola_cryptata = Utilizator.criptareParola(this.parola)
         let utiliz = this;
         let token = parole.genereazaToken(100);
-        console.log("salvare utilis", utiliz)
+        console.log("!!!!!!!!!!!!!!!!!!!!!salvare utiliz", utiliz)
         AccesBD.getInstanta(Utilizator.tipConexiune).insert({ tabel: Utilizator.tabel, 
             campuri: ["username", "nume", "prenume", "data_nastere", "ocupatie", "parola", "email", "culoare_chat", "cod", "cale_imagine"], 
             valori: [`'${this.username}'`, `'${this.nume}'`, `'${this.prenume}'`, `'${this.data_nastere}'`, `'${this.ocupatie}'`, `'${parola_cryptata}'`, `'${this.email}'`, `'${this.culoare_chat}'`, `'${token}'`, `'${this.cale_imagine}'`] }, function (err, rez) {
             if (err)
-                console.log(err);
+                console.log("eroare salvare utiliz.js", err);
             utiliz.trimiteMail("Cont nou", "Bine ai venit în comunitatea PC Components. Username-ul tău este:" + utiliz.username,
                 `<h1>Salut!</h1><p style='color:green, font-style:bold'>Bine ai venit în comunitatea PC Components. Username-ul tau este ${utiliz.username}.</p> <p><a href='http://${Utilizator.numeDomeniu}/confirmare/${utiliz.username}/${token}'>Click aici pentru confirmare</a></p>`)
         });
@@ -273,7 +273,7 @@ class Utilizator {
                     `<h1>Hello, </h1><p style='color:green, font-style:bold'> ${utiliz.username} acesta este un email pentru confirmarea stergerii contului. Va multimim pentru ca ati fost alaturi de noi!.</p>`)
             }
         });
-        console.log("utilizator utiliz", utiliz);
+        //console.log("utilizator utiliz stergere", utiliz);
     }
 
 
@@ -480,6 +480,10 @@ class Utilizator {
     areDreptul(drept) {
         return this.rol.areDreptul(drept);
     }
+
+    // areDreptuldeCurierat(drept) {
+    //     return this.rol.areDreptuldeCurierat(drept);
+    // }
 }
 
 module.exports = { Utilizator: Utilizator }

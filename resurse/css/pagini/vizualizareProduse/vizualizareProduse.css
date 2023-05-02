@@ -1,0 +1,48 @@
+main{
+    margin-top: 3%;
+}
+
+.table-responsive-lg{
+    margin-left: 2%;
+    margin-right: 2%;;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dee2e6;
+  padding: 0.5rem;
+}
+
+.table-bordered thead th{
+    color: #0d9170;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+  border-bottom-width: 1em;
+  font-weight: 1em;
+
+}
+
+.table-active {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.table-group-divider > tr:not(:last-child) {
+  border-bottom: 2em solid #dee2e6;
+}
+
+.table-responsive-lg {
+  overflow-x: auto;
+}
+
+table th, table td {
+    width: 5%;
+    text-align: center;
+  }
+
+table td img{
+    width: 80%;
+    height: auto;
+}
+  

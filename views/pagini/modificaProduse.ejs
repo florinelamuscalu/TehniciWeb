@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title>Modifica Produse</title>
+    <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
+    <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
+
+    <link rel="stylesheet" href="/resurse/css/pagini/modificaProduse/modificaProduse.css" type="text/css" />
+    <%- include("../fragmente/head") %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+    <% if(locals.produs) { %>
+        <script>
+
+            // populez inputurile din pagina de profil cu datele din tabel (incarcate prin EJS)
+            window.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("inp-numep").value = "<%= locals.produs.nume %>";
+                document.getElementById("inp-numep").readOnly = true;
+                document.getElementById("inp-desc").value = "<%= locals.produs.descriere %>";
+                document.getElementById("inp-pret").value = "<%= locals.produs.pret %>";
+                document.getElementById("inp-greutate").value = "<%= locals.produs.greutate %>";
+                document.getElementById("inp-dataF").value = "<%= locals.produs.data_fabricare %>";
+                var optiuni = document.getElementById("tip-prod").options
+                for (let opt of optiuni)
+                    if (opt.value == "<%= locals.produs.tip_produs %>")
+                        opt.selected = true;
+                var cat = document.getElementById("cat-prod").options
+                for (let opt of cat)
+                    if (opt.value == "<%= locals.produs.categorie %>")
+                        opt.selected = true;
+
+                var specificatii = "<%= locals.produs.specificatii %>";
+                specificatii = specificatii.replace(/{|}|&#34;/g, "").replace(/,/g, ", ");
+                document.getElementById("inp-specificatii").value = specificatii;
+                var desigilate = document.getElementById("inp-des").options
+                for (let opt of desigilate)
+                    if (opt.value == "<%= locals.produs.desigilate %>")
+                        opt.selected = true;
+                document.getElementById("inp-culoare").value = "<%= locals.produs.culoare %>";
+                document.getElementById("inp-dataA").value = "<%= locals.produs.data_adaugare %>";
+                document.getElementById("inp-garantie").value = "<%= locals.produs.garantie %>";
+                document.getElementById("inp-stoc").value = "<%= locals.produs.stoc %>";
+
+            });
+        </script>
+    <% } %>
+</head>
+
+<body class="dark">
+    <%- include("../fragmente/header") %>
+        <main>
+            <div class="afisaj">
+                <h1 id="titlu">Modifica produse</h1>
+                <div class="formular">
+                    <br>
+                    <p id="mesaj"><%- locals.mesaj %></p>
+                    <% if(!locals.raspuns) { %>
+
+                        <%-include("../fragmente/formular_produse", {action: "/modificaProduse" }) %>
+                            <% } %>
+
+                                <% if(locals.raspuns) { %>
+                                    <%- locals.raspuns+"<br />"%>
+                                    <% } %>
+                                        <% if(locals.err) { %>
+                                            <%- locals.err %>
+                                                <% } %>
+                </div>
+            </div>
+        </main>
+        <%- include("../fragmente/footer") %>
+</body>
+
+</html>
