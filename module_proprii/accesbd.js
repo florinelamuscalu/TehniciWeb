@@ -275,7 +275,7 @@ class AccesBD{
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
         
         let comanda=`delete from ${tabel} ${conditieWhere}`;
-        //console.log(comanda);
+        console.log(comanda);
         this.client.query(comanda,callback)
     }
 
@@ -300,7 +300,7 @@ class AccesBD{
         if(conditiiAnd.length>0)
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
         let comanda=`update ${tabel} set ${campuriActualizate.join(", ")}  ${conditieWhere}`;
-        //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111",comanda);
+        console.log("comanda update parametrizat \n",comanda);
         this.client.query(comanda,valori, callback)
     }
 

@@ -382,6 +382,8 @@ const allowedExtensions = ['.png', '.jpg', '.jpeg'];
 
 function validateFileName(fileName) {
     const lastDotIndex = fileName.lastIndexOf('.');
+    console.log("validateFileName", lastDotIndex)
+    console.log(fileName)
     const fileExtension = fileName.substr(lastDotIndex).toLowerCase();
 
     if (fileName.indexOf('%') !== -1) {
@@ -411,7 +413,7 @@ app.post("/resetare", function (req, res) {
             {
                 tabel: "utilizatori",
                 campuri: ["email"],
-                conditiiAnd: [`email = '${campuriText.email}`]
+                conditiiAnd: [`email = '${campuriText.email}'`]
 
             },
             function (err, rez) {
@@ -421,7 +423,7 @@ app.post("/resetare", function (req, res) {
                     renderError(res, 2);
                     return;
                 }
-                console.log("RESETARE", rez.rowCount);
+                console.log("RESETARE", rez.rows);
                 if (rez.rowCount == 0) {
                     //res.render("pagini/resetare", { mesaj: "Email-ul nu este corect" });
                     res.send("Email-ul nu este corect")
@@ -434,7 +436,7 @@ app.post("/resetare", function (req, res) {
                             tabel: "utilizatori",
                             campuri: ["parola"],
                             valori: [parolaCriptata],
-                            conditiiAnd: [`username = '${campuriText.username}`]
+                            conditiiAnd: [`username = '${campuriText.username}'`]
 
                         },
                         function (err, rez) {
@@ -616,7 +618,7 @@ app.post("/profil", function (req, res) {
     }
     var formular = new formidable.IncomingForm();
 
-    formular.parse(req, function (err, campuriText, campuriFile) {
+    formular.parse(req, function (err, campuriText, campuriFisier) {
 
         var parolaCriptata = Utilizator.criptareParola(campuriText.parola);
         // AccesBD.getInstanta().update(
@@ -630,8 +632,8 @@ app.post("/profil", function (req, res) {
             {
                 tabel: "utilizatori",
                 campuri: ["nume", "prenume", "email", "culoare_chat", "cale_imagine", "parola"],
-                valori: [`${campuriText.nume}`, `${campuriText.prenume}`, `${campuriText.email}`, `${campuriText.culoare_chat}`, `${campuriText.cale_imagine}`, `${campuriText.parola}`],
-                conditiiAnd: [username = campuriText.username] // parola cripatat inlocuiesti in valori si in sesiune :))
+                valori: [`${campuriText.nume}`, `${campuriText.prenume}`, `${campuriText.email}`, `${campuriText.culoare_chat}`, `${campuriText.cale_imagine}`, `${parolaCriptata}`],
+                conditiiAnd: [`username = '${campuriText.username}'`] // parola cripatat inlocuiesti in valori si in sesiune :))
 
             },
             function (err, rez) {
@@ -662,6 +664,7 @@ app.post("/profil", function (req, res) {
 
 
                 res.render("pagini/profil", { mesaj: "Update-ul s-a realizat cu succes." });
+                res.send[""]
 
             });
 
@@ -961,7 +964,7 @@ app.post("/adaugaProduse", function (req, res) {
             AccesBd.getInstanta().select({
                 tabel: "produse",
                 campuri: "nume,descriere, pret, greutate, data_fabricare, tip_produs, categorie, specificatii, desigilate, culoare, imagine, garantie, stoc".split(","),
-                conditiiAnd: [ `descriere = '${campuriText.descriere}'`, `specificatii = '${specificatii_trans}'`]
+                conditiiAnd: [`descriere = '${campuriText.descriere}'`, `specificatii = '${specificatii_trans}'`]
             },
                 function (err, rezSelectP) {
                     if (err)
@@ -1045,7 +1048,7 @@ app.post("/adaugaProduse", function (req, res) {
                         });
 
                         res.render("pagini/adaugaProduse", { raspuns: "Adaugare cu succes!" })
-                    }else{
+                    } else {
                         res.render("pagini/adaugaProduse", { raspuns: "Produsul pe care vreti sa il adaugati exista deja in baza noastra de date. Noi comapram produsul pe care vreti sa il adaugati cu produsele deja existente in baza noastra dupa descriere si specificatile!" })
                     }
                 });
@@ -1088,40 +1091,208 @@ app.get("/vizualizareProduse", function (req, res) {
 });
 
 app.get("/modificaProduse/:specificatii", function (req, res) {
-    console.log("!!!!!!!!!!!nodejs modifica prod spec", req.params.specificatii)
+    //console.log("!!!!!!!!!!!nodejs modifica prod spec", req.params.specificatii)
     const spec = decodeURIComponent(req.params.specificatii);
-    console.log("!!!spec modificare produs",spec)
+    //console.log("!!!spec modificare produs",spec)
     const utiliz = req.utilizator;
-  
-    if (obGlobal.bdMongo) {
-      obGlobal.bdMongo
-        .collection("comercianti")
-        .findOne(
-          {
-            "utilizator.username": utiliz.username,
-            "produse.specificatii": spec,
-          },
-          function (err, rez) {
-            if (err) console.log(err);
-            else {
-              //console.log("rez.rows modificaProduse index,js", rez.produse)
-              if (rez) {
-                //console.log("produs modificare produs", rez.produse);
-                res.render("pagini/modificaProduse", { produs: rez.produse});
-              } else {
-                console.log("Nu s-a gasit produsul cu specificatia specificata");
-                res.redirect("/");
-              }
-            }
-          }
-        );
-    } else {
-      console.log("Nu s-a putut conecta la baza de date");
-      res.redirect("/");
+
+    if (!req.session.utilizator) {
+        renderError(res, 403,)
+        res.render("pagini/eroare", { text: "Nu sunteti logat." });
+        return;
     }
+
+    if (obGlobal.bdMongo) {
+        obGlobal.bdMongo
+            .collection("comercianti")
+            .findOne(
+                {
+                    "utilizator.username": utiliz.username,
+                    "produse.specificatii": spec,
+                },
+                function (err, rez) {
+                    if (err) console.log(err);
+                    else {
+                        //console.log("rez.rows modificaProduse index,js", rez.produse)
+                        if (rez) {
+                            //console.log("produs modificare produs", rez.produse);
+                            res.render("pagini/modificaProduse", { produs: rez.produse });
+                        } else {
+                            console.log("Nu s-a gasit produsul cu specificatia specificata");
+                            res.redirect("/");
+                        }
+                    }
+                }
+            );
+    } else {
+        console.log("Nu s-a putut conecta la baza de date");
+        res.redirect("/");
+    }
+});
+
+
+
+app.post("/modificaProduse", function (req, res) {
+
+    const utiliz = req.utilizator
+    if (!req.session.utilizator) {
+        renderError(res, 403,)
+        res.render("pagini/eroare", { text: "Nu sunteti logat." });
+        return;
+    }
+
+
+    var formular = new formidable.IncomingForm();
+
+    formular.parse(req,  async function (err, campuriText, campuriFile) {
+
+        var specificatii_trans = transformaSirSpecificatii(campuriText.specificatii)
+
+        var imagine
+        //console.log("!!!!!!!!!!!!!!!!!!!!imagine", campuriFile.imagine.originalFilename)
+        if (campuriFile.imagine.originalFilename) {
+            var imagine = campuriFile.imagine.originalFilename
+            //console.log("!!!!!!!!!!!!!!img!!!!!!!!!!!!!!", imagine)
+            if (!validateFileName(imagine))
+                res.send("Extensia imaginii nu este buna")
+        } else {
+            console.log("a ajuns pe else")
+            var img = await AccesBd.getInstanta().selectAsync({
+                tabel: "produse",
+                campuri: "imagine".split(","),
+                conditiiAnd: [`specificatii = '${specificatii_trans}'`]
+            },
+                function (err, rez) {
+                    if (rez.rowCount > 0) {
+                        //console.log("rez.rows modificaProdus", rez.rows[0].imagine)
+                        //imagine = rez.rows[0].imagine
+                        //console.log("!!!!!!!!!!!!!!", imagine)
+                    } else {
+                        res.send("Produslul pe care il cautati nu e in baza noastra de date")
+                    }
+
+                    //console.log("a trecut de if", imagine)
+
+                });
+           // console.log("a trecut de select")
+           imagine =img.rows[0].imagine
+        }
+        
+        console.log("img update",imagine)
+        AccesBd.getInstanta().updateParametrizat(
+            {
+                tabel: "produse",
+                campuri: ["descriere", "pret", "greutate", "data_fabricare", "tip_produs", "categorie", "specificatii", "desigilate", "culoare", "imagine", "garantie", "stoc"],
+                valori: [`${campuriText.descriere}`, `${campuriText.pret}`, `${campuriText.greutate}`, `${campuriText.data_fabricare}`, `${campuriText.tip_produs}`,
+                `${campuriText.categorie}`, `${specificatii_trans}`, `${campuriText.desigilate}`, `${campuriText.culoare}`, `${imagine}`, `${campuriText.garantie}`, `${campuriText.stoc}`],
+                conditiiAnd: [`specificatii = '${specificatii_trans}'`]
+
+            },
+            function (err, rez) {
+                if (err) {
+                    console.log(err);
+                    renderError(res, 2);
+                    return;
+                } else {
+                    //console.log("update modificaProduse", rez.rowCount);
+                    if (rez.rowCount == 0) {
+                        //res.render("pagini/vizualizareProduse", { mesaj: "Update-ul nu s-a realizat." });
+                        res.send("Update-ul nu s-a realizat")
+                        return;
+                    } else {
+                        if (obGlobal.bdMongo) {
+                            obGlobal.bdMongo
+                                .collection("comercianti")
+                                .updateOne(
+                                    {
+                                        "utilizator.username": utiliz.username,
+                                        "produse.specificatii": specificatii_trans,
+                                    },
+                                    {
+                                        $set: {
+                                            "produse.descriere": campuriText.descriere,
+                                            "produse.pret": campuriText.pret,
+                                            "produse.greutate": campuriText.greutate,
+                                            "produse.data_fabricare": campuriText.data_fabricare,
+                                            "produse.tip_produs": campuriText.tip_produs,
+                                            "produse.categorie": campuriText.categorie,
+                                            "produse.specificatii": specificatii_trans,
+                                            "produse.desigilate": campuriText.desigilate,
+                                            "produse.culoare": campuriText.culoare,
+                                            "produse.imagine": imagine,
+                                            "produse.garantie": campuriText.garantie,
+                                            "produse.stoc": campuriText.stoc
+                                        }
+                                    },
+                                    function (err, rez) {
+                                        if (err) console.log("eorare update mongo db", err);
+                                        else {
+                                            console.log("Documentul a fost actualizat cu succes!");
+                                            console.log(rez);
+                                            //res.render("pagini/vizualizareProduse", { mesaj: "Update-ul s-a realizat." });
+                                            res.send("Update-ul s-a realizat")
+                                        }
+                                    }
+                                );
+                        } else {
+                            console.log("Nu s-a putut conecta la baza de date");
+                            res.redirect("/");
+                        }
+                    }
+                }
+
+
+            });
+    });
+});
+
+app.delete("/stergeProduse/:spec", (req, res) => {
+    const specificatii = decodeURIComponent(req.params.spec);
+    console.log("sterge produse spec", specificatii)
+    const utiliz = req.utilizator
+    AccesBd.getInstanta().delete({
+      tabel: "produse",
+      conditiiAnd: [`specificatii = '${specificatii}'`]
+    },
+    function (err, rez) {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "A avut loc o eroare" });
+      }
+      if (rez.rowCount > 0) {
+
+        if (obGlobal.bdMongo) {
+            obGlobal.bdMongo
+                .collection("comercianti")
+                .deleteOne(
+                    {
+                        "utilizator.username": utiliz.username,
+                        "produse.specificatii": specificatii,
+                    },
+                    function (err, rez) {
+                        if (err) console.log("eroare stergere document din baza de date", err);
+                        else {
+                            console.log("Documentul a fost sters cu succes!");
+                            console.log(rez);
+                            //res.send("Stergerea s-a realizat");
+                        }
+                    }
+                );
+        } else {
+            console.log("Nu s-a putut conecta la baza de date");
+            //res.send("Nu s-a putut conecta la baza de date")
+        }
+
+        res.status(200).json({ message: "Produsul a fost sters cu succes" });
+        
+      } else {
+        res.status(404).json({ message: "Produsul nu a fost gasit" });
+      }
+    });
+
   });
   
-  
+
 
 /////////////////////////////////////////////// FAVORITE
 
@@ -1375,9 +1546,9 @@ app.get("/comenzi", function (req, res) {
             function (err, rez) {
                 if (err)
                     console.log(err)
-                if (rez.rowCount > 0) {
-                    res.render("pagini/comenzi", { comenzi: rez.rows })
-                    console.log("get comenzi", rez.rows)
+                if (rez.length > 0) {
+                    res.render("pagini/comenzi", { comenzi: rez })
+                    console.log("get comenzi", rez)
                 }
             })
     }

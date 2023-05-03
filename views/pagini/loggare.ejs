@@ -16,6 +16,15 @@
 <body class="dark">
     <%- include("../fragmente/header") %>
     <main>
+        <div id="mesaj">
+            <p id="mesaj"><%- locals.mesaj %></p>  
+                <% if(locals.raspuns) { %>
+                    <%- locals.raspuns+"<br />"%>
+                <% } %>
+                <% if(locals.err) { %>
+                    <%- locals.err %>
+                <% } %>  
+        </div>
         <div id="loggare">
             <% if(!locals.utilizator) { %>
                 <form id="form_inreg"  method="post" class="date"  action="/login"  enctype="multipart/form-data">

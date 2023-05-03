@@ -23,7 +23,7 @@
                 <p id="mesaj"><%- locals.mesaj %></p>  
                 <% if(!locals.raspuns) { %>
                     <%- include("../fragmente/formula_reset", {action: "/resetare" }) %>
-                        <% } %>
+                <% } %>
                 <% if(locals.raspuns) { %>
                     <%- locals.raspuns+"<br />"%>
                 <% } %>

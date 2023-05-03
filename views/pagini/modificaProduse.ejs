@@ -39,6 +39,7 @@
                         opt.selected = true;
                 document.getElementById("inp-culoare").value = "<%= locals.produs.culoare %>";
                 document.getElementById("inp-dataA").value = "<%= locals.produs.data_adaugare %>";
+                document.getElementById("inp-dataA").readOnly = true;
                 document.getElementById("inp-garantie").value = "<%= locals.produs.garantie %>";
                 document.getElementById("inp-stoc").value = "<%= locals.produs.stoc %>";
 
@@ -56,9 +57,8 @@
                     <br>
                     <p id="mesaj"><%- locals.mesaj %></p>
                     <% if(!locals.raspuns) { %>
-
-                        <%-include("../fragmente/formular_produse", {action: "/modificaProduse" }) %>
-                            <% } %>
+                        <%- include("../fragmente/formular_produse", {action: "/modificaProduse"}) %>
+                    <% } %>
 
                                 <% if(locals.raspuns) { %>
                                     <%- locals.raspuns+"<br />"%>
