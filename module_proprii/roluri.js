@@ -88,6 +88,7 @@ class RolComerciant extends Rol{
         Drepturi.adaugaProduse,
         Drepturi.stergeProduse,
         Drepturi.modificaProduse,
+        Drepturi.cumparareProduse,
     ] }
     
     constructor (){

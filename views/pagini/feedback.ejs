@@ -7,7 +7,7 @@
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
     
     <link rel="stylesheet" type="text/css" href="/resurse/css/pagini/feedback/feedback.css" />
-    <!-- <script type="text/javascript" src="/resurse/js/bootstrap.js"></script> -->
+    <script type="text/javascript" src="/resurse/js/feedback.js"></script>
 
     <%-include("../fragmente/head")%>
 </head>
@@ -17,85 +17,105 @@
 
         <main>
 
-            <form method="post" action="/feedback" enctype="multipart/form-data">
-				<label>Review-ul dumneavoastră:<br /><br>
-					<textarea class="form-control form-control-lg" cols="30" rows="5" name="mesaj"
-						placeholder="Cum ti se pare produsul?"></textarea>
-				</label><br />
-				<label>Adăugați o imagine: <br />
-					<input type="file" name="imagine" class="form-control-file" multiple accept="image/*">
-				</label><br />
-				<input type="submit" class="btn btn-outline-primary btn-lg" value="Trimite!">
-	            <input type="hidden" name="form_submitted" value="1">
-			</form>
+            <form method="post" action="?" enctype="multipart/form-data">
+                <label>Review-ul dumneavoastră:<br /><br>
+                  <textarea class="form-control form-control-lg" cols="30" rows="5" name="mesaj" placeholder="Cum ti se pare produsul?"></textarea>
+                </label><br />
+                <label>Adăugați o imagine: <br />
+                  <input type="file" name="imagine" class="form-control-file" multiple accept="image/*">
+                </label><br />
+                <button type="button" class="btn btn-outline-primary btn-lg" onclick="submitForm()">Trimite!</button>
+                <input type="hidden" name="form_submitted" value="1">
+              </form>
+              
 
 
             <section> <br>
 				<h2>Mesaje:</h2>
 				<div id="mesaje">
-                    <% if (locals.mesaje) {
+                    <% if (locals.mesaje ) {
                         var mesajeSort=locals.mesaje.sort(function(a,b) {return (new Date(b.attributes.data)).getTime()-(new Date(a.attributes.data)).getTime()})
                         for (let msg of mesajeSort) { 
                             let dt=new Date(msg.attributes.data);
-                            if( msg.attributes.username.includes("admin")){ %>
-                                <article class="mesaj-c" style="background-color: rgb(180, 230, 180)">
-                                    <h3><span class="username"><%= msg.attributes.username %></span> spune:</h3>
-                                    <% if (msg.elements) { %>
-                                        <p><%= msg.elements[0].text %></p>
-                                    <% } %>
-                                    <div class="img_feedback">
-                                        <% if (msg.attributes.cale_imagine) {
-                                            var cale_imagine_array = msg.attributes.cale_imagine.split(','); // Obține un array de cale_imagine separate prin virgulă
-                                            if (cale_imagine_array.length > 0) { // Verifică dacă array-ul conține elemente
-                                                cale_imagine_array.forEach(function(cale) { %>
+                            if(msg.attributes.id == locals.id) {
+                                if( msg.attributes.username.includes("admin")){ %>
+                                    <article class="mesaj-c" style="background-color: rgb(180, 230, 180)">
+                                        <h3><span class="username"><%= msg.attributes.username %></span> spune:</h3>
+                                        <% if (msg.elements) { %>
+                                            <p><%= msg.elements[0].text %></p>
+                                        <% } %>
+                                        <div class="img_feedback">
+                                            <% if (msg.attributes.cale_imagine) {
+                                                if (msg.attributes.cale_imagine.split(',').length >= 2){ 
+                                                    var cale_imagine_array = msg.attributes.cale_imagine.split(','); 
+                                                    if (cale_imagine_array.length > 0) { 
+                                                        cale_imagine_array.forEach(function(cale) { %>
+                                                            <div class="img-container">
+                                                                <%img = "../../" + cale 
+                                                                console.log(img)%>
+                                                                <img  src="<%= img %>" alt="img">
+                                                            </div>
+                                                        <% });
+                                                    }
+                                                }else{ %>
                                                     <div class="img-container">
-                                                        <img  src="<%= cale %>" alt="img">
+                                                        <%img = "../../" +  msg.attributes.cale_imagine%>
+                                                        <img  src="<%= img %>" alt="img">
                                                     </div>
-                                                <% });
-                                            }
-                                        } %>
-                                    </div>
-                                    <p><small><time datetime="<%= dt.getUTCDate() %>"><%= dt.toLocaleString('ro-RO', {
-                                                                weekday: 'long', 
-                                                                day: 'numeric',
-                                                                year: 'numeric', 
-                                                                month: 'long', 
-                                                                hour: 'numeric',
-                                                                minute: 'numeric', 
-                                                                second: 'numeric',
-                                                            }) %></time></small>
-                                    </p>
-                                </article>
-                            <% } else { %>
-                                <article class="mesaj-c" style="background-color: rgb(167, 212, 197)">
-                                    <h3><span class="username"><%= msg.attributes.username%></span> spune:</h3>
-                                    <% if (msg.elements) { %>
-                                        <p><%= msg.elements[0].text %></p>
-                                    <% } %>
-                                    <div class="img_feedback">
-                                        <% if (msg.attributes.cale_imagine) {
-                                            var cale_imagine_array = msg.attributes.cale_imagine.split(','); // Obține un array de cale_imagine separate prin virgulă
-                                            if (cale_imagine_array.length > 0) { // Verifică dacă array-ul conține elemente
-                                                cale_imagine_array.forEach(function(cale) { %>
+                                               <% }
+                                            } %>
+                                        </div>
+                                        <p><small><time datetime="<%= dt.getUTCDate() %>"><%= dt.toLocaleString('ro-RO', {
+                                                                    weekday: 'long', 
+                                                                    day: 'numeric',
+                                                                    year: 'numeric', 
+                                                                    month: 'long', 
+                                                                    hour: 'numeric',
+                                                                    minute: 'numeric', 
+                                                                    second: 'numeric',
+                                                                }) %></time></small>
+                                        </p>
+                                    </article>
+                                <% } else { %>
+                                    <article class="mesaj-c" style="background-color: rgb(167, 212, 197)">
+                                        <h3><span class="username"><%= msg.attributes.username%></span> spune:</h3>
+                                        <% if (msg.elements) { %>
+                                            <p><%= msg.elements[0].text %></p>
+                                        <% } %>
+                                        <div class="img_feedback">
+                                            <% if (msg.attributes.cale_imagine) {
+                                                if (msg.attributes.cale_imagine.split(',').length >= 2){ 
+                                                    var cale_imagine_array = msg.attributes.cale_imagine.split(', '); 
+                                                    if (cale_imagine_array.length > 0) { 
+                                                        cale_imagine_array.forEach(function(cale) { %>
+                                                            <div class="img-container">
+                                                                <%img = "../../" + cale
+                                                                console.log(img)%>
+                                                                <img  src="<%= img %>" alt="img">
+                                                            </div>
+                                                        <% });
+                                                    }
+                                                }else{ %>
                                                     <div class="img-container">
-                                                        <img  src="<%= cale %>" alt="img">
+                                                        <%img = "../../" +  msg.attributes.cale_imagine%>
+                                                        <img  src="<%= img %>" alt="img">
                                                     </div>
-                                                <% });
-                                            }
-                                        } %>
-                                    </div>
-                                    <p><small><time datetime="<%= dt.getUTCDate() %>"><%= dt.toLocaleString('ro-RO', {
-                                                                weekday: 'long', 
-                                                                day: 'numeric',
-                                                                year: 'numeric', 
-                                                                month: 'long', 
-                                                                hour: 'numeric',
-                                                                minute: 'numeric', 
-                                                                second: 'numeric',
-                                                            }) %></time></small>
-                                    </p>
-                                </article>
-                            <% }  %>
+                                               <% }
+                                            } %>
+                                        </div>
+                                        <p><small><time datetime="<%= dt.getUTCDate() %>"><%= dt.toLocaleString('ro-RO', {
+                                                                    weekday: 'long', 
+                                                                    day: 'numeric',
+                                                                    year: 'numeric', 
+                                                                    month: 'long', 
+                                                                    hour: 'numeric',
+                                                                    minute: 'numeric', 
+                                                                    second: 'numeric',
+                                                                }) %></time></small>
+                                        </p>
+                                    </article>
+                                <% }  %>
+                            <%}%>
                         <% } %>
                     <% } %>
 				</div>

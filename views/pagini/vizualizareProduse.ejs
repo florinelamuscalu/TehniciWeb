@@ -17,15 +17,8 @@
 <body class="dark">
     <%- include("../fragmente/header") %>
         <main>
-          <div class="mesaj">
+          <h1 id="titluVizPage">Vizualizare Produse</h1>
             <br>
-            <p id="mesaj"><%- locals.mesaj %></p>
-              <% if(locals.raspuns) { %>
-                  <%- locals.raspuns+"<br />"%>
-              <% } %>
-              <% if(locals.err) { %>
-                  <%- locals.err %>
-              <% } %>
             <section class="tabel produse">
                 <div class="table-responsive-lg">
                   <table class="table table-bordered">

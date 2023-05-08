@@ -45,7 +45,7 @@ ul.meniu {
   margin-left: 10%;
   margin-bottom: 0;
   margin-top: 0;
-  z-index: 100000000;
+  z-index: 100000000000000000;
 }
 ul.meniu a {
   color: var(--color-text);
@@ -153,6 +153,10 @@ ul.meniu > li:hover::before {
 
 #hamburger, #ch-menu {
   display: none;
+}
+
+#nav-titlu {
+  text-align: var(--text-align);
 }
 
 /*# sourceMappingURL=nav2.css.map */

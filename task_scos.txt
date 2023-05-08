@@ -1,5 +1,12 @@
 INDEX.ejs
 
+<% if (locals.utilizator.cale_imagine) { %>
+    <img src="/<%- locals.utilizator.cale_imagine %>" alt="" id="hello-img"/>
+<% } else { %>
+    <img src="../../resurse/imagini/user/user.png" alt="" id="hello-img" />
+<% } %>
+
+
 <!-- <div id="promo">
 <a href="promotii" target="_self">
     <figure style="width: 65%">

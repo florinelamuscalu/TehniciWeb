@@ -404,6 +404,10 @@ function validateFileName(fileName) {
 }
 
 
+app.get("/resetare", function(req, res){
+    res.render("pagini/resetare")
+})
+
 app.post("/resetare", function (req, res) {
     var formular = new formidable.IncomingForm()
     formular.parse(req, function (err, campuriText, campuriFisier) {
@@ -1432,11 +1436,9 @@ async function genereazaPdf(stringHTML, numeFis, callback) {
         callback(numeFis);
 }
 
-function* numarComanda() {
-    let counter = 1;
-    while (true) {
-        yield counter++;
-    }
+function numarComanda() {
+    const randomNumber = Math.floor(Math.random() * Math.pow(10, 8));
+    return randomNumber.toString().padStart(8, '0');
 }
 
 
@@ -1507,8 +1509,7 @@ app.post("/cumpara", function (req, res) {
                 }
 
                 //comnezi
-                comanda = numarComanda();
-                numarComanda = comanda.next().value;
+                numarComanda = numarComanda();
                 let jsonComenzi = {
                     numarComanda: numarComanda,
                     statusComanda: 0,
@@ -1554,6 +1555,32 @@ app.get("/comenzi", function (req, res) {
     }
 
 })
+
+app.post("/modificaStatus", function (req, res) {
+    if (obGlobal.bdMongo) {
+        const status = req.body.data
+        const numarComanda = req.body.numarComanda
+        console.log("status", status)
+        console.log("nrc", numarComanda)
+
+        obGlobal.bdMongo.collection("comenzi").updateOne(
+            { numarComanda: numarComanda },
+            { $set: { statusComanda: status } },
+            function (err, rez) {
+                if (err){
+                    console.log(err)
+                    res.sendStatus(204)
+                }
+                else {
+                    console.log("post comenzi", rez)
+                    res.sendStatus(201);
+                }
+            })
+    }
+})
+
+
+
 
 
 app.get("/grafice", function (req, res) {
@@ -1634,26 +1661,7 @@ app.get("/feedback/:id", function (req, res) {
     let obJson, elementMesaje, mesajeXml;
     [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
 
-    AccesBd.getInstanta().select({
-        tabel: "produse",
-        campuri: "id".split(","),
-        conditiiAnd: [`id = ${req.params.id}`]
-    }, function (err, rez) {
-        if (!err) {
-            if (rez.rows.length > 0) {
-                // Exista produsul in baza de date
-                res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: mesajeXml, produse: rez.rows, id: req.params.id });
-            } else {
-                // Nu exista produsul in baza de date
-                res.send("Nu avem niciun produs la care vreti sa daugati review");
-            }
-        } else {
-            console.error('Eroare la selectarea produselor la feedback: ', err);
-            res.send("A intervenit o eroare la selectarea produselor la feedback");
-        }
-    });
-
-    // res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: mesajeXml })
+    res.render("pagini/feedback", { mesaje: mesajeXml, id: req.params.id });
 });
 
 const storage = multer.diskStorage({
@@ -1677,7 +1685,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.post("/feedback", upload.array('imagine'), function (req, res) {
+app.post("/feedback/:id", upload.array('imagine'), function (req, res) {
     let obJson, elementMesaje, mesajeXml;
 
     [obJson, elementMesaje, mesajeXml] = parseazaMesaje();
@@ -1694,13 +1702,15 @@ app.post("/feedback", upload.array('imagine'), function (req, res) {
         caleImagini = caleImagini.slice(0, -2); // Eliminăm ultimul ", " din caleImagini
     }
 
+    // adauga id-produs
     let mesajNou = {
         type: "element",
         name: "mesaj",
         attributes: {
             username: u,
             data: new Date(),
-            cale_imagine: caleImagini, // Adăugăm calea imaginii ca atribut în elementul "mesaj"
+            cale_imagine: caleImagini, 
+            id: req.params.id,
         },
         elements: [{ type: "text", "text": req.body.mesaj }]
     };
@@ -1712,7 +1722,7 @@ app.post("/feedback", upload.array('imagine'), function (req, res) {
     let sirXml = xmljs.js2xml(obJson, { compact: false, spaces: 4 });
     fs.writeFileSync(caleXMLMesaje, sirXml); // Salvăm XML-ul actualizat în fișier
     console.log(sirXml)
-    res.render("pagini/feedback", { utilizator: req.session.utilizator, mesaje: elementMesaje.elements })
+    res.render("pagini/feedback", { mesaj: "Am adaugat un nou feedback" })
 });
 
 
