@@ -19,6 +19,9 @@
         <main>
           <h1 id="titluVizPage">Vizualizare Produse</h1>
             <br>
+            <div id="adaugaProduse">
+              <a href="/adaugaProduse" class="btn btn-primary">Adauga un produs</a>
+            </div>
             <section class="tabel produse">
                 <div class="table-responsive-lg">
                   <table class="table table-bordered">
@@ -39,7 +42,6 @@
                         <th scope="col">Data adaugare</th>
                         <th scope="col">Garantie</th>
                         <th scope="col">Stoc</th>
-                        <th scope="col">Adaugare produse</th>
                         <th scope="col">Modificare produse</th>
                         <th scope="col">Stergere produse</th>
                       </tr>
@@ -79,7 +81,6 @@
                             <td><%= produs.data_adaugare %></td>
                             <td><%= produs.garantie %></td>
                             <td><%= produs.stoc %></td>
-                            <td><a href="/adaugaProduse" class="btn btn-primary">Adaugare</a></td>
                             <td><a href="/modificaProduse/<%- encodeURIComponent(produs.specificatii) %>" class="btn btn-primary">Modificare</a></td>
                             <td><button onclick="stergeProdus('<%= encodeURIComponent(produs.specificatii) %>')" class="btn btn-danger">Stergere</button></td>
                           </tr>

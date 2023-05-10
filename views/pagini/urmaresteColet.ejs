@@ -7,6 +7,9 @@
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
     <link rel="stylesheet" href="resurse/css/pagini/urmaresteColet/style.css" type="text/css">
+    
+    <script type="text/javascript" src="/resurse/js/urmaresteColet.js"></script>
+    
     <%- include("../fragmente/head.ejs") %>
 </head>
 
@@ -15,13 +18,6 @@
         <%- include("../fragmente/header.ejs") %>
             <div id="main">
                 <div id="imag">
-                    <!-- <figure style="width: 65%">
-                <picture>
-                    <source srcset="resurse/imagini/urmaresteColet/trackpackage_tel.png" media="(max-width: 450px)">
-                    <source srcset="resurse/imagini/urmaresteColet/trackpackage_tableta.png" media="(max-width: 800px)">
-                    <img src="resurse/imagini/urmaresteColet/trackpackage.png" alt="promo" style="width:100%">
-                </picture>
-            </figure> -->
                 </div>
                 <div id="div_tabel">
                     <table id="tabel">
@@ -29,34 +25,53 @@
                         <thead>
                             <tr>
                                 <th>Nr comanda</th>
-                                <th>Pregatire</th>
                                 <th>Ambalare</th>
                                 <th>Plecare din depozit</th>
                                 <th>Destinatia finala</th>
+                                <th>Anulare comanda </th>
+                                <th>Retur comada </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                                <td>&nbsp</td>
-                            </tr>
+                            <%if(locals?.utilizator){%>
+                                    <% comenzi.forEach(function(comanda) { %>
+                                        <%if(locals.utilizator.username == comanda.username){%>
+                                        <tr>
+                                            <td><%= comanda.numarComanda %></td>
+                                            <td><%= comanda.statusComanda === 1 ? 'X' : '' %></td>
+                                            <td><%= comanda.statusComanda === 2 ? 'X' : '' %></td>
+                                            <td><%= comanda.statusComanda === 3 ? 'X' : '' %></td>
+                                            <td>
+                                                <% if (comanda.statusComanda >= 1 && comanda.statusComanda < 3 ) { %>
+                                                    <button class="buttonC" onclick="urmaresteColet('<%= comanda.numarComanda %>')">Anulare</button>
+                                                    <%console.log("am apsat")%>
+                                                    <% } %>
+                                            </td>
+                                            <td>
+                                                <% if (comanda.statusComanda === 3) { %>
+                                                    <button class="buttonC" onclick="urmaresteColet('<%= comanda.numarComanda %>')">Retur</button>
+                                                <% } %>
+                                            </td>
+                                        </tr>
+                                    <%}else{%>
+                                        <tr>
+                                            <td>&nbsp</td>
+                                            <td>&nbsp</td>
+                                            <td>&nbsp</td>
+                                            <td>&nbsp</td>
+                                        </tr>
+                                <%}%>
+                                <% }); %>
+                            <%}else{%>
+                                <tr>
+                                    <td>&nbsp</td>
+                                    <td>&nbsp</td>
+                                    <td>&nbsp</td>
+                                    <td>&nbsp</td>
+                                    <td>&nbsp</td>
+                                    <td>&nbsp</td>
+                                </tr>
+                            <%}%>
                         </tbody>
                     </table>
                 </div>

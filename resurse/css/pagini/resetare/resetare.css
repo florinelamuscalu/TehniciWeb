@@ -1,0 +1,16 @@
+.afisaj{
+    height: 100%;
+    margin-top: 2%;
+    margin-left: 3%;
+}
+
+.formular{
+    margin-top: 2%;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
+.formular label{
+    width: 100%;
+    height: auto;
+}

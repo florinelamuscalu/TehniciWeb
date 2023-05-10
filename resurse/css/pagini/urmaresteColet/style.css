@@ -35,7 +35,7 @@ body {
 }
 
 #div_tabel{
-    margin-top: 2%;
+    margin-top: 4%;
 }
 
 
@@ -60,6 +60,8 @@ body {
 
 #tabel td {
     box-sizing: border-box;
+    color: white;
+    height: auto;
 }
 
 #tabel thead {
@@ -75,7 +77,18 @@ body {
     padding: 0;
     margin: 0;
     background-color: var(--culoare-background);
+  
 }
+
+.buttonC {
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+  }
+  
 
 @media screen and (max-width: 800px) {
 

@@ -412,12 +412,12 @@ app.post("/resetare", function (req, res) {
     var formular = new formidable.IncomingForm()
     formular.parse(req, function (err, campuriText, campuriFisier) {
         var parolaCriptata = Utilizator.criptareParola(campuriText.parola);
-        console.log("campuri resetare", campuriText.email, campuriText.username)
+        //console.log("campuri resetare", campuriText.email, campuriText.username)
         AccesBd.getInstanta().select(
             {
                 tabel: "utilizatori",
-                campuri: ["email"],
-                conditiiAnd: [`email = '${campuriText.email}'`]
+                campuri: ["*"],
+                conditiiAnd: [`username = '${campuriText.username}'`]
 
             },
             function (err, rez) {
@@ -429,9 +429,7 @@ app.post("/resetare", function (req, res) {
                 }
                 console.log("RESETARE", rez.rows);
                 if (rez.rowCount == 0) {
-                    //res.render("pagini/resetare", { mesaj: "Email-ul nu este corect" });
                     res.send("Email-ul nu este corect")
-                    //console.log("a ajuns aici !!!")
                     return;
                 }
                 else {
@@ -443,27 +441,31 @@ app.post("/resetare", function (req, res) {
                             conditiiAnd: [`username = '${campuriText.username}'`]
 
                         },
-                        function (err, rez) {
-                            console.log("rez", rez);
+                        function (err, rezUpdate) {
+                            //console.log("rez", rezUpdate);
                             if (err) {
-                                console.log("error", err);
+                                console.log("error Update", err);
                                 renderError(res, 2);
                                 return;
                             }
                             //console.log(rez.rowCount);
-                            if (rez.rowCount == 0) {
-                                res.render("pagini/resetare", { mesaj: "Resetarea nu s-a realizat" });
+                            if (rezUpdate.rowCount == 0) {
+                                res.send("Resetarea nu s-a realizat");
                                 return;
                             }
                             else {
-                                // req.session.utilizator.parola = parolaCriptata;
-                                // res.locals.utilizator = req.session.utilizator;
-                                res.render("pagini/loggare", { mesaj: "Resetarea s-a realizat cu succes." });
-                                Utilizator.trimiteMail("V-ati schimbat parola de la cont", mesajText, mesajHTML, [{
+                                
+                                res.send("Resetarea s-a realizat cu succes." );
+                                u = new Utilizator(rez.rows[0])
+                                //console.log("new urilizator", u)
+                                mesajText = `Hello ${campuriText.username} se pare ca ti-ai resetat prola`;
+                                mesajHTML = `<h2>Hello ${campuriText.username},</h2> se pare ca ti-ai resetat parola`;
+                                u.trimiteMail("V-ati schimbat parola de la cont", mesajText, mesajHTML, [{
                                     filename: "",
                                     content: ""
                                 }])
                             }
+                          
 
                         });
                 }
@@ -472,40 +474,7 @@ app.post("/resetare", function (req, res) {
     });
 });
 
-// app.post("/resetareParola", function (req, res) {
-//     var formular = new formidable.IncomingForm()
-//     formular.parse(req, function (err, campuriText, campuriFisier) {
-//         var parolaCriptata = Utilizator.criptareParola(campuriText.parola);
-//         console.log('campuri resetare username',campuriText.username)
-//         AccesBd.getInstanta().update(
-//             {
-//                 tabel: "utilizatori",
-//                 campuri: ["parola"],
-//                 valori: [parolaCriptata],
-//                 conditiiAnd: [`username = '${campuriText.username}'`]
 
-//             },
-//             function (err, rez) {
-//                 console.log("rez", rez);
-//                 if (err) {
-//                     console.log("error", err);
-//                     renderError(res, 2);
-//                     return;
-//                 }
-//                 //console.log(rez.rowCount);
-//                 if (rez.rowCount == 0) {
-//                     res.render("pagini/resetare", { mesaj: "Resetarea nu s-a realizat" });
-//                     return;
-//                 }
-//                 else {
-//                     // req.session.utilizator.parola = parolaCriptata;
-//                     // res.locals.utilizator = req.session.utilizator;
-//                     res.render("pagini/loggare", { mesaj: "Resetarea s-a realizat cu succes." });
-//                 }
-
-//             });
-//     });
-// });
 
 function generateUsernameSuggestion(username) {
     // Adaugam un numar la sfarsitul username-ului existent
@@ -1436,7 +1405,7 @@ async function genereazaPdf(stringHTML, numeFis, callback) {
         callback(numeFis);
 }
 
-function numarComanda() {
+function randomnumarComanda() {
     const randomNumber = Math.floor(Math.random() * Math.pow(10, 8));
     return randomNumber.toString().padStart(8, '0');
 }
@@ -1509,7 +1478,7 @@ app.post("/cumpara", function (req, res) {
                 }
 
                 //comnezi
-                numarComanda = numarComanda();
+                numarComanda = randomnumarComanda();
                 let jsonComenzi = {
                     numarComanda: numarComanda,
                     statusComanda: 0,
@@ -1543,18 +1512,24 @@ app.post("/cumpara", function (req, res) {
 
 app.get("/comenzi", function (req, res) {
     if (obGlobal.bdMongo) {
-        obGlobal.bdMongo.collection("comenzi").find({}).toArray(
-            function (err, rez) {
-                if (err)
-                    console.log(err)
-                if (rez.length > 0) {
-                    res.render("pagini/comenzi", { comenzi: rez })
-                    console.log("get comenzi", rez)
-                }
-            })
+      obGlobal.bdMongo.collection("comenzi").find({}).toArray(
+        function (err, rez) {
+          if (err)
+            console.log(err)
+          if (rez.length > 0) {
+            // filtrăm comenzi cu statusul 3 și le ștergem
+            obGlobal.bdMongo.collection("comenzi").deleteMany({ statusComanda: "3" }, function (err, result) {
+              if (err)
+                console.log(err)
+              console.log("Removed " + result.deletedCount + " documents with statusComanda = 3");
+            });
+            res.render("pagini/comenzi", { comenzi: rez })
+            console.log("get comenzi", rez)
+          }
+        })
     }
+  })
 
-})
 
 app.post("/modificaStatus", function (req, res) {
     if (obGlobal.bdMongo) {
@@ -1579,8 +1554,49 @@ app.post("/modificaStatus", function (req, res) {
     }
 })
 
+//////////////////////////////////// urmareste colet ///////////////////////////////////////
 
+app.get("/urmaresteColet", function (req, res) {
+    if (obGlobal.bdMongo) {
+        obGlobal.bdMongo.collection("comenzi").find({}).toArray(
+            function (err, rez) {
+                if (err)
+                    console.log(err)
+                if (rez.length > 0) {
+                    res.render("pagini/urmaresteColet", { comenzi: rez })
+                    //console.log("get urmareste colet", rez)
+                }
+            })
+    }
+})
 
+app.delete("/urmaresteColet/:numarComanda", (req, res) => {
+    var numarComanda = req.params.numarComanda
+
+        if (obGlobal.bdMongo) {
+            obGlobal.bdMongo
+                .collection("comenzi")
+                .deleteOne(
+                    {
+                        "comenzi.numarComanda": numarComanda,
+                    },
+                    function (err, rez) {
+                        if (err) console.log("eroare stergere document din baza de date", err);
+                        else {
+                            console.log("Documentul a fost sters cu succes!");
+                            console.log(rez);
+                            res.send("200");
+                        }
+                    }
+                );
+        } else {
+            console.log("Nu s-a putut conecta la baza de date");
+            res.send("500")
+        }
+
+});
+
+//////////////////////////////////////////grafice ///////////////////////////////////
 
 
 app.get("/grafice", function (req, res) {

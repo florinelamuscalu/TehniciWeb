@@ -8,7 +8,7 @@
 
 
     <script type="text/javascript" src="/resurse/js/inregistrare.js"></script>
-    <link rel="stylesheet" href="/resurse/css/pagini/inregistrare/inregistrare.css" type="text/css" />
+    <link rel="stylesheet" href="/resurse/css/pagini/resetare/resetare.css" type="text/css" />
 
     <%- include("../fragmente/head") %>
 </head>
@@ -19,17 +19,19 @@
             <div class="afisaj">
                 <h1 id="titlu">Resetare parola</h1>
                 <br>
-                <p> Introduceti datele dumneavoastra</p><br>
-                <p id="mesaj"><%- locals.mesaj %></p>  
-                <% if(!locals.raspuns) { %>
-                    <%- include("../fragmente/formula_reset", {action: "/resetare" }) %>
-                <% } %>
-                <% if(locals.raspuns) { %>
-                    <%- locals.raspuns+"<br />"%>
-                <% } %>
-                <% if(locals.err) { %>
-                    <%- locals.err %>
-                <% } %>  
+                <div class="formular">
+                    <p> Introduceti datele dumneavoastra</p>
+                    <p id="mesaj"><%- locals.mesaj %></p>  
+                    <% if(!locals.raspuns) { %>
+                        <%- include("../fragmente/formular_reset", {action: "/resetare" }) %>
+                    <% } %>
+                    <% if(locals.raspuns) { %>
+                        <%- locals.raspuns+"<br />"%>
+                    <% } %>
+                    <% if(locals.err) { %>
+                        <%- locals.err %>
+                    <% } %> 
+                </div> 
             </div>
         </main>
     <%- include("../fragmente/footer") %>

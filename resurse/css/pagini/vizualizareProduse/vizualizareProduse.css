@@ -2,6 +2,15 @@ main{
     margin-top: 3%;
 }
 
+#adaugaProduse{
+  margin-left: 2%;
+  margin-bottom: 1%;
+}
+
+#adaugaProduse a{
+  font-size: 1.2em;
+}
+
 #titluVizPage{
   margin-left: 2%;
 }

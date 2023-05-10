@@ -6,7 +6,7 @@
     /* justify-content: space-around; */
     height: var(--inaltime-meniu);
     line-height: var(--inaltime-meniu);
-    width: 100vw;
+    width: 99.5vw;
     margin-left: calc(50% - 50vw);
 }
 
