@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title>Azure bot</title>
+    <meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
+    <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
+
+    <!-- <link rel="stylesheet" type="text/css" href="/resurse/css/pagini/logout/logout.css" /> -->
+    <link rel="stylesheet" type="text/css" href="/resurse/css/pagini/azurebot/azurebot2.css" />
+
+    <script type="text/javascript" src="/resurse/js/bot.js"></script>
+    <%- include("../fragmente/head") %>
+</head>
+
+<body class="dark">
+    <%- include("../fragmente/header") %>
+        <main>
+            <p>Azure bot
+            <p>
+            <div class="chat">
+                <div id="chat-container" style="display: none;">
+                    <div id="chatbox"></div>
+                    <input type="text" id="message" placeholder="Type your message">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+                <button id="chat-toggle-btn" class="btn btn-primary" onclick="toggleChat()">Cu ce te putem
+                    ajuta?</button>
+            </div>
+        </main>
+        <%- include('../fragmente/footer') %>
+
+</body>
+
+</html>

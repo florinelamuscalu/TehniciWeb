@@ -2,6 +2,25 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 
+//// BOT /////////////////////////////////////////////////////////
+
+const { ConnectorClient } = require('botbuilder');
+const { ChatConnector } = require('botbuilder');
+
+const botToken = 'eWJz1wTSa4Q.NpVP-5KsJI1pXVT5LVDbliyGsWJOxMNYYgTaNuJ1HKM';
+
+const { BotFrameworkAdapter } = require('botbuilder');
+
+const botAdapter = new BotFrameworkAdapter({
+    appId: '', // Lasă gol pentru autentificarea cu tokenul de acces
+    appPassword: '', // Lasă gol pentru autentificarea cu tokenul de acces
+    token: botToken // Tokenul de acces generat
+});
+
+const connectorClient = botAdapter.createConnectorClient('');
+
+
+//////////////////////////////////////////////////////////////////
 
 const sharp = require("sharp");
 const formidable = require("formidable");
@@ -302,6 +321,15 @@ setInterval(stergeAccesariVechi, 10 * 60 * 1000);
 //     })()
 // }
 
+
+/////////////////////// WEB CHAT /////////////////////////////////////////////////
+
+app.post('/azurebot', (req, res) => {
+    connectorClient.processActivity(req, res, async (context) => {
+      // Gestionarea mesajelor de chat
+      await botLogic(context);
+    });
+  });
 
 //////////////////////////////////////////////////////////////////////////////// logare
 
