@@ -1,10 +1,3 @@
-//import { AzureBot } from "./module_proprii/bot.js";
-
-const { AzureBot } = require(["/module_proprii/bot.bundle.js"],function(){console.log("a incarcat modulul")});
-
-const bot = new AzureBot();
-
-
 function toggleChat() {
   var chatContainer = document.getElementById("chat-container");
   var chatToggleBtn = document.getElementById("chat-toggle-btn");
@@ -37,7 +30,6 @@ async function sendMessage() {
 
   // timitere mesaj
   console.log("mesaj", message)
-  const context = { activity: { type: 'message', text: message } };
-  await bot.run(context);
+
 }
 
