@@ -42,7 +42,7 @@
                                             <td><%= comanda.statusComanda === 2 ? 'X' : '' %></td>
                                             <td><%= comanda.statusComanda === 3 ? 'X' : '' %></td>
                                             <td>
-                                                <% if (comanda.statusComanda >= 1 && comanda.statusComanda < 3 ) { %>
+                                                <% if (comanda.statusComanda >= 0 && comanda.statusComanda < 3 ) { %>
                                                     <button class="buttonC" onclick="urmaresteColet('<%= comanda.numarComanda %>')">Anulare</button>
                                                     <%console.log("am apsat")%>
                                                     <% } %>

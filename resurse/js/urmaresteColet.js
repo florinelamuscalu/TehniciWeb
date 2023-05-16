@@ -1,8 +1,5 @@
-console.log("a ajuns in js")
-
 function urmaresteColet(numarComanda) {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!functia urmaresteColet")
-    fetch(`/urmaresteColet/${numarComanda}`, {
+    fetch(`/stergeColet/${numarComanda}`, {
       method: 'DELETE'
     })
     .then(response => {

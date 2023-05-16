@@ -4,6 +4,7 @@ const app = express();
 
 //// BOT /////////////////////////////////////////////////////////
 
+const { AzureBot } = require('./module_proprii/bot.js')
 const { ConnectorClient } = require('botbuilder');
 const { ChatConnector } = require('botbuilder');
 
@@ -58,6 +59,7 @@ app.use(bodyParser.json()); // pentru a lua datele din JSON body
 app.use(["/feedback"], express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 //console.log("Cale proiect:", __dirname);
+app.use("/module_proprii", express.static(__dirname + "/module_proprii"));
 app.use("/resurse", express.static(__dirname + "/resurse"));
 app.use("/node_modules", express.static(__dirname + "/node_modules"));
 app.use("/poze_uploadate", express.static(__dirname + "/resurse/imagini/poze_uploadate"));
@@ -325,9 +327,9 @@ setInterval(stergeAccesariVechi, 10 * 60 * 1000);
 /////////////////////// WEB CHAT /////////////////////////////////////////////////
 
 app.post('/azurebot', (req, res) => {
+    const bot = new AzurBot();
     connectorClient.processActivity(req, res, async (context) => {
-      // Gestionarea mesajelor de chat
-      await botLogic(context);
+        await bot.run(context);
     });
   });
 
@@ -1598,15 +1600,18 @@ app.get("/urmaresteColet", function (req, res) {
     }
 })
 
-app.delete("/urmaresteColet/:numarComanda", (req, res) => {
-    var numarComanda = req.params.numarComanda
+app.delete("/stergeColet/:numarComanda", (req, res) => {
+    const numarComanda = req.params.numarComanda
+
+    console.log("numarComanda", numarComanda)
+    console.log(typeof(numarComanda))
 
         if (obGlobal.bdMongo) {
             obGlobal.bdMongo
                 .collection("comenzi")
                 .deleteOne(
                     {
-                        "comenzi.numarComanda": numarComanda,
+                        "numarComanda": numarComanda,
                     },
                     function (err, rez) {
                         if (err) console.log("eroare stergere document din baza de date", err);
