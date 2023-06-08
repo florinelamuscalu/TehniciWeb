@@ -9,6 +9,10 @@ form{
     flex-direction: column;
 }
 
+#review{
+    font-size: 1.3em;
+}
+
 #mesaje{
     display: block;
     width: 98vw;

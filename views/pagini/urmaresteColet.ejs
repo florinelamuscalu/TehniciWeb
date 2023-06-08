@@ -7,9 +7,9 @@
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
     <link rel="stylesheet" href="resurse/css/pagini/urmaresteColet/style.css" type="text/css">
-    
+
     <script type="text/javascript" src="/resurse/js/urmaresteColet.js"></script>
-    
+
     <%- include("../fragmente/head.ejs") %>
 </head>
 
@@ -34,44 +34,51 @@
                         </thead>
                         <tbody>
                             <%if(locals?.utilizator){%>
-                                    <% comenzi.forEach(function(comanda) { %>
-                                        <%if(locals.utilizator.username == comanda.username){%>
+                                <% comenzi.forEach(function(comanda) { %>
+                                    <% ok = 0 %>
+                                    <%if(locals.utilizator.username==comanda.username){%>
                                         <tr>
-                                            <td><%= comanda.numarComanda %></td>
-                                            <td><%= comanda.statusComanda === 1 ? 'X' : '' %></td>
-                                            <td><%= comanda.statusComanda === 2 ? 'X' : '' %></td>
-                                            <td><%= comanda.statusComanda === 3 ? 'X' : '' %></td>
                                             <td>
-                                                <% if (comanda.statusComanda >= 0 && comanda.statusComanda < 3 ) { %>
-                                                    <button class="buttonC" onclick="urmaresteColet('<%= comanda.numarComanda %>')">Anulare</button>
-                                                    <%console.log("am apsat")%>
-                                                    <% } %>
+                                                <%= comanda.numarComanda %>
                                             </td>
                                             <td>
-                                                <% if (comanda.statusComanda === 3) { %>
-                                                    <button class="buttonC" onclick="urmaresteColet('<%= comanda.numarComanda %>')">Retur</button>
-                                                <% } %>
+                                                <%= comanda.statusComanda===1 ? 'X' : '' %>
+                                            </td>
+                                            <td>
+                                                <%= comanda.statusComanda===2 ? 'X' : '' %>
+                                            </td>
+                                            <td>
+                                                <%= comanda.statusComanda===3 ? 'X' : '' %>
+                                            </td>
+                                            <td>
+                                                <% if (comanda.statusComanda>= 0 && comanda.statusComanda < 3 ) { %>
+                                                        <button class="buttonC"
+                                                            onclick="urmaresteColet('<%= comanda.numarComanda %>')">Anulare</button>
+                                                        <% } %>
+                                            </td>
+                                            <td>
+                                                <% if (comanda.statusComanda===3) { %>
+                                                    <button class="buttonC"
+                                                        onclick="urmaresteColet('<%= comanda.numarComanda %>')">Retur</button>
+                                                    <% } %>
                                             </td>
                                         </tr>
                                     <%}else{%>
-                                        <tr>
-                                            <td>&nbsp</td>
-                                            <td>&nbsp</td>
-                                            <td>&nbsp</td>
-                                            <td>&nbsp</td>
-                                        </tr>
-                                <%}%>
+                                            <tr>
+                                                <td>&nbsp</td>
+                                                <td>&nbsp</td>
+                                                <td>&nbsp</td>
+                                                <td>&nbsp</td>
+                                                <td>&nbsp</td>
+                                                <td>&nbsp</td>
+                                            </tr>
+                                            <%ok = 1%>
+                                        <%}%>
+                                        <% if (ok ==1) {
+                                            return
+                                        }%>
                                 <% }); %>
-                            <%}else{%>
-                                <tr>
-                                    <td>&nbsp</td>
-                                    <td>&nbsp</td>
-                                    <td>&nbsp</td>
-                                    <td>&nbsp</td>
-                                    <td>&nbsp</td>
-                                    <td>&nbsp</td>
-                                </tr>
-                            <%}%>
+                            <%} %>
                         </tbody>
                     </table>
                 </div>
@@ -81,3 +88,7 @@
         <%- include("../fragmente/footer.ejs") %>
     </div>
 </body>
+
+
+
+

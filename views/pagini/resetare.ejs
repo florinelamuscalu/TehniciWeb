@@ -20,17 +20,13 @@
                 <h1 id="titlu">Resetare parola</h1>
                 <br>
                 <div class="formular">
-                    <p> Introduceti datele dumneavoastra</p>
-                    <p id="mesaj"><%- locals.mesaj %></p>  
-                    <% if(!locals.raspuns) { %>
-                        <%- include("../fragmente/formular_reset", {action: "/resetare" }) %>
-                    <% } %>
-                    <% if(locals.raspuns) { %>
-                        <%- locals.raspuns+"<br />"%>
-                    <% } %>
-                    <% if(locals.err) { %>
-                        <%- locals.err %>
-                    <% } %> 
+                    <%if(locals.mesaj == "Resetarea s-a realizat cu succes!"){ %>
+                        <p id="mesaj" style="color: #FFAD03;"><%- locals.mesaj %></p>
+                    <%} else {%>
+                        <p id="mesaj" style="color: red;"><%- locals.mesaj %></p>
+                    <%}%>
+                    <p> Introduceti datele dumneavoastra</p>  
+                    <%- include("../fragmente/formular_reset", {action: "/resetare" }) %>
                 </div> 
             </div>
         </main>

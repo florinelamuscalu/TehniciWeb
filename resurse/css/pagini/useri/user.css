@@ -1,5 +1,5 @@
 .afisaj{
-    margin-top: 5%;
+    margin-top: 2%;
     margin-left: 2%;
 }
 .table{
@@ -37,6 +37,18 @@ p{
     background: #0085b6;
   }
 
+  #sterge_utiliz{
+    margin-top: 2%;
+  }
+
+  #comerciant{
+    margin-top: 2%;
+  }
+
+  #curier{
+    margin-top: 2%;
+  }
+
   #admin{
-    margin-top: 10%;
+    margin-top: 2%;
   }

@@ -17,13 +17,7 @@
     <%- include("../fragmente/header") %>
     <main>
         <div id="mesaj">
-            <p id="mesaj"><%- locals.mesaj %></p>  
-                <% if(locals.raspuns) { %>
-                    <%- locals.raspuns+"<br />"%>
-                <% } %>
-                <% if(locals.err) { %>
-                    <%- locals.err %>
-                <% } %>  
+            <p id="mesaj"><%- locals.mesaj %></p>
         </div>
         <div id="loggare">
             <% if(!locals.utilizator) { %>

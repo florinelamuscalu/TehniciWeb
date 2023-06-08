@@ -28,7 +28,6 @@ const formidable = require("formidable");
 const { Client } = require("pg");
 const { Utilizator } = require("./module_proprii/utilizator.js")
 const { Produse } = require("./module_proprii/produse.js")
-const { adaugaFavorite } = require("./resurse/js/favorite.js")
 const ejs = require("ejs");
 const session = require("express-session");
 const AccesBd = require("./module_proprii/accesbd.js")
@@ -50,6 +49,7 @@ const socket = require('socket.io');
 var server = new http.createServer(app);
 var io = socket(server)
 io = io.listen(server);
+
 
 
 var cssBootstrap = sass.compile(__dirname + "/resurse/scss/customizare_bootstrap.scss", { sourceMap: true });
@@ -174,13 +174,16 @@ var client = instantaBD.getClient();
 
 /// cand se conexcteaza soket-ul la server 
 
-io.on("connection", function (socket) {
+
+io.on("connection", (socket) => { 
     console.log("Conectare!");
-    console.log("aaa****************")
-    //if(!conexiune_index)
-    //	conexiune_index=socket
-    socket.on('disconnect', function () { conexiune_index = null; console.log('Deconectare') });
-})
+    console.log("aaa****************") 
+    console.log("Conectare!");
+	//if(!conexiune_index)
+	//	conexiune_index=socket
+    socket.on('disconnect', () => {conexiune_index=null;console.log('Deconectare')});
+});
+
 
 app.post('/mesaj', function (req, res) {
 
@@ -244,58 +247,58 @@ app.all("/*", function (req, res, next) {
     let ipReq = getIp(req);
     var ip_gasit = ipuri_active[ipReq + "|" + req.url];
     var timp_curent = new Date();
-    // if (ip_gasit) {
+    if (ip_gasit) {
 
-    //     if ((timp_curent - ip_gasit.data) < 20 * 1000) {//diferenta e in milisecunde; verific daca ultima accesare a fost pana in 10 secunde
-    //         if (ip_gasit.nr > 10) {//mai mult de 10 cereri 
-    //             res.send("<h1>Prea multe cereri intr-un interval scurt. Revino m-ai tarziu</h1>");
-    //             ip_gasit.data = timp_curent
-    //             return;
-    //         }
-    //         else {
+        if ((timp_curent - ip_gasit.data) < 120 * 1000) {//diferenta e in milisecunde; verific daca ultima accesare a fost pana in 10 secunde
+            if (ip_gasit.nr > 60) {//mai mult de 10 cereri 
+                res.send("<h1>Prea multe cereri intr-un interval scurt. Revino mai tarziu</h1>");
+                ip_gasit.data = timp_curent
+                return;
+            }
+            else {
 
-    //             ip_gasit.data = timp_curent;
-    //             ip_gasit.nr++;
-    //         }
-    //     }
-    //     else {
-    //         //console.log("Resetez: ", req.ip+"|"+req.url, timp_curent-ip_gasit.data)
-    //         ip_gasit.data = timp_curent;
-    //         ip_gasit.nr = 1;//a trecut suficient timp de la ultima cerere; resetez
-    //     }
-    // }
-    // else {
-    //     ipuri_active[ipReq + "|" + req.url] = { nr: 1, data: timp_curent };
-    //     //console.log("am adaugat ", req.ip+"|"+req.url);
-    //     //console.log(ipuri_active);        
+                ip_gasit.data = timp_curent;
+                ip_gasit.nr++;
+            }
+        }
+        else {
+            //console.log("Resetez: ", req.ip+"|"+req.url, timp_curent-ip_gasit.data)
+            ip_gasit.data = timp_curent;
+            ip_gasit.nr = 1;//a trecut suficient timp de la ultima cerere; resetez
+        }
+    }
+    else {
+        ipuri_active[ipReq + "|" + req.url] = { nr: 1, data: timp_curent };
+        //console.log("am adaugat ", req.ip+"|"+req.url);
+        //console.log(ipuri_active);        
 
-    // }
-    // let comanda_param = `insert into accesari(ip, user_id, pagina) values ($1::text, $2,  $3::text)`;
-    // //console.log(comanda);
-    // if (ipReq && ip_gasit) { //TO DO - nu depaseste 10 cereri in 5 secunde (atentie in cerinta aveti alte numere)
-    //     if ((timp_curent - ip_gasit.data) < 20 * 1000) {
-    //         if (ip_gasit.nr > 10) {//mai mult de 10 cereri 
-    //             res.send("<h1>Prea multe cereri intr-un interval scurt.Revino m-ai tarziu</h1>");
-    //             ip_gasit.data = timp_curent
-    //             return;
-    //         }
-    //         else {
+    }
+    let comanda_param = `insert into accesari(ip, user_id, pagina) values ($1::text, $2,  $3::text)`;
+    //console.log(comanda);
+    if (ipReq && ip_gasit) { //TO DO - nu depaseste 10 cereri in 5 secunde (atentie in cerinta aveti alte numere)
+        if ((timp_curent - ip_gasit.data) < 120 * 1000) {
+            if (ip_gasit.nr > 60) {//mai mult de 10 cereri 
+                res.send("<h1>Prea multe cereri intr-un interval scurt.Revino m-ai tarziu</h1>");
+                ip_gasit.data = timp_curent
+                return;
+            }
+            else {
 
-    //             ip_gasit.data = timp_curent;
-    //             ip_gasit.nr++;
-    //             var id_utiliz = req.session.utilizator ? req.session.utilizator.id : null;
-    //             //console.log("id_utiliz", id_utiliz);
-    //             client.query(comanda_param, [ipReq, id_utiliz, req.url], function (err, rez) {
-    //                 if (err) console.log(err);
-    //             });
-    //         }
-    //     }
-    // var id_utiliz=req.session.utilizator?req.session.utilizator.id:null;
-    // //console.log("id_utiliz", id_utiliz);
-    // client.query(comanda_param, [ipReq, id_utiliz, req.url], function(err, rez){
-    //     if(err) console.log(err);
-    // });
-    //}
+                ip_gasit.data = timp_curent;
+                ip_gasit.nr++;
+                var id_utiliz = req.session.utilizator ? req.session.utilizator.id : null;
+                //console.log("id_utiliz", id_utiliz);
+                client.query(comanda_param, [ipReq, id_utiliz, req.url], function (err, rez) {
+                    if (err) console.log(err);
+                });
+            }
+        }
+    var id_utiliz=req.session.utilizator?req.session.utilizator.id:null;
+    //console.log("id_utiliz", id_utiliz);
+    client.query(comanda_param, [ipReq, id_utiliz, req.url], function(err, rez){
+        if(err) console.log(err);
+    });
+    }
     next();
 });
 
@@ -331,71 +334,61 @@ app.post('/azurebot', (req, res) => {
     connectorClient.processActivity(req, res, async (context) => {
         await bot.run(context);
     });
-  });
+});
 
 //////////////////////////////////////////////////////////////////////////////// logare
 
 app.post("/login", function (req, res) {
-    var username;
-    //console.log("ceva");
-    var formular = new formidable.IncomingForm()
+    var formular = new formidable.IncomingForm();
     formular.parse(req, function (err, campuriText, campuriFisier) {
         Utilizator.getUtilizDupaUsername(campuriText.username, {
             req: req,
             res: res,
             parola: campuriText.parola
         }, function (u, obparam) {
-            console.log("utiliz loggin", u)
             let parolaCriptata = Utilizator.criptareParola(obparam.parola);
-            //console.log("u.parola confirmat mail parola cripatat", u.parola, u.confirmat_mail, parolaCriptata)
             if (u.confirmat_mail) {
                 if (u.parola == parolaCriptata) {
                     u.cale_imagine = u.cale_imagine ? path.join("poze_uploadate", u.username, u.cale_imagine) : "";
                     obparam.req.session.utilizator = u;
-
-                    obparam.req.session.succesLogin = "Bravo! Te-ai logat!";
                     obparam.res.redirect("/index");
-                    req.session.incercari = 0
+                    req.session.incercari = 0;
                     var timpCurent = new Date();
-                    //obparam.res.render("/login");
                 }
                 else {
                     req.session.ultimulTimp = timpCurent;
                     if (req.session.ultimulTimp || (timpCurent - req.session.ultimulTimp) > 600000) {
-                        req.session.incercari = 1
+                        req.session.incercari = 1;
                     } else {
-                        req.session.incercari++
+                        req.session.incercari++;
+                        var mesaj = "Date connectare incorecte!"
                     }
 
-                    obparam.req.session.succesLogin = "Date logare incorecte sau nu a fost confirmat mailul!";
-                    //obparam.res.redirect("/index");
-
                     if (req.session.incercari >= 3) {
-                        req.session.timp_b = new Date()
-                        // req.session.timp_d = new Date()
+                        console.log("intra")
+                        req.session.timp_b = new Date();
                         mesajText = `Stimate ${u.username} ati introdus parola de 3 ori.`;
                         mesajHTML = `<h2>Stimate ${u.username},</h2> ati introdus parola de 3 ori.`;
                         u.trimiteMail("Parola incorecta", mesajText, mesajHTML, [{
                             filename: "",
                             content: ""
                         }]);
-                        res.send("Totul nu e bine! Poti sa te logezi dupa 5 minute :)))");
-                        //console.log("___________________________")
-
-                    } else {
-                        obparam.res.redirect("/loggare");
+                        mesaj = "Poti sa te conectezi dupa 5 minute"
                     }
-                    let timp_trecut = req.session.timp_b + 500000
+                    let timp_trecut = req.session.timp_b + 500000;
                     if (req.session.timp_b >= timp_trecut) {
-                        req.session.incercari = 0
+                        req.session.incercari = 0;
                     }
+
+                    res.render("pagini/loggare", { mesaj: mesaj });
                 }
             } else {
-                res.send("Nu aveti mail-ul confirmat si nu va puteti loga. Va rugam sa va confirmati mail-ul")
+                return res.render("pagini/loggare", { mesaj: "Nu aveti mail-ul confirmat si nu va puteti loga. Va rugam sa va confirmati mail-ul" });
             }
-        })
-    })
+        });
+    });
 });
+
 
 
 //delogare
@@ -434,7 +427,7 @@ function validateFileName(fileName) {
 }
 
 
-app.get("/resetare", function(req, res){
+app.get("/resetare", function (req, res) {
     res.render("pagini/resetare")
 })
 
@@ -442,12 +435,11 @@ app.post("/resetare", function (req, res) {
     var formular = new formidable.IncomingForm()
     formular.parse(req, function (err, campuriText, campuriFisier) {
         var parolaCriptata = Utilizator.criptareParola(campuriText.parola);
-        //console.log("campuri resetare", campuriText.email, campuriText.username)
         AccesBd.getInstanta().select(
             {
                 tabel: "utilizatori",
                 campuri: ["*"],
-                conditiiAnd: [`username = '${campuriText.username}'`]
+                conditiiAnd: [`email = '${campuriText.email}'`, `username = '${campuriText.username}'`]
 
             },
             function (err, rez) {
@@ -455,12 +447,11 @@ app.post("/resetare", function (req, res) {
                 if (err) {
                     console.log("error", err);
                     renderError(res, 2);
-                    return;
                 }
                 console.log("RESETARE", rez.rows);
                 if (rez.rowCount == 0) {
-                    res.send("Email-ul nu este corect")
-                    return;
+                    var mesaj = "Email-ul sau username-ul nu sunt corecte"
+                    res.render("pagini/resetare", { mesaj: mesaj })
                 }
                 else {
                     AccesBd.getInstanta().update(
@@ -472,22 +463,17 @@ app.post("/resetare", function (req, res) {
 
                         },
                         function (err, rezUpdate) {
-                            //console.log("rez", rezUpdate);
+
                             if (err) {
                                 console.log("error Update", err);
-                                renderError(res, 2);
-                                return;
+                                mesaj = "Eroare la update"
                             }
-                            //console.log(rez.rowCount);
                             if (rezUpdate.rowCount == 0) {
-                                res.send("Resetarea nu s-a realizat");
-                                return;
+                                var mesaj = "Resetarea nu s-a realizat"
                             }
                             else {
-                                
-                                res.send("Resetarea s-a realizat cu succes." );
+                                var mesaj = "Resetarea s-a realizat cu succes!"
                                 u = new Utilizator(rez.rows[0])
-                                //console.log("new urilizator", u)
                                 mesajText = `Hello ${campuriText.username} se pare ca ti-ai resetat prola`;
                                 mesajHTML = `<h2>Hello ${campuriText.username},</h2> se pare ca ti-ai resetat parola`;
                                 u.trimiteMail("V-ati schimbat parola de la cont", mesajText, mesajHTML, [{
@@ -495,11 +481,12 @@ app.post("/resetare", function (req, res) {
                                     content: ""
                                 }])
                             }
-                          
+
+                            res.render("pagini/resetare", { mesaj: mesaj })
+
 
                         });
                 }
-
             });
     });
 });
@@ -514,21 +501,10 @@ function generateUsernameSuggestion(username) {
 
 
 app.post("/inregistrare", function (req, res) {
-    //var username;
-    //console.log("ceva");
     var formular = new formidable.IncomingForm()
     formular.parse(req, function (err, campuriText, campuriFisier) {
-
-        //console.log("username", campuriText.username);
-
-        // console.log()
-
-        //console.log(campuriFisier);
         var eroare = "";
-
         var utilizNou = new Utilizator();
-        //console.log("utilizator nou", utilizNou)
-        //console.log("", utilizNou.setareUserName = campuriText.username)
         try {
             utilizNou.setareNume = campuriText.nume;
             utilizNou.setareUserName = campuriText.username;
@@ -538,32 +514,18 @@ app.post("/inregistrare", function (req, res) {
             utilizNou.setarePrenume = (campuriText.prenume)
             utilizNou.culoare_chat = (campuriText.culoare_chat);
             utilizNou.setareParola = (campuriText.parola);
-
-            // if(campuriText.ocupatie == "moderator"){
-            //     utilizNou.rol= campuriText.ocupatie
-            //     rol = campuriText.ocupatie
-            // }else{
-            //     rol = 'comun'
-            // }
-
             if (campuriFisier.poza.originalFilename && validateFileName(campuriFisier.poza.originalFilename)) {
                 utilizNou.cale_imagine = campuriFisier.poza.originalFilename;
-
             }
-
             Utilizator.getUtilizDupaUsername(campuriText.username, {}, function (u, parametru, eroareUser) {
-
                 var mesaj;
-                if (eroareUser == -1) {//nu exista username-ul in BD
+                if (eroareUser == -1) {
                     utilizNou.salvareUtilizator();
                     console.log("utilizator dupa salvare", utilizNou)
                 }
                 else {
-                    let sugestie = generateUsernameSuggestion(username); // genereaza username 
-                    // utilizNou.setareUserName = sugestie
-                    eroare += "Mai exista username-ul";
+                    let sugestie = generateUsernameSuggestion(username);
                     mesaj = "M-ai exista username-ul. Poti folosi user-ul " + sugestie
-                    //document.getElementById("mesaj").innerHTML= mesaj;
                     console.log(mesaj)
                 }
                 console.log("err, errUser", eroare, eroareUser)
@@ -574,7 +536,6 @@ app.post("/inregistrare", function (req, res) {
                 else
                     res.render("pagini/inregistrare", { err: "Eroare:  " + eroare, mesaj: mesaj });
             })
-            //utilizNou.salvareUtilizator();
         }
         catch (e) {
             console.log(e.message);
@@ -583,28 +544,20 @@ app.post("/inregistrare", function (req, res) {
             res.render("pagini/inregistrare", { err: "Eroare: " + eroare })
         }
     });
-    formular.on("field", function (nume, val) {  // 1
-
+    formular.on("field", function (nume, val) {
         console.log(`--- ${nume}=${val}`);
-
         if (nume == "username")
             username = val;
     })
-    formular.on("fileBegin", function (nume, fisier) { //2
+    formular.on("fileBegin", function (nume, fisier) {
         console.log("fileBegin");
-
         console.log(nume, fisier);
-        //TO DO in folderul poze_uploadate facem folder cu numele utilizatorului
         let folderUser = path.join(__dirname, "/resurse/imagini/poze_uploadate", username);
-        //folderUser=__dirname+"/poze_uploadate/"+username
-        //console.log("folder User", folderUser);
         if (!fs.existsSync(folderUser))
             fs.mkdirSync(folderUser);
         fisier.filepath = path.join(folderUser, fisier.originalFilename)
-        //fisier.filepath=folderUser+"/"+fisier.originalFilename
     })
-    formular.on("file", function (nume, fisier) {//3
-        //console.log("file");
+    formular.on("file", function (nume, fisier) {
         console.log(nume, fisier);
     });
 });
@@ -613,30 +566,22 @@ app.post("/inregistrare", function (req, res) {
 
 
 app.post("/profil", function (req, res) {
-    //console.log("profil");
     if (!req.session.utilizator) {
         renderError(res, 403,)
         res.render("pagini/eroare", { text: "Nu sunteti logat." });
         return;
     }
     var formular = new formidable.IncomingForm();
-
     formular.parse(req, function (err, campuriText, campuriFisier) {
-
         var parolaCriptata = Utilizator.criptareParola(campuriText.parola);
-        // AccesBD.getInstanta().update(
-        //     {tabel:"utilizatori",
-        //     campuri:["nume","prenume","email","culoare_chat"],
-        //     valori:[`${campuriText.nume}`,`${campuriText.prenume}`,`${campuriText.email}`,`${campuriText.culoare_chat}`],
-        //     conditiiAnd:[`parola='${parolaCriptata}'`]
-        // },
-
+        var newparolaCriptata = Utilizator.criptareParola(campuriText.cparola);
+        console.log(newparolaCriptata, "!!!!!!!!!!!!!!!")
         AccesBd.getInstanta().updateParametrizat(
             {
                 tabel: "utilizatori",
                 campuri: ["nume", "prenume", "email", "culoare_chat", "cale_imagine", "parola"],
-                valori: [`${campuriText.nume}`, `${campuriText.prenume}`, `${campuriText.email}`, `${campuriText.culoare_chat}`, `${campuriText.cale_imagine}`, `${parolaCriptata}`],
-                conditiiAnd: [`username = '${campuriText.username}'`] // parola cripatat inlocuiesti in valori si in sesiune :))
+                valori: [`${campuriText.nume}`, `${campuriText.prenume}`, `${campuriText.email}`, `${campuriText.culoare_chat}`, `${campuriText.cale_imagine}`, `${newparolaCriptata}`],
+                conditiiAnd: [`username = '${campuriText.username}'`, `parola = '${parolaCriptata}'`] // parola cripatat inlocuiesti in valori si in sesiune :))
 
             },
             function (err, rez) {
@@ -651,21 +596,16 @@ app.post("/profil", function (req, res) {
                     return;
                 }
                 else {
-                    //actualizare sesiune
-                    //console.log("ceva");
                     req.session.utilizator.nume = campuriText.nume;
                     req.session.utilizator.prenume = campuriText.prenume;
                     req.session.utilizator.email = campuriText.email;
                     req.session.utilizator.culoare_chat = campuriText.culoare_chat;
-                    req.session.utilizator.parola = campuriText.parola;
+                    req.session.utilizator.parola = parolaCriptata;
                     if (campuriFisier.poza.originalFilename && validateFileName(campuriFisier.poza.originalFilename)) {
                         utilizNou.cale_imagine = campuriFile.poza.originalFilename;
-                        //console.log("******************************cale iamgine2", campuriFisier.cale_imagine);
                     }
                     res.locals.utilizator = req.session.utilizator;
                 }
-
-
                 res.render("pagini/profil", { mesaj: "Update-ul s-a realizat cu succes." });
                 res.send[""]
 
@@ -715,11 +655,6 @@ app.post("/sterge_utiliz", function (req, res) {
 
             });
 
-            AccesBd.getInstanta().delete({ tabel: "utilizatori", conditiiAnd: [`username=${campuriText.username}`] }, function (err, rezQuery) {
-                console.log(err);
-                //res.redirect("/useri");
-            });
-
             AccesBd.getInstanta().delete({ tabel: "utilizatori", conditiiAnd: [`id=${campuriText.id_utiliz}`] }, function (err, rezQuery) {
                 console.log(err);
                 res.redirect("/useri");
@@ -742,13 +677,10 @@ app.post("/sterge_utiliz", function (req, res) {
 app.post("/sterge_cont", function (req, res) {
     if (req?.utilizator?.areDreptul?.(Drepturi.stergereUtilizatori)) {
         var formular = new formidable.IncomingForm();
-        //var utiliz = new Utilizator();
-
         formular.parse(req, function (err, campuriText, campuriFile) {
             var user
             username = campuriText.username
             AccesBd.getInstanta().select({ tabel: "utilizatori", campuri: ["*"], conditiiAnd: [`username='${username}'`] }, function (err, rez) {
-                // console.log(err);
                 if (err) {
                     console.log('err', err);
                 } else {
@@ -769,9 +701,6 @@ app.post("/sterge_cont", function (req, res) {
                                         let folder2 = path.join(folder, user.username)
                                         fs.rmSync(folder2, { recursive: true, force: true })
                                     }
-
-                                    //res.redirect("/index");
-
                                 }
 
                             });
@@ -799,35 +728,6 @@ app.post("/sterge_cont", function (req, res) {
 
 
 
-//http://${Utilizator.numeDomeniu}/cod/${utiliz.username}/${token}
-
-// app.get("/stergere/:username/:token", function (req, res) {
-//     console.log("/stergere/:username/:token", req.params) // parametrii functiei 
-//     try {
-//         Utilizator.getUtilizDupaUsername(req.params.username, { res: res, token: req.params.token }, function (u, obparam) {
-//             AccesBd.getInstanta().update({
-//                 tabel: "utilizatori",
-//                 campuri: ['sterge_cont'],
-//                 valori: ['true'],
-//                 conditiiAnd: [`cod = '${obparam.token}'`]
-//             },
-//                 function (err, rezUpdate) {
-//                     if (err || rezUpdate.rowCount == 0) {
-//                         console.error("cod sterge", err)
-//                         renderError(res, 3);
-//                     } else {
-//                         res.render("pagini/confirmare_stergere.ejs");
-//                     }
-//                 }
-//             )
-//         })
-//     }
-//     catch (e) {
-//         console.log(e);
-//         renderError(res, 2);comanda
-//     }
-// });
-
 app.get("/confirmare/:username/:token", function (req, res) {
     console.log(req.params) // parametrii functiei 
     try {
@@ -843,7 +743,7 @@ app.get("/confirmare/:username/:token", function (req, res) {
                         console.error("cod", err)
                         renderError(res, 3);
                     } else {
-                        res.render("pagini/confirmare.ejs");
+                        res.render("pagini/confirmare");
                     }
                 }
             )
@@ -913,20 +813,6 @@ app.get("/produs/:id", function (req, res) {
     })
 });
 
-app.get("/produse", function (req, res) {
-    client.query("select * from unnest(enum_range(null::categ_produs))", function (err, rezCateg) {
-        client.query("select  * from ", function (err, rez) {
-            if (err) {
-                console.log(err);
-                renderError(res, 2);
-            }
-            else {
-                res.render("pagini/produse", { produse: rez.rows, optiuni: rezCateg.rows });
-                console.log(rez);
-            }
-        });
-    });
-});
 
 function transformaSirSpecificatii(sir) {
     const elemente = sir.split(',').map(s => `"${s.trim()}"`);
@@ -943,7 +829,7 @@ app.post("/adaugaProduse", function (req, res) {
         produsNou = new Produse();
         var specificatii_trans = transformaSirSpecificatii(campuriText.specificatii)
         try {
-            produsNou.setareNume = campuriText.nume,
+                produsNou.setareNume = campuriText.nume,
                 produsNou.setareDescriere = campuriText.descriere,
                 produsNou.setarePret = campuriText.pret,
                 produsNou.setareGreutate = campuriText.greutate,
@@ -1135,7 +1021,7 @@ app.get("/modificaProduse/:specificatii", function (req, res) {
 
 
 
-app.post("/modificaProduse", function (req, res) {
+app.post("/modificaProduse/:specificatii", function (req, res) {
 
     const utiliz = req.utilizator
     if (!req.session.utilizator) {
@@ -1144,22 +1030,28 @@ app.post("/modificaProduse", function (req, res) {
         return;
     }
 
-
     var formular = new formidable.IncomingForm();
-
-    formular.parse(req,  async function (err, campuriText, campuriFile) {
-
+    formular.parse(req, async function (err, campuriText, campuriFile) {
         var specificatii_trans = transformaSirSpecificatii(campuriText.specificatii)
-
         var imagine
-        //console.log("!!!!!!!!!!!!!!!!!!!!imagine", campuriFile.imagine.originalFilename)
         if (campuriFile.imagine.originalFilename) {
             var imagine = campuriFile.imagine.originalFilename
-            //console.log("!!!!!!!!!!!!!!img!!!!!!!!!!!!!!", imagine)
             if (!validateFileName(imagine))
-                res.send("Extensia imaginii nu este buna")
+                res.render("pagini/modificaProduse", {mesaj: "Extensia imaginii nu este buna"})
+            else {
+                AccesBd.getInstanta().select({ tabel: "produse", campuri: "imagine".split(","), conditiiAnd: [`specificatii = '${specificatii_trans}'`] },
+                function (err, rez) {
+                    if (!err && rez.rowCount > 0) {
+                        //console.log(rez.rows[0].imagine, "!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        var folder = __dirname + "/resurse/imagini/produse"
+                        let folder2 = path.join(folder, rez.rows[0].imagine)
+                        fs.rmSync(folder2, { recursive: true, force: true })
+                        //console.log(folder2, "FOLDER2 !!!!!!!!!!!")
+                    }
+
+                });
+            }
         } else {
-            console.log("a ajuns pe else")
             var img = await AccesBd.getInstanta().selectAsync({
                 tabel: "produse",
                 campuri: "imagine".split(","),
@@ -1167,41 +1059,38 @@ app.post("/modificaProduse", function (req, res) {
             },
                 function (err, rez) {
                     if (rez.rowCount > 0) {
-                        //console.log("rez.rows modificaProdus", rez.rows[0].imagine)
-                        //imagine = rez.rows[0].imagine
-                        //console.log("!!!!!!!!!!!!!!", imagine)
+                        console.log("rez.rows modificaProdus", rez.rows[0].imagine)
+                        imagine = rez.rows[0].imagine
+                        console.log(imagine)
                     } else {
-                        res.send("Produslul pe care il cautati nu e in baza noastra de date")
+                        //res.send("Produslul pe care il cautati nu e in baza noastra de date")
+                        res.render("pagini/modificaProduse", {mesaj: "Produslul pe care il cautati nu e in baza noastra de date"})
                     }
 
-                    //console.log("a trecut de if", imagine)
-
                 });
-           // console.log("a trecut de select")
-           imagine =img.rows[0].imagine
+            imagine =img.rows[0].imagine
         }
-        
-        console.log("img update",imagine)
+        console.log(imagine,'!!!!!!!!!!!!!!!!!!!!!!')
         AccesBd.getInstanta().updateParametrizat(
             {
                 tabel: "produse",
-                campuri: ["descriere", "pret", "greutate", "data_fabricare", "tip_produs", "categorie", "specificatii", "desigilate", "culoare", "imagine", "garantie", "stoc"],
+                campuri: ["descriere", "pret", "greutate", "data_fabricare", "tip_produs", "categorie", "desigilate", "culoare", "imagine", "garantie", "stoc"],
                 valori: [`${campuriText.descriere}`, `${campuriText.pret}`, `${campuriText.greutate}`, `${campuriText.data_fabricare}`, `${campuriText.tip_produs}`,
-                `${campuriText.categorie}`, `${specificatii_trans}`, `${campuriText.desigilate}`, `${campuriText.culoare}`, `${imagine}`, `${campuriText.garantie}`, `${campuriText.stoc}`],
+                `${campuriText.categorie}`, `${campuriText.desigilate}`, `${campuriText.culoare}`, `${imagine}`, `${campuriText.garantie}`, `${campuriText.stoc}`],
                 conditiiAnd: [`specificatii = '${specificatii_trans}'`]
 
             },
             function (err, rez) {
                 if (err) {
                     console.log(err);
-                    renderError(res, 2);
-                    return;
+                    //renderError(res, 2);
+                    res.render("pagini/modificaProduse", {mesaj: "A aparut o eroare la update"})
                 } else {
                     //console.log("update modificaProduse", rez.rowCount);
                     if (rez.rowCount == 0) {
                         //res.render("pagini/vizualizareProduse", { mesaj: "Update-ul nu s-a realizat." });
-                        res.send("Update-ul nu s-a realizat")
-                        return;
+                        //res.send("Update-ul nu s-a realizat")
+                        res.render("pagini/modificaProduse", {mesaj: "Update-ul nu s-a realizat"})  
                     } else {
                         if (obGlobal.bdMongo) {
                             obGlobal.bdMongo
@@ -1219,7 +1108,6 @@ app.post("/modificaProduse", function (req, res) {
                                             "produse.data_fabricare": campuriText.data_fabricare,
                                             "produse.tip_produs": campuriText.tip_produs,
                                             "produse.categorie": campuriText.categorie,
-                                            "produse.specificatii": specificatii_trans,
                                             "produse.desigilate": campuriText.desigilate,
                                             "produse.culoare": campuriText.culoare,
                                             "produse.imagine": imagine,
@@ -1233,7 +1121,8 @@ app.post("/modificaProduse", function (req, res) {
                                             console.log("Documentul a fost actualizat cu succes!");
                                             console.log(rez);
                                             //res.render("pagini/vizualizareProduse", { mesaj: "Update-ul s-a realizat." });
-                                            res.send("Update-ul s-a realizat")
+                                            //res.send("Update-ul s-a realizat")
+                                            res.render("pagini/modificaProduse", {mesaj: "Update-ul s-a realizat!"})
                                         }
                                     }
                                 );
@@ -1247,6 +1136,22 @@ app.post("/modificaProduse", function (req, res) {
 
             });
     });
+    formular.on("field", function (nume, val) {  // 1
+        //console.log("filed");
+        if (nume == "imagine")
+            nume = val;
+        })
+    formular.on("fileBegin", function (nume, fisier) { //2
+        //console.log("fileBegin");
+        //console.log(nume, fisier);
+        let folderProdus = path.join(__dirname, "/resurse/imagini/produse");
+        if (!fs.existsSync(folderProdus))
+            fs.mkdirSync(folderProdus);
+        fisier.filepath = path.join(folderProdus, fisier.originalFilename)
+        })
+    formular.on("file", function (nume, fisier) {//3
+        console.log(nume, fisier);
+    });
 });
 
 app.delete("/stergeProduse/:spec", (req, res) => {
@@ -1254,47 +1159,47 @@ app.delete("/stergeProduse/:spec", (req, res) => {
     console.log("sterge produse spec", specificatii)
     const utiliz = req.utilizator
     AccesBd.getInstanta().delete({
-      tabel: "produse",
-      conditiiAnd: [`specificatii = '${specificatii}'`]
+        tabel: "produse",
+        conditiiAnd: [`specificatii = '${specificatii}'`]
     },
-    function (err, rez) {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: "A avut loc o eroare" });
-      }
-      if (rez.rowCount > 0) {
+        function (err, rez) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "A avut loc o eroare" });
+            }
+            if (rez.rowCount > 0) {
 
-        if (obGlobal.bdMongo) {
-            obGlobal.bdMongo
-                .collection("comercianti")
-                .deleteOne(
-                    {
-                        "utilizator.username": utiliz.username,
-                        "produse.specificatii": specificatii,
-                    },
-                    function (err, rez) {
-                        if (err) console.log("eroare stergere document din baza de date", err);
-                        else {
-                            console.log("Documentul a fost sters cu succes!");
-                            console.log(rez);
-                            //res.send("Stergerea s-a realizat");
-                        }
-                    }
-                );
-        } else {
-            console.log("Nu s-a putut conecta la baza de date");
-            //res.send("Nu s-a putut conecta la baza de date")
-        }
+                if (obGlobal.bdMongo) {
+                    obGlobal.bdMongo
+                        .collection("comercianti")
+                        .deleteOne(
+                            {
+                                "utilizator.username": utiliz.username,
+                                "produse.specificatii": specificatii,
+                            },
+                            function (err, rez) {
+                                if (err) console.log("eroare stergere document din baza de date", err);
+                                else {
+                                    console.log("Documentul a fost sters cu succes!");
+                                    console.log(rez);
+                                    //res.send("Stergerea s-a realizat");
+                                }
+                            }
+                        );
+                } else {
+                    console.log("Nu s-a putut conecta la baza de date");
+                    //res.send("Nu s-a putut conecta la baza de date")
+                }
 
-        res.status(200).json({ message: "Produsul a fost sters cu succes" });
-        
-      } else {
-        res.status(404).json({ message: "Produsul nu a fost gasit" });
-      }
-    });
+                res.status(200).json({ message: "Produsul a fost sters cu succes" });
 
-  });
-  
+            } else {
+                res.status(404).json({ message: "Produsul nu a fost gasit" });
+            }
+        });
+
+});
+
 
 
 /////////////////////////////////////////////// FAVORITE
@@ -1349,7 +1254,7 @@ app.delete("/favorite", function (req, res) {
         AccesBd.getInstanta().delete({ tabel: "favorite", conditiiAnd: [`id_produs = ${idProdus}`, `id_user = ${id_utiliz}`] }, function (err, rez) {
             if (!err) {
                 AccesBd.getInstanta().selectJoin({
-                    tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,data_adaugare,garantie,stoc".split(","),
+                    tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,produse.data_adaugare,garantie,stoc".split(","),
                     joinTabel: "produse",
                     joinConditiile: [`favorite.id_produs = produse.id`], conditiiAnd: [`favorite.id_user in (${id_utiliz})`]
                 }, function (err, rez) {
@@ -1374,7 +1279,7 @@ app.get("/favorite", function (req, res) {
     let id_utiliz = req?.session?.utilizator?.id;
     id_utiliz = id_utiliz ? id_utiliz : null;
     if (id_utiliz != null) {
-        AccesBd.getInstanta().selectJoin({ tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,data_adaugare,garantie,stoc".split(","), joinTabel: "produse", joinConditiile: [`favorite.id_produs = produse.id`], conditiiAnd: [`favorite.id_user in (${id_utiliz})`] },
+        AccesBd.getInstanta().selectJoin({ tabel: "favorite", campuri: "produse.id,nume,descriere,pret,greutate,data_fabricare,tip_produs,categorie,specificatii,desigilate,culoare,imagine,produse.data_adaugare,garantie,stoc".split(","), joinTabel: "produse", joinConditiile: [`favorite.id_produs = produse.id`], conditiiAnd: [`favorite.id_user in (${id_utiliz})`] },
             function (err, rez) {
                 if (err) {
                     renderError(res, 2);
@@ -1443,10 +1348,6 @@ function randomnumarComanda() {
 
 
 app.post("/cumpara", function (req, res) {
-    //console.log(req.body);
-    //console.log("Utilizator:", req?.utilizator);
-    //console.log("Utilizator are dreptul:", req?.utilizator?.rol?.areDreptul?.(Drepturi.cumparareProduse));
-    //console.log("Drept:", req?.utilizator?.areDreptul?.(Drepturi.cumparareProduse));
     var prodid;
     var cantitate = req.body.cantitate;
     console.log("cant122", cantitate)
@@ -1478,7 +1379,7 @@ app.post("/cumpara", function (req, res) {
                         filename: "factura.pdf",
                         content: fs.readFileSync(numeFis)
                     }]);
-                    res.send("Totul e bine!");
+                    res.send("Comanda a fost procesata cu succes, pe e-mail veti regasi factura. Va multumim pentru comanda!");
                 });
                 rez.rows.forEach(function (elem) { elem.cantitate = 1 });
                 const data = new Date();
@@ -1542,23 +1443,23 @@ app.post("/cumpara", function (req, res) {
 
 app.get("/comenzi", function (req, res) {
     if (obGlobal.bdMongo) {
-      obGlobal.bdMongo.collection("comenzi").find({}).toArray(
-        function (err, rez) {
-          if (err)
-            console.log(err)
-          if (rez.length > 0) {
-            // filtrăm comenzi cu statusul 3 și le ștergem
-            obGlobal.bdMongo.collection("comenzi").deleteMany({ statusComanda: "3" }, function (err, result) {
-              if (err)
-                console.log(err)
-              console.log("Removed " + result.deletedCount + " documents with statusComanda = 3");
-            });
-            res.render("pagini/comenzi", { comenzi: rez })
-            console.log("get comenzi", rez)
-          }
-        })
+        obGlobal.bdMongo.collection("comenzi").find({}).toArray(
+            function (err, rez) {
+                if (err)
+                    console.log(err)
+                if (rez.length > 0) {
+                    // filtrăm comenzi cu statusul 3 și le ștergem
+                    obGlobal.bdMongo.collection("comenzi").deleteMany({ statusComanda: "3" }, function (err, result) {
+                        if (err)
+                            console.log(err)
+                        console.log("Removed " + result.deletedCount + " documents with statusComanda = 3");
+                    });
+                    res.render("pagini/comenzi", { comenzi: rez })
+                    console.log("get comenzi", rez)
+                }
+            })
     }
-  })
+})
 
 
 app.post("/modificaStatus", function (req, res) {
@@ -1572,7 +1473,7 @@ app.post("/modificaStatus", function (req, res) {
             { numarComanda: numarComanda },
             { $set: { statusComanda: status } },
             function (err, rez) {
-                if (err){
+                if (err) {
                     console.log(err)
                     res.sendStatus(204)
                 }
@@ -1604,28 +1505,28 @@ app.delete("/stergeColet/:numarComanda", (req, res) => {
     const numarComanda = req.params.numarComanda
 
     console.log("numarComanda", numarComanda)
-    console.log(typeof(numarComanda))
+    console.log(typeof (numarComanda))
 
-        if (obGlobal.bdMongo) {
-            obGlobal.bdMongo
-                .collection("comenzi")
-                .deleteOne(
-                    {
-                        "numarComanda": numarComanda,
-                    },
-                    function (err, rez) {
-                        if (err) console.log("eroare stergere document din baza de date", err);
-                        else {
-                            console.log("Documentul a fost sters cu succes!");
-                            console.log(rez);
-                            res.send("200");
-                        }
+    if (obGlobal.bdMongo) {
+        obGlobal.bdMongo
+            .collection("comenzi")
+            .deleteOne(
+                {
+                    "numarComanda": numarComanda,
+                },
+                function (err, rez) {
+                    if (err) console.log("eroare stergere document din baza de date", err);
+                    else {
+                        console.log("Documentul a fost sters cu succes!");
+                        console.log(rez);
+                        res.send("200");
                     }
-                );
-        } else {
-            console.log("Nu s-a putut conecta la baza de date");
-            res.send("500")
-        }
+                }
+            );
+    } else {
+        console.log("Nu s-a putut conecta la baza de date");
+        res.send("500")
+    }
 
 });
 
@@ -1647,7 +1548,7 @@ app.get("/update_grafice", function (req, res) {
     });
 })
 
-////////////////////////////// Contact //////////////////////////
+////////////////////////////// Feedback //////////////////////////
 
 caleXMLMesaje = "resurse/xml/feedback.xml";
 headerXML = `<?xml version="1.0" encoding="utf-8"?>`;
@@ -1758,7 +1659,7 @@ app.post("/feedback/:id", upload.array('imagine'), function (req, res) {
         attributes: {
             username: u,
             data: new Date(),
-            cale_imagine: caleImagini, 
+            cale_imagine: caleImagini,
             id: req.params.id,
         },
         elements: [{ type: "text", "text": req.body.mesaj }]
@@ -1846,7 +1747,7 @@ app.get(["/", "/index", "/home", "/login"], async function (req, res) {
             //adaugat si inchidere functie:
         });
     // console.log(req.ip);
-    // // res.render("pagini/index", { ip: req.ip, imagini: obGlobal.imagini, succesLogin: sir, useriOnlineInactiv: useriOnlineInactiv, useriOnline: useriOnline, port: s_port });
+    // res.render("pagini/index", { ip: req.ip, imagini: obGlobal.imagini, succesLogin: sir, useriOnlineInactiv: useriOnlineInactiv, useriOnline: useriOnline, port: s_port });
     // console.log("*********************s_port", s_port)
 });
 

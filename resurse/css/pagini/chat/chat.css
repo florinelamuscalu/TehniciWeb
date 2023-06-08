@@ -1,6 +1,6 @@
 #chat{
-    margin-top: 5%;
-    margin-left: 3%;
+    margin-top: 3%;
+    margin-left: 1%;
 }
 
 #mesaje_chat{
@@ -11,11 +11,16 @@
     width:95vw;
 }
 
-#nume #mesaj{
-    width: 70vw;
+#chat_l{
+    width: 96vw;
+    font-size: 1.2em;
 }
 
 #buton {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+#titlu{
+    margin-left: 2%; 
 }

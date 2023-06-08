@@ -109,12 +109,11 @@
                 <% if(locals?.utilizator?.rol.cod == "comerciant") { %>
                     <li><div id="nav-titlu">Comerciant</div>
                         <ul>
-                            <li><a href="/adaugaProduse">Adauga produse</a></li>
+                            <!-- <li><a href="/adaugaProduse">Adauga produse</a></li> -->
                             <li><a href="/vizualizareProduse">Produsele tale</a></li>
                         </ul>
                     </li>
                 <% } %>
-                <li> <a href="termeniConditi">Termeni si Conditii</a></li>
                 <li> <a href="/chat">Chat</a></li>
                 <li> <a href="/contact">Contact</a></li>
                 <% if(locals?.utilizator?.areDreptul?.(Drepturi?.vizualizareUtilizatori)) { %>
@@ -133,7 +132,8 @@
                         <li><a href="info#Shops">Sedii magazine</a></li> 
                         <li><a href="info#galerie">Galerie</a></li>
                     </ul>
-                </li>   
+                </li>  
+                <li> <a href="termeniConditi">Termeni si Conditii</a></li> 
         </ul>
     </nav>
     <br/>

@@ -1,9 +1,3 @@
-/*
-
-ATENTIE!
-inca nu am implementat protectia contra SQL injection
-*/
-
 const {Client}=require("pg");
 
 
@@ -131,12 +125,10 @@ class AccesBD{
         let conditieWhere="";
         if(conditiiAnd.length>0)
             conditieWhere=`where ${conditiiAnd.join(" and ")}`;
-        //console.log("0000000000000000000000000000000000000000000000000000000000")
-        //console.log(callback);
         let comanda=`select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
         console.error(comanda);
         this.client.query(comanda,parametriQuery,callback)
-    } 
+    }  
 
      /**
      * @typedef {object} ObiectQuery - obiect primit de functiile care realizeaza un query

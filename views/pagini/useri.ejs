@@ -3,7 +3,7 @@
 
 <head>
 
-	<title>PC Components- utilizatori</title>
+	<title>PC Components - utilizatori</title>
 	<meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
 	<meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
@@ -60,9 +60,50 @@
 						<% } %>
 							<% } %>
 				</table>
+				
+				<h2 id="comerciant">Comercianti</h2>
+
+				<table id="useri" class="table table-success table-striped-columns" data-pagination="true">
+					<tr>
+						<th scope="col">id</th>
+						<th scope="col">Username</th>
+						<th scope="col">Nume</th>
+						<th scope="col">Prenume</th>
+						<th scope="col">Data</th>
+						<th scope="col">Rol</th>
+					</tr>
+
+					<% for (var i=0; i < useri.length; i++) { if(useri[i].rol=="comerciant" ){ %>
+						<tr>
+							<td>
+								<%= useri[i].id %>
+							</td>
+							<td>
+								<%= useri[i].username %>
+							</td>
+							<td>
+								<%= useri[i].nume %>
+							</td>
+							<td>
+								<%= useri[i].email %>
+							</td>
+							<% d=new Date(useri[i].data_adaugare)
+								sir_data=`${d.getDate()}/${d.getMonth()}/${d.getFullYear()}
+								${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}` %>
+								<td>
+									<%= sir_data %>
+								</td>
+								<td>
+									<%= useri[i].rol %>
+								</td>
+						</tr>
+
+						<% } %>
+							<% } %>
+				</table>
 
 
-				<p>Sterge utilizator</p>
+				<p id="sterge_utiliz">Sterge utilizator</p>
 				<form id="sterge" method="post" action="/sterge_utiliz">
 					<label>
 						Id: <input type="text" name="id_utiliz" class="form-control" value="">
@@ -70,10 +111,48 @@
 
 					<input type="submit" class="btn btn-info btn-lg active" value="Submit">
 				</form>
-				<br><br>
 
-				
 
+				<h2 id="curier">Curieri</h2>
+
+				<table id="useri" class="table table-success table-striped-columns" data-pagination="true">
+					<tr>
+						<th scope="col">id</th>
+						<th scope="col">Username</th>
+						<th scope="col">Nume</th>
+						<th scope="col">Prenume</th>
+						<th scope="col">Data</th>
+						<th scope="col">Rol</th>
+					</tr>
+
+					<% for (var i=0; i < useri.length; i++) { if(useri[i].rol=="curier" ){ %>
+						<tr>
+							<td>
+								<%= useri[i].id %>
+							</td>
+							<td>
+								<%= useri[i].username %>
+							</td>
+							<td>
+								<%= useri[i].nume %>
+							</td>
+							<td>
+								<%= useri[i].email %>
+							</td>
+							<% d=new Date(useri[i].data_adaugare)
+								sir_data=`${d.getDate()}/${d.getMonth()}/${d.getFullYear()}
+								${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}` %>
+								<td>
+									<%= sir_data %>
+								</td>
+								<td>
+									<%= useri[i].rol %>
+								</td>
+						</tr>
+
+						<% } %>
+							<% } %>
+				</table>
 
 
 				<h2 id="admin">Admini</h2>

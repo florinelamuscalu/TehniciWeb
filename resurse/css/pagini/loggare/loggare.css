@@ -1,9 +1,22 @@
+
+#mesaj{
+    margin-top: 3%;
+    display: flex;
+    align-items: left;
+    justify-content: center;
+}
+
+#mesaj p{
+    color: red;
+    font-size: 1.4em;
+}
+
 #loggare{
     display: flex;
     align-items: left;
     justify-content: center;
     height: 100%;
-    margin-top: 5%;
+    margin-top: 2%;
 }
 
 #inreg{
@@ -13,3 +26,5 @@
     text-decoration: none;
     text-align: center;
 }
+
+

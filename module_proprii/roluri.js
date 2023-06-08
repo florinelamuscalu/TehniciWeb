@@ -26,6 +26,7 @@ class RolAdmin extends Rol{
         Drepturi.vizualizareUtilizatori,
         Drepturi.stergereUtilizatori,
         Drepturi.cumparareProduse,
+        Drepturi.scrieChat,
         Drepturi.vizualizareGrafice,
         Drepturi.adaugaProduse,
         Drepturi.stergeProduse,
@@ -41,16 +42,16 @@ class RolAdmin extends Rol{
 
 }
 
-class RolModerator extends Rol{
+// class RolModerator extends Rol{
     
-    static get tip() {return "moderator"}
-    static get drepturi() { return [
-        Drepturi.vizualizareUtilizatori,
-    ] }
-    constructor (){
-        super()
-    }
-}
+//     static get tip() {return "moderator"}
+//     static get drepturi() { return [
+//         Drepturi.vizualizareUtilizatori,
+//     ] }
+//     constructor (){
+//         super()
+//     }
+// }
 
 class RolClient extends Rol{
     static get tip() {return "comun"}
@@ -89,6 +90,7 @@ class RolComerciant extends Rol{
         Drepturi.stergeProduse,
         Drepturi.modificaProduse,
         Drepturi.cumparareProduse,
+        Drepturi.scrieChat,
     ] }
     
     constructor (){
@@ -105,7 +107,6 @@ class RolFactory{
     static creeazaRol(tip) {
         switch(tip){
             case RolAdmin.tip : return new RolAdmin();
-            case RolModerator.tip : return new RolModerator();
             case RolClient.tip : return new RolClient();
             case RolCurier.tip : return new RolCurier();
             case RolComerciant.tip : return new RolComerciant();

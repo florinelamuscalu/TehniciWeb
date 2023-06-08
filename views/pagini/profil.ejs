@@ -15,8 +15,16 @@
 					document.getElementById("inp-username").readOnly = true;
 					document.getElementById("inp-nume").value = "<%= locals.utilizator.nume %>";
 					document.getElementById("inp-prenume").value = "<%= locals.utilizator.prenume %>";
+					const dataOriginala = "<%= locals.utilizator.data_nastere %>";
+					const data = new Date(dataOriginala);
+					const an = data.getFullYear();
+					const luna = String(data.getMonth() + 1).padStart(2, "0");
+					const zi = String(data.getDate()).padStart(2, "0");
+					document.getElementById("inp-dataN").value = `${an}-${luna}-${zi}`;
+					document.getElementById("inp-dataN").readOnly = true;
 					document.getElementById("inp-email").value = "<%= locals.utilizator.email %>";
 					document.getElementById("inp-ocupatie").value = "<%= locals.utilizator.ocupatie %>";
+					document.getElementById("inp-ocupatie").readOnly = true;
 					document.getElementById("p-reintrod").remove();
 					var optiuni = document.getElementById("sel-culoare").options
 					for (let opt of optiuni)
@@ -34,10 +42,12 @@
 			<% if(locals.utilizator) { %>
 				<h2 id="profil">Profil</h2>	
 				<div id="user">
+					<%if(locals.mesaj == "Update-ul s-a realizat cu succes."){ %>
+                        <p id="mesaj" style="color: #FFAD03;"><%- locals.mesaj %></p>
+                    <%} else {%>
+                        <p id="mesaj" style="color: red;"><%- locals.mesaj %></p>
+                    <%}%>
 					<div id="imagine">
-						<p>
-							<%= locals.raspuns %>
-						</p>
 						<% if(!locals.utilizator.cale_imagine.includes('undefined')) {%>
 							<img src="/<%- locals.utilizator.cale_imagine%>" alt="poza de profil" id ="img_profil"/>
 						<% } else {%>
@@ -48,7 +58,6 @@
 					<%- include("../fragmente/formular",{action:"/profil"}, {raspuns:locals.mesaj}) %>
 
 		 			<%if(locals.utilizator.rol.cod !="curier"){
-						//console.log("!!!!!!!!!!!", locals.utilizator)
 						if(locals.utilizator.rol.cod == 'comerciant'){ %>
 							<p>Vrei sa iti vezi produsele? <a href="/vizualizareProduse">Vizualizare produse <i class="fa-solid fa-table-list"></i></a></p>
 							<p>Vrei sa adaugi un produs? <a href="/adaugaProduse">Pentru asta poti incepe prin a adauga primul tau produs spre vanzare <i class="fa-solid fa-plus"></i></a></a></p>
@@ -68,7 +77,7 @@
 					</form>
 					<br><br>
 
-					<!-- <a href="/sterge_cont"><i class="fa-regular fa-trash"></i></a> -->
+					
 			</div>
 			</main>
 		<% } else { %>

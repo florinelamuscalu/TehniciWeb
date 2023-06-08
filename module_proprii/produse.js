@@ -1,12 +1,8 @@
 const AccesBD = require('./accesbd.js');
-const Utilizator = require('./utilizator')
 
 class Produse {
     static tipConexiune = "local";
     static tabel = "produse"
-    static parolaCriptare = "tehniciweb"
-    static emailServer = "florinelagabrielamuscalu@gmail.com"
-    static lungimeCod = 64
     static numeDomeniu = "localhost:8080"
     #eroare;
 

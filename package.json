@@ -39,8 +39,11 @@
     "qrcode": "^1.5.1",
     "sass": "^1.56.1",
     "sharp": "^0.31.2",
-    "socket.io": "^4.6.0",
+    "socket.io": "^4.6.1",
     "xml-js": "^1.6.11",
     "xmljs": "^0.3.2"
+  },
+  "devDependencies": {
+    "@types/socket.io": "^2.1.13"
   }
 }

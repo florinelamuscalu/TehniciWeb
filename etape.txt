@@ -16,7 +16,7 @@
 ----> etapa 2
 
 1. tema cromatica:
-#2b677
+#2b6777
 #c8d8e4
 #fffff
 #FFAD03

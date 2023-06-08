@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="col">
-                        <label>Select simplu:
+                        <label>Categorii produse:
                             <select id="inp-categorie" class="form-select form-select-lg">
                                 <option id="sel-toate" selected value="toate">toate</option>
                                 <% for (let opt of locals.optiuni) { %>
@@ -118,7 +118,7 @@
                     </div>
 
                     <div class="col">
-                        <label>Select multiplu:
+                        <label>Pret produse:
                             <select id="i-pret" multiple size="3" autocomplete="off"
                                 class="form-select form-select-lg mb-3" multiple aria-label="multiple select example">
                                 <option value="1" selected>0-200</option>
@@ -135,7 +135,7 @@
                     </div>
 
                     <div class="col">
-                        <label>Datalist:
+                        <label>Datalist culoare produse:
                             <input list="id_lista" id="i_datalist" class="form-control btn btn-outline-info">
                             <datalist id="id_lista">
                                 <% var culori=[] %>
@@ -168,6 +168,7 @@
                             <button id="filtrare" type="button" class="btn btn-primary"><span>Filtreaza</span>
                                 <i class="bi bi-filter-circle"></i>
                             </button>
+                            <br><br>
                             <button id="resetare" type="button" class="btn btn-primary"><span>Reseteaza</span>
                                 <i class="bi bi-x-circle"></i>
                             </button><br />
@@ -186,7 +187,7 @@
                             <div class="grid-produse">
                                 <% for( let prod of locals.produse) { %>
                                     <article class="produs" id="articol_<%-prod.id%>">
-                                        <h3 class="nume">Nume: <a href="/produs/<%-prod.id %>"><span class="val-nume"><%-prod.nume%></span></a></h3>
+                                        <h3 class="nume"><a href="/produs/<%-prod.id %>"><span class="val-nume"><%-prod.nume%></span></a></h3>
                                         <div class="categorie">
                                             <% let cat=prod.categorie.replace(/{/g, "" );
                                             cat=cat.replace(/}/g, "" ); // let
@@ -297,8 +298,8 @@
                                                         <div class="accordion-body">
                                                             <p class="data_fabricare"><span
                                                                     class="val-data_fabricare"><time
-                                                                        datetime="YYY-MM-DD"><%-
-                                                                            prod.data_fabricare%></time></span></p>
+                                                                        datetime="<%- prod.data_fabricare.toISOString().substring(0,10) %>"><%-
+                                                                        prod.data_fabricare.toISOString().substring(0,10) %></time></span></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -325,7 +326,7 @@
                                                         <button class="accordion-button collapsed" type="button"
                                                             data-bs-toggle="collapse" data-bs-target="#collapseSeven"
                                                             aria-expanded="false" aria-controls="collapseSeven">
-                                                            Desigilat
+                                                            Resigilat
                                                         </button>
                                                     </h2>
                                                     <div id="collapseSeven" class="accordion-collapse collapse"

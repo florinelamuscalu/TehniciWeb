@@ -18,11 +18,11 @@
         <main>
 
             <form method="post" action="?" enctype="multipart/form-data">
-                <label>Review-ul dumneavoastră:<br /><br>
+                <label for="floatingTextarea" id="review">Review-ul dumneavoastră:<br /><br>
                   <textarea class="form-control form-control-lg" cols="30" rows="5" name="mesaj" placeholder="Cum ti se pare produsul?"></textarea>
                 </label><br />
-                <label>Adăugați o imagine: <br />
-                  <input type="file" name="imagine" class="form-control-file" multiple accept="image/*">
+                <label for="formFileMultiple"  class="form-label">Adăugați o imagine: <br />
+                  <input type="file" name="imagine" class="form-control" multiple accept="image/*">
                 </label><br />
                 <button type="button" class="btn btn-outline-primary btn-lg" onclick="submitForm()">Trimite!</button>
                 <input type="hidden" name="form_submitted" value="1">
@@ -40,7 +40,7 @@
                             if(msg.attributes.id == locals.id) {
                                 if( msg.attributes.username.includes("admin")){ %>
                                     <article class="mesaj-c" style="background-color: rgb(180, 230, 180)">
-                                        <h3><span class="username"><%= msg.attributes.username %></span> spune:</h3>
+                                        <h3><span class="username"><%= msg.attributes.username %></span></h3>
                                         <% if (msg.elements) { %>
                                             <p><%= msg.elements[0].text %></p>
                                         <% } %>
@@ -78,7 +78,7 @@
                                     </article>
                                 <% } else { %>
                                     <article class="mesaj-c" style="background-color: rgb(167, 212, 197)">
-                                        <h3><span class="username"><%= msg.attributes.username%></span> spune:</h3>
+                                        <h3><span class="username"><%= msg.attributes.username%></span></h3>
                                         <% if (msg.elements) { %>
                                             <p><%= msg.elements[0].text %></p>
                                         <% } %>

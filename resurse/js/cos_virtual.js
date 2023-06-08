@@ -38,7 +38,7 @@ window.addEventListener("load", function () {
 					article.appendChild(imagine);
 
 					let descriere = document.createElement("p");
-					descriere.innerHTML = prod.descriere + "<br>" + " <b>Pret:</b>" + prod.pret + " RON";
+					descriere.innerHTML = "<b>Pret:</b>" + prod.pret + " RON" + "&emsp;";
 					article.appendChild(descriere);
 
 					console.log("a trecut de descriere!!")
@@ -59,7 +59,8 @@ window.addEventListener("load", function () {
 							article.parentNode.removeChild(article);
 							ok = 0
 						  } else {
-							descriere.innerHTML = prod.descriere + "<br>" + " <b>Pret:</b>" + prod.pret * cantitate.value;
+							descriere.innerHTML = "<b>Pret:</b>" + prod.pret * cantitate.value;
+
 							ok = 1
 						}
 
@@ -141,3 +142,4 @@ window.addEventListener("load", function () {
 
 
 });
+

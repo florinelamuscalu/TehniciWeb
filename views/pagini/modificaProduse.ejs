@@ -33,6 +33,7 @@
                 var specificatii = "<%= locals.produs.specificatii %>";
                 specificatii = specificatii.replace(/{|}|&#34;/g, "").replace(/,/g, ", ");
                 document.getElementById("inp-specificatii").value = specificatii;
+                document.getElementById("inp-specificatii").readOnly = true;
                 var desigilate = document.getElementById("inp-des").options
                 for (let opt of desigilate)
                     if (opt.value == "<%= locals.produs.desigilate %>")
@@ -53,19 +54,14 @@
         <main>
             <div class="afisaj">
                 <h1 id="titlu">Modifica produse</h1>
+                <%if(locals.mesaj == "Update-ul s-a realizat!"){ %>
+                    <p id="mesaj" style="color: #FFAD03;"><%- locals.mesaj %></p>
+                <%} else {%>
+                    <p id="mesaj" style="color: red;"><%- locals.mesaj %></p>
+                <%}%>
                 <div class="formular">
                     <br>
-                    <p id="mesaj"><%- locals.mesaj %></p>
-                    <% if(!locals.raspuns) { %>
-                        <%- include("../fragmente/formular_produse", {action: "/modificaProduse"}) %>
-                    <% } %>
-
-                                <% if(locals.raspuns) { %>
-                                    <%- locals.raspuns+"<br />"%>
-                                    <% } %>
-                                        <% if(locals.err) { %>
-                                            <%- locals.err %>
-                                                <% } %>
+                    <%- include("../fragmente/formular_produse", {action: "?"}) %>
                 </div>
             </div>
         </main>

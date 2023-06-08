@@ -10,6 +10,8 @@
     <script type="text/javascript" src="/resurse/js/bootstrap.js"></script>
     <script type="text/javascript" src="/resurse/js/produse.js"></script>
     <link rel="stylesheet" href="/resurse/css/pagini/favorite/favorite.css" type="text/css" />
+    <link rel="stylesheet" href="/resurse/css/pagini/produse/paginator.css" type="text/css" />
+    <script type="text/javascript" src="/resurse/js/paginator.js"></script>
 
     <script type="text/javascript" src="/resurse/js/favorite.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
@@ -29,7 +31,7 @@
                 <div class="grid-produse">
                     <% for(let prod of locals.favorite) {%>
                         <article class="produs" id="articol_<%-prod.id%>">
-                            <h3 class="nume">Nume<a href="/produs/<%-prod.id %>"><span class="val-nume"><%-prod.nume%></span></a></h3>
+                            <h3 class="nume"><a href="/produs/<%-prod.id %>"><span class="val-nume"><%-prod.nume%></span></a></h3>
                             <div class="categorie">
                                 <% let cat=prod.categorie.replace(/{/g, "" );
                                 cat=cat.replace(/}/g, "" ); // let
@@ -140,8 +142,8 @@
                                             <div class="accordion-body">
                                                 <p class="data_fabricare"><span
                                                         class="val-data_fabricare"><time
-                                                            datetime="YYY-MM-DD"><%-
-                                                                prod.data_fabricare%></time></span></p>
+                                                            datetime="<%- prod.data_fabricare.toISOString().substring(0,10) %>"><%-
+                                                            prod.data_fabricare.toISOString().substring(0,10) %></time></span></p>
                                             </div>
                                         </div>
                                     </div>
@@ -192,6 +194,11 @@
                         </article>
                     <% } %>
                 </div>
+                <div class="pagination">
+                    <button id="prevBtn"  disabled>Prev</button>
+                    <span id="currentPage"></span> <p> / </p> <span id="totalPages"></span>
+                    <button id="nextBtn">Next</button>
+                </div> 
             </section>
         </main>
     <%- include("../fragmente/footer") %>

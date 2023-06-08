@@ -111,7 +111,7 @@ window.onload = function () {
     }
 
 
-    document.getElementById("inp-garantie").onchange = function () {
+    document.getElementById("inp-garantie").oninput = function () {
         //console.log(this.value);
         document.getElementById("infoRange").innerHTML = `(${this.value})`
     }
@@ -429,7 +429,9 @@ window.onload = function () {
         //     //produs.innerHTML = prod
         //     produs.innerText=`Pretul maxim este ${pret_max}` 
         // }
-        document.getElementsByClassName("grid-produse")[0].appendChild(produs)
+        //document.getElementsByClassName("grid-produse")[0].appendChild(produs)
+        var p = document.getElementsByClassName("grid-produse")[0];
+        p.parentNode.insertBefore(produs, p);
     }
     document.getElementById("minim").onclick = function () {
         var pret_min = minim();

@@ -2,7 +2,6 @@ const AccesBD = require('./accesbd.js');
 const crypto = require("crypto");
 const nodemailer = require("nodemailer")
 const parole = require("./parole.js")
-const roluri = require("./roluri.js")
 const { RolFactory } = require('./roluri.js');
 
 
@@ -269,8 +268,8 @@ class Utilizator {
                 console.log("eorare delete utilizator.js", err);
             }
             else {
-                utiliz.trimiteMail("Sterge cont", "Hello, " + utiliz.username + " acesta este un email pentru confirmarea stergerii contului",
-                    `<h1>Hello, </h1><p style='color:green, font-style:bold'> ${utiliz.username} acesta este un email pentru confirmarea stergerii contului. Va multimim pentru ca ati fost alaturi de noi!.</p>`)
+                console.log("trimite mail")
+                utiliz.trimiteMail("Sterge cont", "Hello, " + utiliz.username + " acesta este un email pentru confirmarea stergerii contului. Va multimim pentru ca ati fost alaturi de noi!")
             }
         });
         //console.log("utilizator utiliz stergere", utiliz);
