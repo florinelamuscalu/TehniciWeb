@@ -31,7 +31,7 @@
 		<h1>Factură PC Components</h1>
 		<p>Stimate domn <%-locals.utilizator.nume %>, aveți aici lista de produse achiziționate.</p> 
 		<div id="container-tabel">
-			<table id="tabl">
+			<table id="tabl" class="table  table-striped">
 				<thead>
 					<tr>
 						<th>Produs</th>
@@ -44,19 +44,16 @@
 				<tbody>
 					<% 
 					var suma=0;
-					for (let prod of locals.produse) {
-						for(let cant of locals.cantitate){
-							if(prod.id == cant.id){
-								suma+=parseFloat(prod.pret) * cant.cantitate ;
-							}
-							%>
-							<tr>
-								<td><%-  prod.nume %></td>
-								<td><%- cant.cantitate %></td>
-								<td><%-  prod.pret %></td>
-								<td><img src="<%- locals.protocol%><%- locals.domeniu %>/resurse/imagini/qrcode/<%-  prod.id %>.png"></td>
-							</tr>
-						<% } %>
+					for (let i=0; i < locals.produse.length; ++i) { %>
+						<%
+							suma += parseFloat(locals.produse[i].pret) * locals.cantitate[i];
+						%>
+						<tr>
+							<td><%=  locals.produse[i].nume %></td>
+							<td><%=  locals.cantitate[i] %></td>
+							<td><%=  locals.produse[i].pret %></td>
+							<td><img src="<%- locals.protocol%><%- locals.domeniu %>/resurse/imagini/qrcode/<%- locals.produse[i].id %>.png"></td>
+						</tr>
 					<% } %>
 				</tbody>
 				<tfoot>

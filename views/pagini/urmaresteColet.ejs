@@ -33,52 +33,48 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%if(locals?.utilizator){%>
+                            <% if(locals?.utilizator) { %>
+                                <% var hasMatchingCommand = false; %>
                                 <% comenzi.forEach(function(comanda) { %>
-                                    <% ok = 0 %>
-                                    <%if(locals.utilizator.username==comanda.username){%>
+                                    <% if(locals.utilizator.username === comanda.username) { %>
+                                        <% hasMatchingCommand = true; %>
                                         <tr>
                                             <td>
                                                 <%= comanda.numarComanda %>
                                             </td>
                                             <td>
-                                                <%= comanda.statusComanda===1 ? 'X' : '' %>
+                                                <%= comanda.statusComanda === 1 ? 'X' : '' %>
                                             </td>
                                             <td>
-                                                <%= comanda.statusComanda===2 ? 'X' : '' %>
+                                                <%= comanda.statusComanda === 2 ? 'X' : '' %>
                                             </td>
                                             <td>
-                                                <%= comanda.statusComanda===3 ? 'X' : '' %>
+                                                <%= comanda.statusComanda === 3 ? 'X' : '' %>
                                             </td>
                                             <td>
-                                                <% if (comanda.statusComanda>= 0 && comanda.statusComanda < 3 ) { %>
-                                                        <button class="buttonC"
-                                                            onclick="urmaresteColet('<%= comanda.numarComanda %>')">Anulare</button>
-                                                        <% } %>
+                                                <% if (comanda.statusComanda >= 0 && comanda.statusComanda < 3) { %>
+                                                    <button class="buttonC" onclick="urmaresteColet('<%= comanda.numarComanda %>')">Anulare</button>
+                                                <% } %>
                                             </td>
                                             <td>
-                                                <% if (comanda.statusComanda===3) { %>
-                                                    <button class="buttonC"
-                                                        onclick="urmaresteColet('<%= comanda.numarComanda %>')">Retur</button>
-                                                    <% } %>
+                                                <% if (comanda.statusComanda === 3) { %>
+                                                    <button class="buttonC" onclick="urmaresteColet('<%= comanda.numarComanda %>')">Retur</button>
+                                                <% } %>
                                             </td>
                                         </tr>
-                                    <%}else{%>
-                                            <tr>
-                                                <td>&nbsp</td>
-                                                <td>&nbsp</td>
-                                                <td>&nbsp</td>
-                                                <td>&nbsp</td>
-                                                <td>&nbsp</td>
-                                                <td>&nbsp</td>
-                                            </tr>
-                                            <%ok = 1%>
-                                        <%}%>
-                                        <% if (ok ==1) {
-                                            return
-                                        }%>
+                                    <% } %>
                                 <% }); %>
-                            <%} %>
+                                <% if (!hasMatchingCommand) { %>
+                                    <tr>
+                                        <td>&nbsp</td>
+                                        <td>&nbsp</td>
+                                        <td>&nbsp</td>
+                                        <td>&nbsp</td>
+                                        <td>&nbsp</td>
+                                        <td>&nbsp</td>
+                                    </tr>
+                                <% } %>
+                            <% } %>                            
                         </tbody>
                     </table>
                 </div>

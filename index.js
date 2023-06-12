@@ -5,8 +5,7 @@ const app = express();
 //// BOT /////////////////////////////////////////////////////////
 
 const { AzureBot } = require('./module_proprii/bot.js')
-const { ConnectorClient } = require('botbuilder');
-const { ChatConnector } = require('botbuilder');
+
 
 const botToken = 'eWJz1wTSa4Q.NpVP-5KsJI1pXVT5LVDbliyGsWJOxMNYYgTaNuJ1HKM';
 
@@ -19,6 +18,8 @@ const botAdapter = new BotFrameworkAdapter({
 });
 
 const connectorClient = botAdapter.createConnectorClient('');
+
+//console.log(connectorClient)
 
 
 //////////////////////////////////////////////////////////////////
@@ -329,12 +330,34 @@ setInterval(stergeAccesariVechi, 10 * 60 * 1000);
 
 /////////////////////// WEB CHAT /////////////////////////////////////////////////
 
+// app.post('/azurebot', (req, res) => {
+//     const bot = new AzurBot();
+//     connectorClient.processActivity(req, res, async (context) => {
+//         await bot.run(context);
+//     });
+// });
+
+
 app.post('/azurebot', (req, res) => {
-    const bot = new AzurBot();
-    connectorClient.processActivity(req, res, async (context) => {
-        await bot.run(context);
-    });
-});
+    const bot = new AzureBot();
+  
+    const userMessage = req.body.message;
+    console.log("usermesage", userMessage)
+    const context = { activity: { text: userMessage } };
+
+    
+
+  
+    bot.run(context)
+      .then(() => {
+        res.status(200).json({ message: 'OK' });
+      })
+      .catch((error) => {
+        console.error('Eroare în timpul execuției botului:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      });
+  });
+  
 
 //////////////////////////////////////////////////////////////////////////////// logare
 
@@ -1348,13 +1371,16 @@ function randomnumarComanda() {
 
 
 app.post("/cumpara", function (req, res) {
-    var prodid;
+    var prodid = [];
     var cantitate = req.body.cantitate;
+    var cant = []
     console.log("cant122", cantitate)
     for (let i = 0; i < cantitate.length - 1; ++i) {
-        prodid = cantitate[i].id
+        prodid.push(cantitate[i].id)
+        cant.push(cantitate[i].cantitate)
     }
-    console.log(prodid)
+    console.log(prodid, "\n")
+    console.log("CANTITATE", cant)
     if (req?.utilizator?.areDreptul?.(Drepturi.cumparareProduse)) {
         AccesBd.getInstanta().select({
             tabel: "produse",
@@ -1368,7 +1394,7 @@ app.post("/cumpara", function (req, res) {
                     domeniu: obGlobal.numeDomeniu,
                     utilizator: req.session.utilizator,
                     produse: rez.rows,
-                    cantitate: req.body.cantitate
+                    cantitate: cant
                 });
                 //console.log(rezFactura);
                 let numeFis = `./temp/factura${(new Date()).getTime()}.pdf`;
@@ -1387,7 +1413,7 @@ app.post("/cumpara", function (req, res) {
                 const month = (data.getMonth() + 1).toString().padStart(2, '0');
                 const year = data.getFullYear().toString();
                 const date = `${day}-${month}-${year}`;
-                console.log(date); // afișează data curentă în formatul dd-mm-yyyy
+                //console.log(date); // afișează data curentă în formatul dd-mm-yyyy
 
                 let jsonFactura = {
                     data: date,
@@ -1398,12 +1424,12 @@ app.post("/cumpara", function (req, res) {
                     //console.log(")))))))))))))))))))))))))))))))))))))))))))))))))))")
                     obGlobal.bdMongo.collection("facturi").insertOne(jsonFactura, function (err, rezmongo) {
                         if (err) console.log(err)
-                        else console.log("Am inserat factura in mongodb");
+                       
 
                         obGlobal.bdMongo.collection("facturi").find({}).toArray(
                             function (err, rezInserare) {
                                 if (err) console.log(err)
-                                else console.log(rezInserare);
+                                
                             })
                     })
                 }
@@ -1421,12 +1447,12 @@ app.post("/cumpara", function (req, res) {
                     //console.log(")))))))))))))))))))))))))))))))))))))))))))))))))))")
                     obGlobal.bdMongo.collection("comenzi").insertOne(jsonComenzi, function (err, rezmongo) {
                         if (err) console.log(err)
-                        else console.log("Am inserat comanda in mongodb");
+                        
 
                         obGlobal.bdMongo.collection("comenzi").find({}).toArray(
                             function (err, rezInserare) {
                                 if (err) console.log(err)
-                                else console.log("post comanda", rezInserare);
+                                
                             })
                     })
                 }
@@ -1455,7 +1481,7 @@ app.get("/comenzi", function (req, res) {
                         console.log("Removed " + result.deletedCount + " documents with statusComanda = 3");
                     });
                     res.render("pagini/comenzi", { comenzi: rez })
-                    console.log("get comenzi", rez)
+                    //console.log("get comenzi", rez)
                 }
             })
     }

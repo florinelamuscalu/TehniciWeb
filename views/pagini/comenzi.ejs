@@ -4,11 +4,14 @@
 <head>
 	<title>Comenzi</title>
 	<meta name="keywords" content="pc,placa video, procesor, ram, placa de baza, cooler ">
-    <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
-
+  <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
+  
+  
+  <link rel="stylesheet" href="/resurse/css/pagini/produse/paginator.css" type="text/css" />
 	<link rel="stylesheet" href="/resurse/css/pagini/comenzi/comanda.css" type="text/css" />
-    <script type="text/javascript" src="/resurse/js/comenzi.js"></script>
-	<%- include("../fragmente/head") %>
+  <script type="text/javascript" src="/resurse/js/comenzi.js"></script>
+	<script type="text/javascript" src="/resurse/js/paginator_comenzi.js"></script>
+  <%- include("../fragmente/head") %>
 
 </head>
 
@@ -48,6 +51,11 @@
                       </div>
                     <% } %>
                   </div>
+                  <div class="pagination">
+                    <button id="prevBtn"  disabled>Prev</button>
+                    <span id="currentPage"></span> <p> / </p> <span id="totalPages"></span>
+                    <button id="nextBtn">Next</button>
+                </div> 
             </section>			
 		</main>
 	<%- include("../fragmente/footer") %>

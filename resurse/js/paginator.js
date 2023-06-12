@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
   function handleNextClick() {
     const numarTotalProduse = document.getElementsByClassName('produs').length;
-    //console.log('numarTotalProduse', numarTotalProduse)
+    console.log('numarTotalProduse', numarTotalProduse)
     const numarTotalPagini = Math.ceil(numarTotalProduse / produsePerPage);
     if (currentPage < numarTotalPagini) {
       currentPage++;
