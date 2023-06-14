@@ -11,11 +11,11 @@ if (document.location.href.indexOf("localhost") != -1) {
 }
 //const socket = io(socketUrl,{reconnect: true});  
 socket = io();
-socket.on("mesaj_nou", function (nume, culoare, mesaj) {
+socket.on("mesaj_nou", function (nume, culoare, mesaj, background_color) {
 
 	time = new Date();
-	date = time.getFullYear() + "/" + (time.getMonth + 1) + '/' + time.getDate() + "  " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
-	date = data(date)
+	date = time.getFullYear() + "/" + (time.getMonth() + 1) + '/' + time.getDate() + "  " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+	console.log(date)
 	var chat = document.getElementById("mesaje_chat");
 	chat.innerHTML += `<p> ${date} ${nume} : <span style= 'background-color: ${background_color}; 'color:${culoare}'>${mesaj}</span></p> `;
 

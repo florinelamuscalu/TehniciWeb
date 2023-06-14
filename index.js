@@ -194,7 +194,7 @@ app.post('/mesaj', function (req, res) {
         //if(conexiune_index){
 
         //trimit catre restul de utilizatori mesajul primit
-        io.sockets.emit('mesaj_nou', req.body.nume, req.body.culoare, req.body.mesaj);
+        io.sockets.emit('mesaj_nou', req.body.nume, req.body.culoare, req.body.mesaj, req.body.background_color);
         res.send("Submit");
         //}
     } else {
