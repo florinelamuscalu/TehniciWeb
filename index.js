@@ -276,9 +276,9 @@ app.all("/*", function (req, res, next) {
     }
     let comanda_param = `insert into accesari(ip, user_id, pagina) values ($1::text, $2,  $3::text)`;
     //console.log(comanda);
-    if (ipReq && ip_gasit) { //TO DO - nu depaseste 10 cereri in 5 secunde (atentie in cerinta aveti alte numere)
+    if (ipReq && ip_gasit) {
         if ((timp_curent - ip_gasit.data) < 120 * 1000) {
-            if (ip_gasit.nr > 60) {//mai mult de 10 cereri 
+            if (ip_gasit.nr > 60) {
                 res.send("<h1>Prea multe cereri intr-un interval scurt.Revino m-ai tarziu</h1>");
                 ip_gasit.data = timp_curent
                 return;

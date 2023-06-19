@@ -11,6 +11,7 @@
  @property {Symbol} modificaProduse Dreptul de a modifica produse
  @property {Symbol} vizualizareGrafice Dreptul de a vizualiza graficele de vanzari
  @property {Symbol} curierat de a modifica statusul unei comenzi
+ @property {Symbol} scrieBot de a modifica statusul unei comenzi
  */
 
 
@@ -28,7 +29,8 @@ const Drepturi = {
     adaugaProduse: Symbol("adaugaProduse"),
     stergeProduse: Symbol("stergeProduse"),
     modificaProduse: Symbol("modificaProduse"),
-    curierat: Symbol("curierat")
+    curierat: Symbol("curierat"),
+    bot:  Symbol("scrieBot")
 }
 
 module.exports = Drepturi;

@@ -113,8 +113,9 @@
                         </ul>
                     </li>
                 <% } %>
-                <% if(locals?.utilizator) { %> 
+                <% if(locals?.utilizator?.areDreptul?.(Drepturi?.scrieChat)) { %> 
                     <li> <a href="/chat">Chat</a></li>
+                    <li> <a href="/azureBot">Bot</a></li>
                 <% } %>
                 <li> <a href="/contact">Contact</a></li>
                 <% if(locals?.utilizator?.areDreptul?.(Drepturi?.vizualizareUtilizatori)) { %>

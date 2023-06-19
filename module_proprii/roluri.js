@@ -27,10 +27,8 @@ class RolAdmin extends Rol{
         Drepturi.stergereUtilizatori,
         Drepturi.cumparareProduse,
         Drepturi.scrieChat,
+        Drepturi.scrieBot,
         Drepturi.vizualizareGrafice,
-        Drepturi.adaugaProduse,
-        Drepturi.stergeProduse,
-        Drepturi.modificaProduse
     ] }
     constructor (){
         super();
@@ -58,7 +56,7 @@ class RolClient extends Rol{
     static get drepturi() { return [
         Drepturi.cumparareProduse,
         Drepturi.scrieChat,
-        Drepturi.stergereUtilizatori,
+        Drepturi.scrieBot,
     ] }
     constructor (){
         super()
@@ -91,6 +89,7 @@ class RolComerciant extends Rol{
         Drepturi.modificaProduse,
         Drepturi.cumparareProduse,
         Drepturi.scrieChat,
+        Drepturi.scrieBot
     ] }
     
     constructor (){
