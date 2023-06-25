@@ -86,8 +86,9 @@ obGlobal = {
     bdMongo: null
 }
 
-var url = "mongodb://localhost:27017";//pentru versiuni mai vechi de Node
-var url = "mongodb://0.0.0.0:27017";
+var url = "mongodb://pccomponents-mongodb:CG2XWofYApD5B6SM2gxHzOLB2RMXudOwpu3G3kPFQiY5ieX7ziFC8E2wRbUp3Q3bLJpZU7EdCRCxACDb5tQEmA==@pccomponents-mongodb.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&maxIdleTimeMS=120000&appName=@pccomponents-mongodb@"
+// var url = "mongodb://localhost:27017";//pentru versiuni mai vechi de Node
+// var url = "mongodb://0.0.0.0:27017";
 
 obGlobal.clientMongo.connect(url, function (err, bd) {
     if (err) console.log(err);

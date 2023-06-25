@@ -16,11 +16,12 @@ class AccesBD{
 
     initLocal(){
         this.client= new Client({
-            database: "pc",
-            user: "flori2",
-            password: "flori",
-            host: "localhost",
-            port: 5432
+            database: "citus",
+            user: "citus",
+            password: "postgresPass!",
+            host: "c-postgressqppccomponents.x5lgpnrn5wfwxi.postgres.cosmos.azure.com",
+            port: 5432,
+	        ssl: true
         });
         this.client.connect();
     }
