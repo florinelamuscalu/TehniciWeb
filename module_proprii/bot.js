@@ -1,25 +1,18 @@
-const { ActivityHandler, MessageFactory } = require('botbuilder');
+class ChatBot {
+  constructor(conversationState) {
+      this.conversationState = conversationState;
+  }
 
-class AzureBot extends ActivityHandler{
-    constructor() {
-        super();
-    
-        this.onMessage(async (context, next) => {
-          const userMessage = context.activity.text;
-          let botResponse = '';
-    
-          if (userMessage.toLowerCase() === 'hello') {
-            botResponse = 'Hello there!';
-          } else {
-            botResponse = `'I'm sorry, I didn't understand that.'`;
-          }
-    
-          await context.sendActivity(MessageFactory.text(botResponse));
-    
-          await next();
-        });
+  async onTurn(context) {
+      if (context.activity.type === 'hello') {
+          // Răspunde la mesajele primite
+          await context.sendActivity('Bună! Ce pot să te ajut?');
+      } else {
+          await context.sendActivity(`${context.activity.type} nu este suportat.`);
       }
+      await this.conversationState.saveChanges(context);
+  }
 }
 
-module.exports = { AzureBot: AzureBot };
+module.exports.ChatBot = ChatBot;
 

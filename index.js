@@ -3,23 +3,21 @@ const fs = require("fs");
 const app = express();
 
 //// BOT /////////////////////////////////////////////////////////
+app.use(express.json());
 
-const { AzureBot } = require('./module_proprii/bot.js')
 
+const { ChatBot } = require('./module_proprii/bot.js')
+const { BotFrameworkAdapter, MemoryStorage, ConversationState } = require('botbuilder');
+const { DefaultAzureCredential } = require('@azure/identity');
 
-const botToken = 'eWJz1wTSa4Q.NpVP-5KsJI1pXVT5LVDbliyGsWJOxMNYYgTaNuJ1HKM';
-
-const { BotFrameworkAdapter } = require('botbuilder');
-
-const botAdapter = new BotFrameworkAdapter({
-    appId: '', // Lasă gol pentru autentificarea cu tokenul de acces
-    appPassword: '', // Lasă gol pentru autentificarea cu tokenul de acces
-    token: botToken // Tokenul de acces generat
+const adapter = new BotFrameworkAdapter({
+    appId: process.env.MicrosoftAppId,
+    credentialProvider: new DefaultAzureCredential()
 });
 
-const connectorClient = botAdapter.createConnectorClient('');
 
-//console.log(connectorClient)
+const conversationState = new ConversationState(new MemoryStorage());
+
 
 
 //////////////////////////////////////////////////////////////////
@@ -123,56 +121,10 @@ app.use("/*", function (req, res, next) {
     });
 });
 
-// var client = new Client({
-//     database: "pc",
-//     user: "flori2",
-//     password: "flori",
-//     host: "localhost",
-//     port: 5432
-// });
-// client.connect();
 
 var instantaBD = AccesBd.getInstanta({ init: "local" })
 var client = instantaBD.getClient();
 
-
-//verificare select din accesbd
-// instantaBD.select({campuri:[" nume, pret"], tabel:"produse", conditiiAnd:["pret>300", "pret<500"]}, function(err, rez){
-//     console.log("!!!!!!!!!!")
-//     if (err)
-//         console.log(err);
-//     else
-//         console.log(rez);
-// })
-
-// client.query("select * from tabel_test", function (err, rez) {
-//     if (err)
-//         console.log(err);
-//     else
-//         console.log(rez);
-// });
-
-
-// var vedeToatalumea="ceva!";
-// app.use('/*', function(req,res){
-//     res.locals.vede=vedeToatalumea;
-//     next();
-// });
-
-
-
-// {
-
-// // apelare functie 
-// (function (){console.log("ape functie")}) ();
-
-// // verificare functie async pentru get utilizator
-// (async function (){
-//     let u = await Utilizator.getUtilizDupaUsernameAsync("prof")
-//     console.log("User async", u)
-// }) ()
-
-// }
 
 /// cand se conexcteaza soket-ul la server 
 
@@ -319,16 +271,6 @@ setInterval(stergeAccesariVechi, 10 * 60 * 1000);
 
 
 
-// {
-//     (function(a){console.log("in functie", a)})(10);
-
-//     (async function(){
-//     let u=await Utilizator.getUtilizDupaUsernameAsync("abc");
-//     console.log("User async:", u);
-//     })()
-// }
-
-
 /////////////////////// WEB CHAT /////////////////////////////////////////////////
 
 // app.post('/azurebot', (req, res) => {
@@ -338,27 +280,14 @@ setInterval(stergeAccesariVechi, 10 * 60 * 1000);
 //     });
 // });
 
-
 app.post('/azurebot', (req, res) => {
-    const bot = new AzureBot();
-  
-    const userMessage = req.body.message;
-    console.log("usermesage", userMessage)
-    const context = { activity: { text: userMessage } };
+    adapter.processActivity(req, res, async (context) => {
+        // Procesează mesajul primit
+        await chatBot.onTurn(context);
+    });
+});
 
-    
-
-  
-    bot.run(context)
-      .then(() => {
-        res.status(200).json({ message: 'OK' });
-      })
-      .catch((error) => {
-        console.error('Eroare în timpul execuției botului:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-      });
-  });
-  
+const chatBot = new ChatBot(conversationState);
 
 //////////////////////////////////////////////////////////////////////////////// logare
 
