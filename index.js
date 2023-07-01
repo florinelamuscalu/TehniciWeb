@@ -3,22 +3,56 @@ const fs = require("fs");
 const app = express();
 
 //// BOT /////////////////////////////////////////////////////////
-app.use(express.json());
 
+const { MicrosoftAppCredentials } = require('botframework-connector');
+app.use(express.json());
+const path = require('path');
+const dotenv = require('dotenv');
+const ENV_FILE = path.join(__dirname, '.env');
+dotenv.config({ path: ENV_FILE });
+// const restify = require('restify');
 
 const { ChatBot } = require('./module_proprii/bot.js')
-const { BotFrameworkAdapter, MemoryStorage, ConversationState } = require('botbuilder');
-const { DefaultAzureCredential } = require('@azure/identity');
+const {
+    CloudAdapter,
+    ConfigurationServiceClientCredentialFactory,
+    createBotFrameworkAuthenticationFromConfiguration,
+    MemoryStorage,
+    ConversationState,
+    UserState
+} = require('botbuilder');
 
-const adapter = new BotFrameworkAdapter({
-    appId: process.env.MicrosoftAppId,
-    credentialProvider: new DefaultAzureCredential()
+const credentialsFactory = new ConfigurationServiceClientCredentialFactory({
+    MicrosoftAppId: process.env.MicrosoftAppId,
+    MicrosoftAppPassword: process.env.MicrosoftAppPassword,
+    MicrosoftAppType: process.env.MicrosoftAppType,
+    MicrosoftAppTenantId: process.env.MicrosoftAppTenantId
 });
 
+const botFrameworkAuthentication = createBotFrameworkAuthenticationFromConfiguration(null, credentialsFactory);
 
-const conversationState = new ConversationState(new MemoryStorage());
+const adapter = new CloudAdapter(botFrameworkAuthentication);
 
+const onTurnErrorHandler = async (context, error) => {
+    // This check writes out errors to console log .vs. app insights.
+    // NOTE: In production environment, you should consider logging this to Azure
+    //       application insights.
+    console.error(`\n [onTurnError] unhandled error: ${ error }`);
 
+    // Send a trace activity, which will be displayed in Bot Framework Emulator
+    await context.sendTraceActivity(
+        'OnTurnError Trace',
+        `${ error }`,
+        'https://www.botframework.com/schemas/error',
+        'TurnError'
+    );
+
+    // Send a message to the user
+    await context.sendActivity('The bot encountered an error or bug.');
+    await context.sendActivity('To continue to run this bot, please fix the bot source code.');
+};
+
+adapter.onTurnError = onTurnErrorHandler;
 
 //////////////////////////////////////////////////////////////////
 
@@ -30,7 +64,6 @@ const { Produse } = require("./module_proprii/produse.js")
 const ejs = require("ejs");
 const session = require("express-session");
 const AccesBd = require("./module_proprii/accesbd.js")
-const path = require('path');
 const Drepturi = require("./module_proprii/drepturi.js")
 const sass = require("sass");
 const QRCode = require('qrcode');
@@ -42,18 +75,19 @@ const bodyParser = require('body-parser')
 const multer = require('multer');
 
 
-// server 
+///////////////////////////////// server /////////////////////////////// 
+
 const http = require('http');
 const socket = require('socket.io');
 var server = new http.createServer(app);
 var io = socket(server)
 io = io.listen(server);
 
+////////////////////////////////////////////////////////////////
 
 
 var cssBootstrap = sass.compile(__dirname + "/resurse/scss/customizare_bootstrap.scss", { sourceMap: true });
 fs.writeFileSync(__dirname + "/resurse/css/biblioteci/bootstrap_custom.css", cssBootstrap.css);
-
 app.use(bodyParser.json()); // pentru a lua datele din JSON body
 app.use(["/feedback"], express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -64,8 +98,6 @@ app.use("/node_modules", express.static(__dirname + "/node_modules"));
 app.use("/poze_uploadate", express.static(__dirname + "/resurse/imagini/poze_uploadate"));
 app.use(helmet.frameguard());
 app.use(["/mesaj"], express.json({ limit: '2mb' }));
-
-
 app.use(["/produse_cos", "/cumpara"], express.json({ limit: '2mb' }));//obligatoriu de setat pt request body de tip json
 app.use(session({ // aici se creeaza proprietatea session a requestului (pot folosi req.session)
     secret: 'abcdefg',//folosit de express session pentru criptarea id-ului de sesiune
@@ -73,16 +105,16 @@ app.use(session({ // aici se creeaza proprietatea session a requestului (pot fol
     saveUninitialized: false
 }));
 
-
-
 obGlobal = {
     erori: null,
     imagini: null,
-    protocol: "http://",
-    numeDomeniu: "localhost:8080",
+    protocol: "https://",
+    numeDomeniu: "appservicepccomponents.azurewebsites.net:8080",
     clientMongo: mongodb.MongoClient,
     bdMongo: null
 }
+
+/////////////////////////////////// mongoDB //////////////////////////////////////
 
 var url = "mongodb://pccomponents-mongodb:CG2XWofYApD5B6SM2gxHzOLB2RMXudOwpu3G3kPFQiY5ieX7ziFC8E2wRbUp3Q3bLJpZU7EdCRCxACDb5tQEmA==@pccomponents-mongodb.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&maxIdleTimeMS=120000&appName=@pccomponents-mongodb@"
 // var url = "mongodb://localhost:27017";//pentru versiuni mai vechi de Node
@@ -95,7 +127,10 @@ obGlobal.clientMongo.connect(url, function (err, bd) {
     }
 });
 
-//creare foldere necesare
+///////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////// creare foldere necesare ///////////////////////////////////////
+
 foldere = ["temp", "poze_uploadate"];
 for (let folder of foldere) {
     let calefolder
@@ -126,18 +161,7 @@ var instantaBD = AccesBd.getInstanta({ init: "local" })
 var client = instantaBD.getClient();
 
 
-/// cand se conexcteaza soket-ul la server 
-
-
-io.on("connection", (socket) => { 
-    console.log("Conectare!");
-    console.log("aaa****************") 
-    console.log("Conectare!");
-	//if(!conexiune_index)
-	//	conexiune_index=socket
-    socket.on('disconnect', () => {conexiune_index=null;console.log('Deconectare')});
-});
-
+///////////////////////////////////////////////// cand se conexcteaza soket-ul la server //////////////////////////////////////// 
 
 app.post('/mesaj', function (req, res) {
 
@@ -157,7 +181,7 @@ app.post('/mesaj', function (req, res) {
     //res.send("Submit");
 });
 
-///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getIp(req) {//pentru Heroku/Render
     var ip = req.headers["x-forwarded-for"];//ip-ul userului pentru care este forwardat mesajul
@@ -273,23 +297,41 @@ setInterval(stergeAccesariVechi, 10 * 60 * 1000);
 
 /////////////////////// WEB CHAT /////////////////////////////////////////////////
 
-// app.post('/azurebot', (req, res) => {
-//     const bot = new AzurBot();
-//     connectorClient.processActivity(req, res, async (context) => {
-//         await bot.run(context);
-//     });
-// });
 
-app.post('/azurebot', (req, res) => {
-    adapter.processActivity(req, res, async (context) => {
-        // Procesează mesajul primit
-        await chatBot.onTurn(context);
+const memoryStorage = new MemoryStorage();
+
+const conversationState = new ConversationState(memoryStorage);
+
+const userState = new UserState(memoryStorage);
+
+const chatBot = new ChatBot(conversationState, userState);
+
+
+function ensureAuthenticated(req, res, next) {
+    if (req.session.utilizator) {
+      return next();
+    }
+    res.redirect('/loggare'); // Redirecționează utilizatorii nelogati către pagina de login
+  }
+
+
+app.post('/azurebot', ensureAuthenticated, async (req, res) => {
+    // Obține token-ul de acces al utilizatorului folosind MSI
+    const msiCreds = new MicrosoftAppCredentials();
+    const accessToken = await msiCreds.getToken();
+  
+    // Setează token-ul de acces în antetul cererii către Azure Bot Service
+    req.headers['Authorization'] = `Bearer ${accessToken}`;
+  
+    // Route received a request to adapter for processing
+    await adapter.processActivity(req, res, async (context) => {
+      await chatBot.run(context);
     });
-});
+  });
 
-const chatBot = new ChatBot(conversationState);
 
-//////////////////////////////////////////////////////////////////////////////// logare
+
+//////////////////////////////////////////////////////////////////////////////// logare //////////////////////////////////////////
 
 app.post("/login", function (req, res) {
     var formular = new formidable.IncomingForm();
@@ -1819,3 +1861,14 @@ s_port = process.env.PORT || 8080
 server.listen(s_port, function () {
     console.log('server listening at', server.address())
 })
+
+server.on('upgrade', async (req, socket, head) => {
+    // Create an adapter scoped to this WebSocket connection to allow storing session data.
+    const streamingAdapter = new CloudAdapter(botFrameworkAuthentication);
+
+    // Set onTurnError for the CloudAdapter created for each connection.
+    streamingAdapter.onTurnError = onTurnErrorHandler;
+
+    await streamingAdapter.process(req, socket, head, (context) => myBot.run(context));
+});
+
