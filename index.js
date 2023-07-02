@@ -1386,6 +1386,7 @@ client.query("select id from produse", function (err, rez) {
 });
 
 async function genereazaPdf(stringHTML, numeFis, callback) {
+    const chrome_path = ''
     const chrome = await puppeteer.launch();
     const document = await chrome.newPage();
     console.log("inainte load")
