@@ -7,10 +7,33 @@
     <meta name="description" content="Construieste-ti propiul pc cu cele mai bune componente!">
 
     <!-- <link rel="stylesheet" type="text/css" href="/resurse/css/pagini/logout/logout.css" /> -->
-    <link rel="stylesheet" type="text/css" href="/resurse/css/pagini/azurebot/azurebot2.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="/resurse/css/pagini/azurebot/azurebot2.css" /> -->
 
-    <script type="text/javascript" src="/resurse/js/azurebot.js"></script>
+    <!-- <script type="text/javascript" src="/resurse/js/azurebot.js"></script> -->
     <%- include("../fragmente/head") %>
+
+        <script crossorigin="anonymous"
+            src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+        <style>
+            html,
+            body {
+                height: 100%;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .web{
+                height: 1000em;
+            }
+
+            #webchat {
+                height: 300em;
+                width: 100%;
+            }
+        </style>
+
 </head>
 
 <body class="dark">
@@ -27,8 +50,28 @@
                 <button id="chat-toggle-btn" class="btn btn-primary" onclick="toggleChat()">Cu ce te putem
                     ajuta?</button>
             </div> -->
-                <iframe src='https://webchat.botframework.com/embed/botpccomponents?s=_0PKRxxtJks.CIUeBEg6bV7Yntzfc5ZNGmFHSSTRJfLyj8RUNb3ed3c'
-                style="height: 502px; max-height: 502px;"></iframe>
+                <!-- <iframe src='https://webchat.botframework.com/embed/botpccomponents?s=_0PKRxxtJks.CIUeBEg6bV7Yntzfc5ZNGmFHSSTRJfLyj8RUNb3ed3c'
+                style="height: 502px; max-height: 502px;"></iframe> -->
+            
+            <div id="webchat" role="main"></div>
+            <script>
+                (async function () {
+                    // Replace TOKEN_FETCH_ROUTE cu ruta în care apelezi metoda din index.js pentru a obține tokenul de acces
+                    const response = await fetch('azurebot');
+                    const data = await response.json();
+                    const directLineSecret = data.accessToken;
+        
+                    window.WebChat.renderWebChat(
+                        {
+                            directLine: window.WebChat.createDirectLine({ token: directLineSecret })
+                        },
+                        document.getElementById('webchat')
+                    );
+        
+                    document.querySelector('#webchat > *').focus();
+                })().catch(err => console.error(err));
+            </script>
+
         </main>
         <%- include('../fragmente/footer') %>
 

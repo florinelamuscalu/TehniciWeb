@@ -74,32 +74,30 @@
                 <% }else  { %>
                     <li> <a href="/produse">Produse</a>
                         <ul>
-                            <% var nume3 =[];
-                            for(let opt of locals.optiuni) {  %>
-                                <% 
-                                    var cat1 = opt.unnest
-                                    if(cat1.startsWith(1) == false && cat1.startsWith(2) == false && cat1.startsWith(3) == false && cat1.startsWith(4) == false) { %>
-                                        <li><a href="/produse?tip=<%- cat1 %>"><%- cat1 %></a></li>
-                                <% } else if(cat1.startsWith(1) == true || cat1.startsWith(2) == true || cat1.startsWith(3) == true || cat1.startsWith(4) == true) {%>
-                                        <%
-                                            let index = cat1.indexOf("-")
-                                            var nume1 = cat1.substr(index +1 )
-                                            let index2 = nume1.indexOf("-")
-                                            var nume2= nume1.substr(index -1, index2)
-                                            //nume2 contine numele meniului == componente
-                                            nume3.push(nume1.substr(index2 + 3))
-                                            // in nume 1 salvez numele submeniului
-                                        %> 
-                                    <%}%>
-                                <%}%>
-                                    
-                                <li><a href="/produse?tip=<%-nume2%>"><%-nume2 %></a>
-                                    <ul>
-                                        <%for(let menu of nume3) {%>
-                                            <li><a href="/produse?tip=<%-cat1%>"><%-menu %></a></li>
-                                        <%}%>
-                                    </ul>
-                                </li>
+                            <% var nume2 = ""; %>
+                            <% var nume3 = []; %>
+                            <% for (let opt of locals.optiuni) { %>
+                                <% var cat1 = opt.unnest; %>
+                                <% if (cat1.startsWith(1) == false && cat1.startsWith(2) == false && cat1.startsWith(3) == false && cat1.startsWith(4) == false) { %>
+                                    <li><a href="/produse?tip=<%- cat1 %>"><%- cat1 %></a></li>
+                                <% } else if (cat1.startsWith(1) == true || cat1.startsWith(2) == true || cat1.startsWith(3) == true || cat1.startsWith(4) == true) { %>
+                                    <%
+                                        let index = cat1.indexOf("-");
+                                        var nume1 = cat1.substr(index + 1);
+                                        let index2 = nume1.indexOf("-");
+                                        nume2 = nume1.substr(index - 1, index2); // actualizam valoarea lui nume2
+                                        nume3.push(nume1.substr(index2 + 3)); // in nume1 salvez numele submeniului
+                                    %> 
+                                <% } %>
+                            <% } %>
+
+                            <li><a href="/produse?tip=<%- nume2 %>"><%- nume2 %></a>
+                                <ul>
+                                    <% for (let menu of nume3) { %>
+                                        <li><a href="/produse?tip=<%- menu %>"><%- menu %></a></li> <!-- Folosim 'menu' în loc de 'cat1' aici -->
+                                    <% } %>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <%if(locals?.utilizator){%>

@@ -49,57 +49,57 @@ window.onload = function () {
 
     var produse = document.getElementsByClassName("produs");
 
-    for (let prod of produse) {
-        linie = prod.id.indexOf("_")
-        // text = inp_text.substr(semn + 1, space);
-        id = prod.id.substr(linie + 1, prod.id.length)
-        desc = "descriere_" + id;
-        //console.log("*******",id)
-        const acordeon = document.getElementById(desc)
-        ///console.log(acordeon)
-        numeClasa = document.getElementById("collapseOne").className;
-        //console.log("numeClasa", numeClasa)
-        //console.log(numeClasa.includes("show"))
-        let stare = []
-        for (let i = 1; i <= produse.length; i++) {
-            if (i < produse.length) {
-                if (numeClasa.includes("show")) {
-                    stare.push(1);
-                } else {
-                    stare.push(0);
-                }
-            } else {
-                if (numeClasa.includes("show")) {
-                    stare.push(1);
-                } else {
-                    stare.push(0);
-                }
-            }
-        }
-        // stare.push(",")
-        //console.log("stare", stare)
-        localStorage.setItem("stare", JSON.stringify(stare));
-        //console.log("stare_local_ir", localStorage.getItem("stare"))
-        //console.log(typeof stare)
-        window.addEventListener("beforeunload", function (event) {
-            numeClasa = document.getElementById("collapseOne").className;
-            var stare_local = localStorage.getItem("stare")
-            //console.log("stare local", stare_local)
-            if (numeClasa.includes("show")) {
-                stare_local[acordeon] = 1
-            } else {
-                stare_local[acordeon] = 0
-            }
-            localStorage.setItem("stare", JSON.stringify(stare_local))
-        });
+    // for (let prod of produse) {
+    //     linie = prod.id.indexOf("_")
+    //     // text = inp_text.substr(semn + 1, space);
+    //     id = prod.id.substr(linie + 1, prod.id.length)
+    //     desc = "descriere_" + id;
+    //     //console.log("*******",id)
+    //     const acordeon = document.getElementById(desc)
+    //     ///console.log(acordeon)
+    //     numeClasa = document.getElementById("collapseOne").className;
+    //     //console.log("numeClasa", numeClasa)
+    //     //console.log(numeClasa.includes("show"))
+    //     let stare = []
+    //     for (let i = 1; i <= produse.length; i++) {
+    //         if (i < produse.length) {
+    //             if (numeClasa.includes("show")) {
+    //                 stare.push(1);
+    //             } else {
+    //                 stare.push(0);
+    //             }
+    //         } else {
+    //             if (numeClasa.includes("show")) {
+    //                 stare.push(1);
+    //             } else {
+    //                 stare.push(0);
+    //             }
+    //         }
+    //     }
+    //     // stare.push(",")
+    //     //console.log("stare", stare)
+    //     localStorage.setItem("stare", JSON.stringify(stare));
+    //     //console.log("stare_local_ir", localStorage.getItem("stare"))
+    //     //console.log(typeof stare)
+    //     window.addEventListener("beforeunload", function (event) {
+    //         numeClasa = document.getElementById("collapseOne").className;
+    //         var stare_local = localStorage.getItem("stare")
+    //         //console.log("stare local", stare_local)
+    //         if (numeClasa.includes("show")) {
+    //             stare_local[acordeon] = 1
+    //         } else {
+    //             stare_local[acordeon] = 0
+    //         }
+    //         localStorage.setItem("stare", JSON.stringify(stare_local))
+    //     });
 
-        stare = localStorage.getItem("stare")
-        //console.log("stare_local_dupa", localStorage.getItem("stare"))
-        if (stare[acordeon] == 1) {
-            document.getElementById("collapseOne").classList.add("show");
-        } else {
-            document.getElementById("collapseOne").classList.remove("show");
-        }
+    //     stare = localStorage.getItem("stare")
+    //     //console.log("stare_local_dupa", localStorage.getItem("stare"))
+    //     if (stare[acordeon] == 1) {
+    //         document.getElementById("collapseOne").classList.add("show");
+    //     } else {
+    //         document.getElementById("collapseOne").classList.remove("show");
+    //     }
 
 
         //let string
@@ -108,7 +108,7 @@ window.onload = function () {
         //     console.log('element clicked');
         //   });
 
-    }
+    //}
 
 
     document.getElementById("inp-garantie").oninput = function () {

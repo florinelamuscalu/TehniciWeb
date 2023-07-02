@@ -5,6 +5,7 @@ const app = express();
 //// BOT /////////////////////////////////////////////////////////
 
 const { MicrosoftAppCredentials } = require('botframework-connector');
+const { DefaultAzureCredential } = require('@azure/identity');
 app.use(express.json());
 const path = require('path');
 const dotenv = require('dotenv');
@@ -28,6 +29,8 @@ const credentialsFactory = new ConfigurationServiceClientCredentialFactory({
     MicrosoftAppType: process.env.MicrosoftAppType,
     MicrosoftAppTenantId: process.env.MicrosoftAppTenantId
 });
+
+
 
 const botFrameworkAuthentication = createBotFrameworkAuthenticationFromConfiguration(null, credentialsFactory);
 
@@ -73,12 +76,13 @@ const helmet = require('helmet')
 const xmljs = require('xml-js');
 const bodyParser = require('body-parser')
 const multer = require('multer');
-
+const cors = require('cors');
 
 ///////////////////////////////// server /////////////////////////////// 
 
 const http = require('http');
 const socket = require('socket.io');
+const { Console } = require("console");
 var server = new http.createServer(app);
 var io = socket(server)
 io = io.listen(server);
@@ -91,6 +95,7 @@ fs.writeFileSync(__dirname + "/resurse/css/biblioteci/bootstrap_custom.css", css
 app.use(bodyParser.json()); // pentru a lua datele din JSON body
 app.use(["/feedback"], express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
+app.use(cors());
 //console.log("Cale proiect:", __dirname);
 app.use("/module_proprii", express.static(__dirname + "/module_proprii"));
 app.use("/resurse", express.static(__dirname + "/resurse"));
@@ -297,6 +302,28 @@ setInterval(stergeAccesariVechi, 10 * 60 * 1000);
 
 /////////////////////// WEB CHAT /////////////////////////////////////////////////
 
+////////////// CORS ////////////////
+
+// const axios = require('axios');
+
+// app.get('/get-token', async (req, res) => {
+//     try {
+//       const response = await axios.post('https://webchat-mockbot.azurewebsites.net/directline/token');
+//       res.json(response.data);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//   });
+
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', 'https://appservicepccomponents.azurewebsites.net');
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//     next();
+//   });
+
+
+//////////////////////////////////
 
 const memoryStorage = new MemoryStorage();
 
@@ -306,27 +333,48 @@ const userState = new UserState(memoryStorage);
 
 const chatBot = new ChatBot(conversationState, userState);
 
+async function getAccessToken() {
+    const credential = new DefaultAzureCredential();
+    const accessToken = await credential.getToken("https://directline.botframework.com");
+    return accessToken.token;
+}
 
 function ensureAuthenticated(req, res, next) {
-    if (req.session.utilizator) {
-      return next();
+    console.log("ensureAuthenticated!!!!!!!!!!!!!!!!!!")
+    if (req.header('Authorization')) {
+        // Tokenul a fost furnizat, permite continuarea la ruta /azurebot
+        return next();
     }
-    res.redirect('/loggare'); // Redirecționează utilizatorii nelogati către pagina de login
-  }
+
+    if (req.session.utilizator) {
+        console.log("!!!!!!!!!!!!!!", req.session.utilizator)
+        return next();
+    } else {
+        // Redirecționează utilizatorii nelogati către pagina de login
+        res.redirect('/');
+    }
+}
+
 
 
 app.post('/azurebot', ensureAuthenticated, async (req, res) => {
-    // Obține token-ul de acces al utilizatorului folosind MSI
-    const msiCreds = new MicrosoftAppCredentials();
-    const accessToken = await msiCreds.getToken();
-  
-    // Setează token-ul de acces în antetul cererii către Azure Bot Service
-    req.headers['Authorization'] = `Bearer ${accessToken}`;
-  
-    // Route received a request to adapter for processing
-    await adapter.processActivity(req, res, async (context) => {
-      await chatBot.run(context);
-    });
+    try{
+        // Obține token-ul de acces al utilizatorului folosind MSI
+        // const msiCreds = new MicrosoftAppCredentials();
+        //const accessToken = await msiCreds.getToken('https://directline.botframework.com');
+        const accessToken = await getAccessToken();
+    
+        // Setează token-ul de acces în antetul cererii către Azure Bot Service
+        req.headers['Authorization'] = `Bearer ${accessToken}`;
+        console.log(req.headers);
+        // Route received a request to adapter for processing
+        await adapter.processActivity(req, res, async (context) => {
+        await chatBot.run(turnContextWithHeader);
+        });
+    }catch (error) {
+        console.error('Eroare la procesarea cererii către bot:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
   });
 
 
