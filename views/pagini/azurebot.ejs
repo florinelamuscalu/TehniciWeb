@@ -25,11 +25,11 @@
             }
 
             .web{
-                height: 1000em;
+                height: 500px;
+                width: auto;
             }
-
             #webchat {
-                height: 300em;
+                height: 100%;
                 width: 100%;
             }
         </style>
@@ -53,13 +53,15 @@
                 <!-- <iframe src='https://webchat.botframework.com/embed/botpccomponents?s=_0PKRxxtJks.CIUeBEg6bV7Yntzfc5ZNGmFHSSTRJfLyj8RUNb3ed3c'
                 style="height: 502px; max-height: 502px;"></iframe> -->
             
+            <div class="web">
             <div id="webchat" role="main"></div>
+            </div>
             <script>
                 (async function () {
                     // Replace TOKEN_FETCH_ROUTE cu ruta în care apelezi metoda din index.js pentru a obține tokenul de acces
-                    const response = await fetch('azurebot');
-                    const data = await response.json();
-                    const directLineSecret = data.accessToken;
+                    const response = await fetch('/azurebot');
+                    const directLineSecret = encodeURIComponent(await response.text());
+
         
                     window.WebChat.renderWebChat(
                         {

@@ -5,7 +5,6 @@ const app = express();
 //// BOT /////////////////////////////////////////////////////////
 
 const { MicrosoftAppCredentials } = require('botframework-connector');
-const { DefaultAzureCredential } = require('@azure/identity');
 app.use(express.json());
 const path = require('path');
 const dotenv = require('dotenv');
@@ -114,7 +113,7 @@ obGlobal = {
     erori: null,
     imagini: null,
     protocol: "https://",
-    numeDomeniu: "appservicepccomponents.azurewebsites.net:8080",
+    numeDomeniu: "appservicepccomponents.azurewebsites.net",
     clientMongo: mongodb.MongoClient,
     bdMongo: null
 }
@@ -131,6 +130,12 @@ obGlobal.clientMongo.connect(url, function (err, bd) {
         obGlobal.bdMongo = bd.db("tehnici_web");
     }
 });
+
+//////////////////////// client pentru postgressql /////////////////
+
+var instantaBd=AccesBd.getInstanta({init:"local"});
+var client=instantaBd.getClient();
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -322,6 +327,11 @@ setInterval(stergeAccesariVechi, 10 * 60 * 1000);
 //     next();
 //   });
 
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+  });
 
 //////////////////////////////////
 
@@ -334,10 +344,14 @@ const userState = new UserState(memoryStorage);
 const chatBot = new ChatBot(conversationState, userState);
 
 async function getAccessToken() {
+    const { DefaultAzureCredential } = require('@azure/identity');
     const credential = new DefaultAzureCredential();
+
     const accessToken = await credential.getToken("https://directline.botframework.com");
+    console.log("Token", accessToken.token)
     return accessToken.token;
 }
+
 
 function ensureAuthenticated(req, res, next) {
     console.log("ensureAuthenticated!!!!!!!!!!!!!!!!!!")
@@ -1362,10 +1376,11 @@ cale_qr = "./resurse/imagini/qrcode";
 if (fs.existsSync(cale_qr))
     fs.rmSync(cale_qr, { force: true, recursive: true });
 fs.mkdirSync(cale_qr);
+console.log(cale_qr)
 client.query("select id from produse", function (err, rez) {
     for (let prod of rez.rows) {
         let cale_prod = obGlobal.protocol + obGlobal.numeDomeniu + "/produs/" + prod.id;
-        //console.log(cale_prod);
+        console.log(cale_prod);
         QRCode.toFile(cale_qr + "/" + prod.id + ".png", cale_prod);
     }
 });
